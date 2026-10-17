@@ -1,0 +1,2132 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="抗生素助手">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>抗生素選擇助手</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: 處方箋式雙欄 — 左欄病人卡（腎功能、過敏、懷孕）固定，右欄分頁決策流程；劑量以等寬字突出，可直接抄寫醫囑 */
+:root{
+  --bg:#edf1f0; --surface:#ffffff; --surface2:#f5f8f7; --ink:#13201d; --muted:#596a66; --line:#d3ddda;
+  --accent:#0a6a5f; --accent-ink:#ffffff; --accent-weak:#dbeee9;
+  --warn:#8f5400; --warn-bg:#fcefd8; --danger:#ae2a20; --danger-bg:#fae4e1;
+  --ok:#1d7344; --ok-bg:#def2e6; --info:#2a5a86; --info-bg:#e3edf7;
+  --f-body:"IBM Plex Sans","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","Noto Sans TC",ui-monospace,Menlo,Consolas,monospace;
+  --s3:#1d6b45; --s3-ink:#ffffff; --s2:#9ccf72; --s2-ink:#14301c; --s1:#f0c64a; --s1-ink:#3a2c00; --s0:#d9534f; --s0-ink:#ffffff;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1514; --surface:#151f1d; --surface2:#1a2624; --ink:#e1ebe8; --muted:#94a6a1; --line:#2a3a37;
+  --accent:#4dc0ae; --accent-ink:#04201b; --accent-weak:#163933;
+  --warn:#f2b45c; --warn-bg:#382810; --danger:#ff8b80; --danger-bg:#3b1a17;
+  --ok:#6fd39a; --ok-bg:#142e1e; --info:#93bde6; --info-bg:#16283a; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0e1514; --surface:#151f1d; --surface2:#1a2624; --ink:#e1ebe8; --muted:#94a6a1; --line:#2a3a37;
+  --accent:#4dc0ae; --accent-ink:#04201b; --accent-weak:#163933;
+  --warn:#f2b45c; --warn-bg:#382810; --danger:#ff8b80; --danger-bg:#3b1a17;
+  --ok:#6fd39a; --ok-bg:#142e1e; --info:#93bde6; --info-bg:#16283a; color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:1260px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 48px}
+h1,h2,h3{text-wrap:balance;margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px;margin-bottom:12px}
+.brand h1{font-size:1.45rem;font-weight:700;letter-spacing:.01em}
+.brand .sub{color:var(--muted);font-size:.85rem}
+.ver{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.disc{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:9px 14px;font-size:.86rem;margin-bottom:16px}
+.disc b{font-weight:600}
+
+.cols{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:920px){.cols{grid-template-columns:minmax(0,1fr)}}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:14px}
+@media (max-width:920px){.side{position:static}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.card h2{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0}
+.field label,.lbl{font-size:.8rem;color:var(--muted)}
+.field input,.field select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);color:var(--ink);font:inherit;font-family:var(--f-mono);font-size:.95rem}
+.field select{font-family:var(--f-body)}
+.unit{font-size:.75rem;color:var(--muted)}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label,.chip{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:5px 12px;font-size:.86rem;cursor:pointer;user-select:none;line-height:1.35}
+.seg input:checked+span{color:var(--accent-ink)}
+.seg label:has(input:checked){background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.seg input:focus-visible+span{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip:disabled{opacity:.5;cursor:not-allowed}
+.chip .n{font-family:var(--f-mono);font-size:.75rem;opacity:.75;margin-right:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+
+.rsum{margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--accent-weak)}
+.rsum .big{font-family:var(--f-mono);font-size:1.25rem;font-weight:600}
+.rsum .small{font-size:.8rem;color:var(--muted)}
+.rsum.empty{background:var(--warn-bg);color:var(--warn)}
+.rsum.arc{background:var(--info-bg)}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;cursor:pointer}
+.chk input{margin-top:3px;accent-color:var(--accent)}
+.linkbtn{background:none;border:0;color:var(--accent);padding:0;cursor:pointer;font-size:.82rem;text-decoration:underline}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:16px;scrollbar-width:none}
+.tab{background:none;border:0;padding:9px 12px;font-size:.93rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+
+.step{margin-bottom:18px}
+.step>h3{font-size:.95rem;font-weight:600;margin-bottom:8px;display:flex;gap:8px;align-items:baseline}
+.step>h3 .k{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
+.hint{font-size:.82rem;color:var(--muted);margin-top:6px}
+
+details.mdr{margin-top:8px}
+details summary{cursor:pointer;font-size:.86rem;color:var(--accent)}
+.mdrlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 14px;margin-top:8px}
+
+.ctx{background:var(--info-bg);color:var(--ink);border-radius:var(--r);padding:10px 14px;font-size:.88rem;margin-bottom:14px}
+.ctx b{color:var(--info)}
+
+.paths{display:flex;flex-wrap:wrap;gap:6px}
+.res{display:grid;gap:12px}
+.opt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.opt.primary{border-left:4px solid var(--accent)}
+.opt-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:8px}
+.tier{font-size:.8rem;font-weight:600;padding:2px 9px;border-radius:6px;background:var(--surface2);border:1px solid var(--line)}
+.tier.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tier.po{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.tier.add,.tier.esc{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.tier.allergy{background:var(--danger-bg);color:var(--danger);border-color:transparent}
+.pick,.plus{font-size:.76rem;color:var(--muted);letter-spacing:.04em;margin:4px 0}
+.plus{color:var(--warn);font-weight:600}
+.plan{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface2)}
+.plan-h{font-size:.84rem;font-weight:600;color:var(--accent);padding:2px 0 4px}
+.pick{text-align:left}
+.rx{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:8px 0;border-top:1px dashed var(--line)}
+.rx:first-of-type{border-top:0}
+.rx-head{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
+.rx-name{font-weight:600}
+.route{font-family:var(--f-mono);font-size:.72rem;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.rx-dose{grid-column:1/2;font-family:var(--f-mono);font-size:.98rem;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.rx-dose .w{font-weight:400;color:var(--muted);font-size:.85rem}
+.rx-meta{grid-column:1/2;font-size:.8rem;color:var(--muted)}
+.rx .copy{grid-column:2/3;grid-row:1/3;align-self:start;border:1px solid var(--line);background:var(--surface2);border-radius:6px;padding:3px 9px;font-size:.78rem;cursor:pointer}
+.rx.blocked .rx-name,.rx.blocked .rx-dose{text-decoration:line-through;text-decoration-color:var(--danger);opacity:.65}
+.adj{color:var(--warn);font-weight:600}
+.flag{font-size:.72rem;padding:1px 7px;border-radius:999px;line-height:1.5}
+.flag.danger{background:var(--danger-bg);color:var(--danger)}
+.flag.warn{background:var(--warn-bg);color:var(--warn)}
+.flag.ok{background:var(--ok-bg);color:var(--ok)}
+.flag.info{background:var(--info-bg);color:var(--info)}
+details.ix{grid-column:1/-1;font-size:.82rem}
+details.ix ul{margin:4px 0 0;padding-left:18px}
+.cond,.onote{font-size:.84rem;margin-top:6px}
+.cond{color:var(--warn)}
+.srcs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.src{font-size:.7rem;font-family:var(--f-mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px;cursor:help}
+.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-bg);border-radius:4px;padding:1px 6px;letter-spacing:.03em}
+
+.notes{display:grid;gap:8px}
+.note{font-size:.88rem;padding:9px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.note.warn{background:var(--warn-bg);border-color:transparent}
+.note.danger{background:var(--danger-bg);border-color:transparent}
+.dur{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px}
+.dur .k{font-size:.78rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.dur .v{font-weight:600}
+.sec-title{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:6px 0 2px}
+
+.tgt{background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.tgt h3{font-size:1.02rem;font-style:italic}
+.tgt .pnote{font-size:.86rem;color:var(--muted);margin:4px 0 10px}
+
+.favs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px}
+.fav{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:.82rem}
+.fav button{background:none;border:0;cursor:pointer;padding:4px 10px}
+.fav button+button{padding:4px 9px 4px 0;color:var(--muted)}
+.btn{border:1px solid var(--accent);color:var(--accent);background:var(--surface);border-radius:8px;padding:6px 12px;font-size:.86rem;cursor:pointer}
+.btn.solid{background:var(--accent);color:var(--accent-ink)}
+
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.76rem;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.sev{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;white-space:nowrap}
+.sev.x{background:var(--danger-bg);color:var(--danger)}
+.sev.h{background:var(--warn-bg);color:var(--warn)}
+.sev.m{background:var(--info-bg);color:var(--info)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.92rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--f-mono);font-weight:600}
+.reflist{font-size:.86rem;padding-left:18px}
+.reflist li{margin-bottom:6px}
+.reflist b{font-family:var(--f-mono);font-size:.78rem}
+.sus{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center}
+.sus .seg label{padding:2px 10px}
+
+.dot{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font-size:.7rem;font-weight:700;font-family:var(--f-mono);line-height:1}
+.dot.s3{background:var(--s3);color:var(--s3-ink)} .dot.s2{background:var(--s2);color:var(--s2-ink)}
+.dot.s1{background:var(--s1);color:var(--s1-ink)} .dot.s0{background:var(--s0);color:var(--s0-ink)}
+.tbl-wrap.spec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table.grid{width:auto;min-width:100%}
+table.grid th,table.grid td{text-align:center;padding:3px 4px;border-bottom:0}
+table.grid .stick{position:sticky;left:0;background:var(--surface);z-index:1;text-align:left;border-right:1px solid var(--line)}
+table.grid thead th{position:sticky;top:0;background:var(--surface);z-index:2;border-bottom:1px solid var(--line)}
+table.grid thead th.stick{z-index:3}
+table.grid tr.gap td{height:8px;padding:0}
+table.grid tr.sel th,table.grid tr.sel td{background:var(--accent-weak)}
+table.grid td.hl{background:var(--accent-weak)}
+.colbtn,.rowbtn{background:none;border:0;cursor:pointer;font:inherit;color:var(--ink)}
+.colbtn{font-size:.72rem;padding:4px 3px;border-radius:6px;white-space:nowrap}
+.colbtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.rowbtn{font-size:.84rem;padding:2px 4px;text-align:left;white-space:nowrap}
+.rowbtn:hover,.colbtn:hover{text-decoration:underline}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.82rem;margin:10px 0 4px}
+.legend .dot{width:22px;height:22px;margin-right:2px}
+.jump{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;z-index:20}
+.muted{color:var(--muted)}
+.mt{margin-top:10px}
+@media (prefers-reduced-motion:no-preference){.chip,.tab,.seg label{transition:background .12s,color .12s,border-color .12s}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>抗生素選擇助手</h1>
+      <div class="sub">依感染部位、台灣抗藥性與腎功能給出抗生素、途徑、劑量與頻次（成人）</div>
+    </div>
+    <div class="ver" id="ver"></div>
+  </header>
+  <div class="disc"><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</div>
+
+  <div class="cols">
+    <aside class="side" id="side">
+      <section class="card" id="ptPanel">
+        <h2>病人與腎功能</h2>
+        <div class="grid2">
+          <div class="field"><label for="age">年齡</label><input id="age" type="number" inputmode="numeric" min="18" max="110" placeholder="歲"></div>
+          <div class="field"><span class="lbl">性別</span>
+            <div class="seg" role="radiogroup" aria-label="性別">
+              <label><input type="radio" name="sex" id="sexM" value="M" checked><span>男</span></label>
+              <label><input type="radio" name="sex" id="sexF" value="F"><span>女</span></label>
+            </div>
+          </div>
+          <div class="field"><label for="wt">體重 <span class="unit">kg</span></label><input id="wt" type="number" inputmode="decimal" min="20" max="300" placeholder="kg"></div>
+          <div class="field"><label for="ht">身高 <span class="unit">cm</span></label><input id="ht" type="number" inputmode="decimal" min="120" max="230" placeholder="cm"></div>
+          <div class="field"><label for="scr">SCr <span class="unit">mg/dL</span></label><input id="scr" type="number" inputmode="decimal" step="0.01" min="0.1" max="20" placeholder="mg/dL"></div>
+          <div class="field" style="justify-content:flex-end"><button class="linkbtn" type="button" id="fillDemo">填入範例數值</button></div>
+        </div>
+        <div class="field mt"><span class="lbl">腎功能評估方式</span>
+          <div class="seg" role="radiogroup" aria-label="腎功能評估方式">
+            <label><input type="radio" name="method" value="cg" checked><span>CG 自動計算</span></label>
+            <label><input type="radio" name="method" value="crcl"><span>輸入 CrCl</span></label>
+            <label><input type="radio" name="method" value="egfr"><span>輸入 eGFR</span></label>
+            <label><input type="radio" name="method" value="hd"><span>HD</span></label>
+            <label><input type="radio" name="method" value="pd"><span>PD</span></label>
+            <label><input type="radio" name="method" value="crrt"><span>CRRT</span></label>
+          </div>
+        </div>
+        <div class="field mt" id="crclRow" hidden><label for="crclIn">CrCl <span class="unit">mL/min</span></label><input id="crclIn" type="number" inputmode="decimal" min="0" max="250"></div>
+        <div class="field mt" id="egfrRow" hidden><label for="egfrIn">eGFR <span class="unit">mL/min/1.73m²</span></label><input id="egfrIn" type="number" inputmode="decimal" min="0" max="250"></div>
+        <label class="chk mt"><input type="checkbox" id="aki"><span>腎功能不穩定（AKI、Cr 快速變化）</span></label>
+        <div id="rsum" class="rsum empty"></div>
+      </section>
+
+      <section class="card">
+        <h2>過敏與懷孕</h2>
+        <div class="field"><label for="allergy">β-lactam 過敏史</label>
+          <select id="allergy">
+            <option value="none">無</option>
+            <option value="pen_low">Penicillin 過敏（非嚴重：皮疹、久遠、不明）</option>
+            <option value="pen_ana">Penicillin 過敏性休克／IgE 型</option>
+            <option value="ceph">Cephalosporin 過敏</option>
+            <option value="bl_scar">任何 β-lactam 嚴重皮膚反應（SJS/TEN/DRESS）</option>
+          </select>
+        </div>
+        <label class="chk mt"><input type="checkbox" id="preg"><span>懷孕（標示孕期禁忌／需謹慎之藥物）</span></label>
+      </section>
+    </aside>
+
+    <main>
+      <nav class="tabs" role="tablist" id="tabs"></nav>
+      <div id="main"></div>
+    </main>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+"use strict";
+const VERIFIED = "2026-10-17";
+const VERSION = "v0.2・12 個感染系統＋泌尿手術預防";
+
+/* ---------------- 出處 ---------------- */
+const REF = {
+  IDSA_cUTI25:{s:"IDSA cUTI 2025",f:"Infectious Diseases Society of America. 2025 Guideline on Management and Treatment of Complicated Urinary Tract Infections. Clin Infect Dis, published July 17, 2025."},
+  IDSA_AMR24:{s:"IDSA AMR 2024",f:"Tamma PD, et al. Infectious Diseases Society of America 2024 Guidance on the Treatment of Antimicrobial-Resistant Gram-Negative Infections. Clin Infect Dis 2024."},
+  IDSA_cys10:{s:"IDSA/ESCMID 2010",f:"Gupta K, et al. International Clinical Practice Guidelines for the Treatment of Acute Uncomplicated Cystitis and Pyelonephritis in Women. Clin Infect Dis 2011;52:e103-20."},
+  IDSA_CAUTI09:{s:"IDSA CAUTI 2009",f:"Hooton TM, et al. Diagnosis, Prevention, and Treatment of Catheter-Associated UTI in Adults. Clin Infect Dis 2010;50:625-63."},
+  EAU_UI25:{s:"EAU 2025",f:"EAU Guidelines on Urological Infections, 2025 edition (uroweb.org)."},
+  AUA_PX19:{s:"AUA BPS 2019",f:"American Urological Association. Best Practice Statement: Urologic Procedures and Antimicrobial Prophylaxis (2019 update), Table V."},
+  AWMF25:{s:"AWMF S3 2025",f:"Perioperative and Peri-Interventional Antibiotic Prophylaxis in Urology: Key Recommendations from the German AWMF S3 Guideline, compared with EAU 2025. Urol Int 2025 (doi:10.1159/000550029)."},
+  ASHP13:{s:"ASHP 2013",f:"Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283."},
+  CDC_STI21:{s:"CDC STI 2021",f:"Workowski KA, et al. Sexually Transmitted Infections Treatment Guidelines, 2021. MMWR Recomm Rep 2021;70(4)."},
+  IDSA_SSTI14:{s:"IDSA SSTI 2014",f:"Stevens DL, et al. Practice Guidelines for the Diagnosis and Management of Skin and Soft Tissue Infections: 2014 Update. Clin Infect Dis 2014;59:e10-52."},
+  ATS19:{s:"ATS/IDSA CAP 2019",f:"Metlay JP, et al. Diagnosis and Treatment of Adults with Community-acquired Pneumonia. Am J Respir Crit Care Med 2019;200:e45-67."},
+  ATS25:{s:"ATS CAP 2025",f:"Jones BE, et al. Diagnosis and Management of Community-acquired Pneumonia. An Official ATS Clinical Practice Guideline. Am J Respir Crit Care Med 2025（IDSA 未背書此更新）."},
+  IDST_CAP:{s:"台灣感染症醫學會",f:"台灣感染症醫學會（IDST）：成人肺炎抗生素治療指引，第二版。"},
+  TW_SPN:{s:"台灣 S. pneumoniae 監測",f:"Hsueh PR, et al. High prevalence of macrolide- and β-lactam-resistant S. pneumoniae in Taiwan: SMART program. Antimicrob Agents Chemother 2003;47:2145-51."},
+  TSAR:{s:"TSAR 國衛院",f:"Taiwan Surveillance of Antimicrobial Resistance (TSAR). Antimicrobial Non-Susceptibility of E. coli from Outpatients and ER Patients in Taiwan. PLoS One 2015;10:e0144103."},
+  VANCO20:{s:"Vancomycin 共識 2020",f:"Rybak MJ, et al. Therapeutic monitoring of vancomycin for serious MRSA infections: revised consensus guideline (ASHP/IDSA/PIDS/SIDP). Am J Health Syst Pharm 2020;77:835-64."},
+  TEICO_SPC:{s:"Teicoplanin 仿單",f:"Targocid (teicoplanin) Summary of Product Characteristics（EMA Article 30 統一仿單；UK eMC）。"},
+  MATZKE84:{s:"Matzke 1984",f:"Matzke GR, et al. Pharmacokinetics of vancomycin in patients with various degrees of renal function. Antimicrob Agents Chemother 1984;25:433-7."},
+  ALLERGY22:{s:"AAAAI/ACAAI 2022",f:"Khan DA, et al. Drug allergy: A 2022 practice parameter update. J Allergy Clin Immunol 2022;150:1333-93."},
+  HAMADA22:{s:"Hamada 2022",f:"Hamada Y, et al. PK/PD Analysis and Dose Optimization of Cefmetazole and Flomoxef against ESBL-Producing Enterobacterales in Invasive UTI Considering Renal Function. Antibiotics 2022;11:456."},
+  DREKONJA21:{s:"Drekonja 2021",f:"Drekonja DM, et al. Effect of 7 vs 14 Days of Antibiotic Therapy on Resolution of Symptoms Among Afebrile Men With UTI. JAMA 2021;326:324-31."},
+  YAHAV19:{s:"Yahav 2019",f:"Yahav D, et al. Seven Versus 14 Days of Antibiotic Therapy for Uncomplicated Gram-negative Bacteremia. Clin Infect Dis 2019;69:1091-8."},
+  NICOLAU95:{s:"Nicolau 1995",f:"Nicolau DP, et al. Experience with a once-daily aminoglycoside program administered to 2,184 adult patients. Antimicrob Agents Chemother 1995;39:650-5."},
+  PARENTE18:{s:"Parente 2018",f:"Parente DM, et al. The Clinical Utility of MRSA Nasal Screening to Rule Out MRSA Pneumonia: A Diagnostic Meta-analysis. Clin Infect Dis 2018;67:1-7."},
+  ACOG717:{s:"ACOG 717",f:"ACOG Committee Opinion No. 717: Sulfonamides, Nitrofurantoin, and Risk of Birth Defects. Obstet Gynecol 2017;130:e150-2."},
+  LABEL:{s:"仿單",f:"各藥品仿單（FDA label／DailyMed、台灣仿單）之腎功能劑量調整。Sanford Guide 為訂閱制，未能逐筆比對，請以院內藥劑部或 Sanford 核對。"}
+};
+
+/* ---------------- 藥物 ---------------- */
+// bl: pen / ceph1 (1st gen) / ceph / carb / mono ; rank = 抗菌譜廣度（降階比較用）
+const D = {
+  amoxicillin:{n:"Amoxicillin",bl:"pen",rank:1},
+  amoxclav:{n:"Amoxicillin-clavulanate",bl:"pen",rank:2},
+  ampicillin:{n:"Ampicillin",bl:"pen",rank:1},
+  ampsulb:{n:"Ampicillin-sulbactam",bl:"pen",rank:2},
+  penG:{n:"Penicillin G",bl:"pen",rank:1},
+  piptazo:{n:"Piperacillin-tazobactam",bl:"pen",rank:4},
+  cefazolin:{n:"Cefazolin",bl:"ceph1",rank:1},
+  cephalexin:{n:"Cephalexin",bl:"ceph1",rank:1,side:"amino"},
+  cefuroxime:{n:"Cefuroxime",bl:"ceph",rank:2},
+  ceftriaxone:{n:"Ceftriaxone",bl:"ceph",rank:2},
+  cefepime:{n:"Cefepime",bl:"ceph",rank:4},
+  flomoxef:{n:"Flomoxef",bl:"ceph",rank:3},
+  cefmetazole:{n:"Cefmetazole",bl:"ceph",rank:3},
+  cza:{n:"Ceftazidime-avibactam",bl:"ceph",rank:6,restrict:true},
+  ctz:{n:"Ceftolozane-tazobactam",bl:"ceph",rank:6,restrict:true},
+  ertapenem:{n:"Ertapenem",bl:"carb",rank:4},
+  meropenem:{n:"Meropenem",bl:"carb",rank:5},
+  aztreonam:{n:"Aztreonam",bl:"mono",rank:4},
+  tmpsmx:{n:"TMP-SMX",rank:2,preg:"避免第一孕期與近足月"},
+  nitrofurantoin:{n:"Nitrofurantoin",rank:1,tw:"limited",preg:"足月（38–42 週）避免；第一孕期有替代時避免"},
+  fosfomycin:{n:"Fosfomycin trometamol",rank:1,tw:"limited"},
+  cipro:{n:"Ciprofloxacin",rank:3,preg:"避免（FQ）"},
+  levo:{n:"Levofloxacin",rank:3,preg:"避免（FQ）"},
+  moxi:{n:"Moxifloxacin",rank:3,preg:"避免（FQ）"},
+  doxy:{n:"Doxycycline",rank:2,preg:"避免（尤其第 15 週後）"},
+  azithro:{n:"Azithromycin",rank:1},
+  gent:{n:"Gentamicin",rank:3,preg:"避免（胎兒耳毒性）"},
+  amikacin:{n:"Amikacin",rank:3,preg:"避免（胎兒耳毒性）"},
+  vanco:{n:"Vancomycin",rank:3},
+  teico:{n:"Teicoplanin",rank:3},
+  linezolid:{n:"Linezolid",rank:3},
+  clinda:{n:"Clindamycin",rank:2},
+  metro:{n:"Metronidazole",rank:1}
+};
+
+/* ---------------- 劑量處方（依腎功能分段） ----------------
+   b: [[CrCl 下限（含）, 劑量]] 由高到低；hd/pd/crrt 為透析劑量
+   {AG:n} = n mg/kg 以 aminoglycoside 給藥體重換算；{TBW:n} = 以實際體重換算 */
+const DIAL = (hd,pd,crrt)=>({hd,pd,crrt});
+const REG = {
+  cro1:{d:"ceftriaxone",r:"IV",b:[[0,"1 g IV q24h"]],...DIAL("1 g IV q24h","1 g IV q24h","1 g IV q24h"),note:"無需腎調整",src:["LABEL"]},
+  cro2:{d:"ceftriaxone",r:"IV",b:[[0,"2 g IV q24h"]],...DIAL("2 g IV q24h","2 g IV q24h","2 g IV q24h"),note:"無需腎調整",src:["LABEL"]},
+  croIM:{d:"ceftriaxone",r:"IM",b:[[0,"500 mg IM 單次（體重 ≥150 kg：1 g）"]],...DIAL("500 mg IM 單次","500 mg IM 單次","500 mg IM 單次"),src:["CDC_STI21"]},
+  czTx:{d:"cefazolin",r:"IV",b:[[35,"2 g IV q8h"],[10.01,"1 g IV q12h"],[0,"1 g IV q24h"]],...DIAL("2 g IV 每次透析後（72 小時間隔前可給 3 g）","1 g IV q24h","2 g IV q12h"),src:["LABEL"]},
+  cxmPO:{d:"cefuroxime",r:"PO",b:[[30,"500 mg PO q12h"],[10,"500 mg PO q24h"],[0,"500 mg PO q48h"]],...DIAL("500 mg PO q48h，透析後補一劑","500 mg PO q48h","500 mg PO q24h"),src:["LABEL"]},
+  lexPO:{d:"cephalexin",r:"PO",b:[[30,"500 mg PO q12h"],[15,"250 mg PO q8–12h"],[0,"250 mg PO q24h"]],...DIAL("250 mg PO q24h（透析日於透析後）","250 mg PO q24h","250–500 mg PO q12h"),src:["LABEL"]},
+  amxPO:{d:"amoxicillin",r:"PO",b:[[30,"1 g PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析後補一劑","500 mg PO q24h","500 mg PO q12h"),note:"CAP 高劑量；CrCl <30 不用 875 mg 錠",src:["ATS19","LABEL"]},
+  amxEnt:{d:"amoxicillin",r:"PO",b:[[30,"500 mg PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析後補一劑","500 mg PO q24h","500 mg PO q12h"),src:["LABEL"]},
+  amcPO:{d:"amoxclav",r:"PO",b:[[30,"875/125 mg PO q12h"],[10,"500/125 mg PO q12h"],[0,"500/125 mg PO q24h"]],...DIAL("500/125 mg PO q24h，透析後補一劑","500/125 mg PO q24h","500/125 mg PO q12h"),src:["LABEL"]},
+  ampIV:{d:"ampicillin",r:"IV",b:[[50,"2 g IV q6h"],[10,"2 g IV q8h"],[0,"2 g IV q12h"]],...DIAL("2 g IV q12h（透析日於透析後）","2 g IV q12h","2 g IV q6–8h"),src:["LABEL"]},
+  samIV:{d:"ampsulb",r:"IV",b:[[30,"3 g IV q6h"],[15,"3 g IV q12h"],[0,"3 g IV q24h"]],...DIAL("3 g IV q24h（透析日於透析後）","3 g IV q24h","3 g IV q8–12h"),src:["LABEL"]},
+  penG:{d:"penG",r:"IV",b:[[50.01,"4 MU IV q4h"],[10,"3 MU IV q4h"],[0,"2 MU IV q6h"]],...DIAL("2 MU IV q6h（透析日於透析後）","2 MU IV q6h","4 MU IV q6h"),src:["LABEL"]},
+  tzp:{d:"piptazo",r:"IV",b:[[40.01,"4.5 g IV q6h（或 4.5 g q8h 延長輸注 4 h）"],[20,"3.375 g IV q6h"],[0,"2.25 g IV q6h"]],...DIAL("2.25 g IV q8h，每次透析後加 0.75 g","2.25 g IV q8h","4.5 g IV q8h 延長輸注（或 3.375 g q6h）"),note:"採仿單院內肺炎（較高）劑量欄，適用重症／PsA",src:["LABEL"]},
+  fep2q8:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q8h"],[30,"2 g IV q12h"],[11,"2 g IV q24h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","2 g IV q48h","2 g IV q12h"),note:"腎功能差未減量易致神經毒性（意識改變、NCSE）",src:["LABEL"]},
+  fep2q12:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q12h"],[30,"2 g IV q24h"],[11,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("首日 1 g，之後 500 mg IV q24h（透析後）","1 g IV q24h","2 g IV q12h"),note:"非 PsA 劑量；懷疑 PsA 改 q8h",src:["LABEL"]},
+  etp:{d:"ertapenem",r:"IV",b:[[30.01,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h；若透析前 6 小時內給藥，透析後補 150 mg","500 mg IV q24h","1 g IV q24h（資料有限）"),note:"不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus",src:["LABEL"]},
+  mem:{d:"meropenem",r:"IV",b:[[50.01,"1 g IV q8h"],[26,"1 g IV q12h"],[10,"500 mg IV q12h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h（透析日於透析後）","500 mg IV q24h","1 g IV q8–12h"),src:["LABEL"]},
+  flomoxef:{d:"flomoxef",r:"IV",b:[[50.01,"1 g IV q6h"],[10,"1 g IV q8–12h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後；資料有限）","1 g IV q24h（資料有限）","資料有限，請會診藥師"),note:"ESBL UTI 之 PK/PD 建議劑量（較台灣仿單常用 1–2 g/day 密集）",src:["HAMADA22"]},
+  cmz:{d:"cefmetazole",r:"IV",b:[[60,"1 g IV q6h"],[30.01,"1 g IV q8h"],[0,"1 g IV q12h"]],...DIAL("1 g IV q24h（資料有限）","1 g IV q24h（資料有限）","資料有限，請會診藥師"),note:"ESBL UTI 之 PK/PD 建議劑量",src:["HAMADA22"]},
+  cza:{d:"cza",r:"IV",b:[[50.01,"2.5 g IV q8h"],[30.01,"1.25 g IV q8h"],[15.01,"0.94 g IV q12h"],[5.01,"0.94 g IV q24h"],[0,"0.94 g IV q48h"]],...DIAL("0.94 g IV q48h（透析日於透析後）","0.94 g IV q48h","1.25 g IV q8h（資料有限，會診藥師）"),note:"KPC／OXA-48 CRE、DTR-PA；NDM 等 MBL 需合併 aztreonam",src:["LABEL","IDSA_AMR24"]},
+  ctz:{d:"ctz",r:"IV",b:[[50.01,"1.5 g IV q8h"],[30,"750 mg IV q8h"],[15,"375 mg IV q8h"],[0,"750 mg 首劑，之後 150 mg IV q8h"]],...DIAL("750 mg 首劑，之後 150 mg IV q8h（透析日於透析後）","750 mg 首劑，之後 150 mg IV q8h","資料有限，請會診藥師"),note:"cUTI 劑量；肺炎劑量加倍（3 g q8h）",src:["LABEL","IDSA_AMR24"]},
+  azt:{d:"aztreonam",r:"IV",b:[[30.01,"2 g IV q8h"],[10,"2 g 首劑，之後 1 g IV q8h"],[0,"2 g 首劑，之後 500 mg IV q8h"]],...DIAL("2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg","2 g 首劑，之後 500 mg IV q8h","2 g 首劑，之後 1 g IV q8h"),note:"與 ceftazidime 側鏈相同，其餘 β-lactam 過敏者可用",src:["LABEL","ALLERGY22"]},
+  tmpsmx:{d:"tmpsmx",r:"PO",b:[[30.01,"1 DS 錠（160/800 mg）PO q12h"],[15,"1 DS 錠 PO q24h（減半）"],[0,"不建議（CrCl <15）"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","不建議；必要時會診藥師"),note:"高血鉀；Cr 可假性上升（抑制腎小管分泌）",src:["LABEL"]},
+  nitro:{d:"nitrofurantoin",r:"PO",b:[[30,"100 mg PO q12h（macrocrystal）"],[0,"避免使用（CrCl <30）"]],...DIAL("避免使用","避免使用","避免使用"),note:"只用於膀胱炎；不用於腎盂腎炎、前列腺炎、菌血症",src:["LABEL","IDSA_cys10"]},
+  fos:{d:"fosfomycin",r:"PO",b:[[0,"3 g PO 單次"]],...DIAL("3 g PO 單次","3 g PO 單次","3 g PO 單次"),note:"單次劑量無需腎調整",src:["LABEL"]},
+  ciproPO:{d:"cipro",r:"PO",b:[[50.01,"500 mg PO q12h"],[30,"250–500 mg PO q12h"],[0,"250–500 mg PO q18h"]],...DIAL("250–500 mg PO q24h（透析後）","250–500 mg PO q24h","500 mg PO q12h"),note:"PsA 全身性感染用 750 mg q12h",src:["LABEL"]},
+  ciproIV:{d:"cipro",r:"IV",b:[[30,"400 mg IV q12h"],[0,"400 mg IV q24h"]],...DIAL("400 mg IV q24h（透析後）","400 mg IV q24h","400 mg IV q12h"),src:["LABEL"]},
+  levo750:{d:"levo",r:"PO/IV",b:[[50,"750 mg PO/IV q24h"],[20,"750 mg PO/IV q48h"],[0,"750 mg 首劑，之後 500 mg q48h"]],...DIAL("750 mg 首劑，之後 500 mg q48h","750 mg 首劑，之後 500 mg q48h","750 mg PO/IV q48h"),src:["LABEL"]},
+  levo500:{d:"levo",r:"PO/IV",b:[[50,"500 mg PO/IV q24h"],[20,"500 mg 首劑，之後 250 mg q24h"],[0,"500 mg 首劑，之後 250 mg q48h"]],...DIAL("500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q24h"),src:["LABEL"]},
+  moxi:{d:"moxi",r:"PO/IV",b:[[0,"400 mg PO/IV q24h"]],...DIAL("400 mg PO/IV q24h","400 mg PO/IV q24h","400 mg PO/IV q24h"),note:"無需腎調整；不用於 UTI（尿中濃度低）",src:["LABEL"]},
+  doxy:{d:"doxy",r:"PO",b:[[0,"100 mg PO q12h"]],...DIAL("100 mg PO q12h","100 mg PO q12h","100 mg PO q12h"),note:"無需腎調整",src:["LABEL"]},
+  azi:{d:"azithro",r:"PO/IV",b:[[0,"500 mg PO/IV q24h"]],...DIAL("500 mg PO/IV q24h","500 mg PO/IV q24h","500 mg PO/IV q24h"),note:"門診 CAP 可首日 500 mg、之後 250 mg ×4 天",src:["ATS19"]},
+  azi1g:{d:"azithro",r:"PO",b:[[0,"1 g PO 單次"]],...DIAL("1 g PO 單次","1 g PO 單次","1 g PO 單次"),src:["CDC_STI21"]},
+  gentQ24:{d:"gent",r:"IV",b:[[60,"5 mg/kg IV q24h{AG:5}"],[40,"5 mg/kg IV q36h{AG:5}"],[20,"5 mg/kg IV q48h{AG:5}"],[0,"避免；必要時單次給藥並依血中濃度"]],...DIAL("1.5–2 mg/kg 每次透析後，依透析前濃度{AG:2}","依濃度給藥（會診藥師）","首劑 5 mg/kg，之後依濃度{AG:5}"),note:"給藥體重：IBW（肥胖用 AdjBW）；監測濃度，避免 >7 天",src:["NICOLAU95","IDSA_cUTI25"]},
+  gentSingle:{d:"gent",r:"IV",b:[[0,"5 mg/kg IV 單次{AG:5}"]],...DIAL("5 mg/kg IV 單次{AG:5}","5 mg/kg IV 單次{AG:5}","5 mg/kg IV 單次{AG:5}"),note:"單次劑量腎毒性低",src:["IDSA_AMR24"]},
+  gentGC:{d:"gent",r:"IM",b:[[0,"240 mg IM 單次"]],...DIAL("240 mg IM 單次","240 mg IM 單次","240 mg IM 單次"),note:"淋病・cephalosporin 過敏時，合併 azithromycin 2 g PO",src:["CDC_STI21"]},
+  amkQ24:{d:"amikacin",r:"IV",b:[[60,"15 mg/kg IV q24h{AG:15}"],[40,"15 mg/kg IV q36h{AG:15}"],[20,"15 mg/kg IV q48h{AG:15}"],[0,"避免；必要時單次給藥並依血中濃度"]],...DIAL("5–7.5 mg/kg 每次透析後，依濃度{AG:7.5}","依濃度給藥（會診藥師）","首劑 15 mg/kg，之後依濃度{AG:15}"),note:"給藥體重：IBW（肥胖用 AdjBW）；監測濃度",src:["NICOLAU95"]},
+  vanco:{d:"vanco",r:"IV",type:"vanco",src:["VANCO20"]},
+  teico:{d:"teico",r:"IV/IM",type:"teico",note:"MRSA 肺炎證據不如 vancomycin／linezolid；骨關節、心內膜炎需高劑量（見 Teicoplanin 頁）",src:["TEICO_SPC"]},
+  lzd:{d:"linezolid",r:"PO/IV",b:[[0,"600 mg PO/IV q12h"]],...DIAL("600 mg PO/IV q12h","600 mg PO/IV q12h","600 mg PO/IV q12h"),note:"無需腎調整；>14 天注意血小板低下",src:["LABEL"]},
+  clinda:{d:"clinda",r:"IV",b:[[0,"900 mg IV q8h"]],...DIAL("900 mg IV q8h","900 mg IV q8h","900 mg IV q8h"),note:"抑制毒素（壞死性感染）；無需腎調整",src:["IDSA_SSTI14"]},
+  metro:{d:"metro",r:"PO/IV",b:[[0,"500 mg PO/IV q8h"]],...DIAL("500 mg q8h（透析日於透析後給）","500 mg PO/IV q8h","500 mg PO/IV q8h"),note:"無需腎調整",src:["LABEL"]}
+};
+
+/* ---------------- MDR 危險因子 ---------------- */
+const MDR = [
+  {id:"prevESBL",t:"過去 6–12 個月培養出 ESBL（或 ceftriaxone 抗藥）腸道菌",fx:["esbl"]},
+  {id:"prevPSA",t:"過去 1 年培養出 P. aeruginosa",fx:["psa"]},
+  {id:"prevMRSA",t:"過去培養或鼻腔篩檢 MRSA 陽性",fx:["mrsa"]},
+  {id:"prevCRE",t:"過去培養出 CRE／DTR-PA",fx:["cre"]},
+  {id:"abx90",t:"90 天內用過 IV 抗生素（尤其 3rd-gen ceph、FQ）",fx:["esbl","hcx"]},
+  {id:"hosp90",t:"90 天內住院 ≥2 天",fx:["esbl","hcx"]},
+  {id:"ltcf",t:"住在長照機構／護理之家",fx:["esbl"]},
+  {id:"device",t:"長期導尿管、腎造廔或輸尿管支架",fx:["psa","ent"]},
+  {id:"uroproc",t:"近期泌尿道器械檢查或手術",fx:["psa","ent"]},
+  {id:"immuno",t:"免疫抑制（化療、移植、高劑量類固醇）",fx:["psa"]}
+];
+
+/* ---------------- 菌種 ---------------- */
+const PATH = {
+  ecoli:{n:"Escherichia coli",g:"ent",note:"台灣 UTI 最常見。社區株對 FQ、TMP-SMX 不感受比例高，ESBL（CTX-M 型）逐年增加。"},
+  kpn:{n:"Klebsiella pneumoniae",g:"ent",note:"天生對 ampicillin／amoxicillin 抗藥。台灣 CAP 重要致病菌（糖尿病、酗酒）；高毒力株可致肝膿瘍、眼內炎。"},
+  pmir:{n:"Proteus mirabilis",g:"ent",note:"天生對 nitrofurantoin、tetracycline 抗藥；產 urease，與 struvite 結石相關。"},
+  ampc:{n:"Enterobacter／C. freundii／K. aerogenes／Serratia",g:"ampc",note:"染色體 AmpC：用 3rd-gen ceph 治療中可能去抑制而失敗，侵襲性感染改用 cefepime。"},
+  psa:{n:"Pseudomonas aeruginosa",g:"psa",note:"對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。"},
+  efae:{n:"Enterococcus faecalis",g:"entc",note:"Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。"},
+  ssap:{n:"Staphylococcus saprophyticus",g:"ssap",note:"年輕女性膀胱炎第二常見；尿液 nitrite 常為陰性。"},
+  saur:{n:"Staphylococcus aureus",g:"sa",note:"無導管者尿液培養出 S. aureus：抽血培養，懷疑血行性感染（SAB）。"},
+  candida:{n:"Candida spp.",g:"cand",note:"抗黴菌於下一批加入。無症狀念珠菌尿多為移生：移除或更換導尿管，通常不需治療（嗜中性球低下、即將泌尿道手術除外）。"},
+  ngon:{n:"Neisseria gonorrhoeae",g:"ng",note:"台灣淋病對 FQ 抗藥普遍，azithromycin 抗藥增加，以 ceftriaxone 為主。"},
+  ctra:{n:"Chlamydia trachomatis",g:"ct",note:"細胞內菌，β-lactam 無效。"},
+  gas:{n:"Streptococcus pyogenes（GAS）",g:"gas",note:"壞死性筋膜炎、毒性休克；合併 clindamycin 抑制毒素。"},
+  bact:{n:"Bacteroides／厭氧菌",g:"anaer",note:"Fournier、腹腔來源；cefazolin、ceftriaxone、cefepime 無效。"},
+  spn:{n:"Streptococcus pneumoniae",g:"spn",note:"台灣 macrolide 抗藥率歷年監測超過 80%，macrolide 不可單用。非腦膜炎以 penicillin 非腦膜炎折點判讀。"},
+  mpn:{n:"Mycoplasma pneumoniae",g:"atyp",note:"β-lactam 無效。台灣 macrolide 抗藥 M. pneumoniae 常見（尤其兒童），macrolide 無效時改 doxycycline 或 FQ。"},
+  cpn:{n:"Chlamydophila pneumoniae",g:"atyp",note:"β-lactam 無效。"},
+  hflu:{n:"Haemophilus influenzae",g:"hflu",note:"COPD 病人常見；β-lactamase 陽性株對 amoxicillin 抗藥。"},
+  legio:{n:"Legionella pneumophila",g:"legio",note:"β-lactam 無效；尿液抗原（serogroup 1）。重症、冷卻水塔、旅遊史。"},
+  flu:{n:"Influenza virus",g:"flu",note:"住院者不論發病時間皆給 oseltamivir（本 app 不提供抗病毒劑量）。注意續發 S. aureus／S. pneumoniae 細菌性肺炎。"}
+};
+const PHL = {
+  ent:{S:"Ceftriaxone 感受（非 ESBL）",ESBL:"ESBL（ceftriaxone 抗藥）",CRE:"CRE（carbapenem 抗藥）"},
+  ampc:{S:"Ceftriaxone 感受",R:"Ceftriaxone 抗藥（去抑制）"},
+  psa:{S:"一般感受",DTR:"DTR（FQ、cefepime、pip-tazo、carbapenem 皆抗藥）"},
+  entc:{AS:"Ampicillin 感受",VRE:"Ampicillin 抗藥／VRE"},
+  sa:{MSSA:"MSSA",MRSA:"MRSA"},
+  spn:{PS:"Penicillin 感受",PR:"Penicillin 抗藥"},
+  hflu:{BN:"β-lactamase 陰性",BP:"β-lactamase 陽性"}
+};
+
+/* ---------------- 標靶治療 ----------------  sc: cys 膀胱炎 / sys 上泌尿道與全身 / resp 肺炎 */
+const O = (tier,regs,extra={})=>Object.assign({tier,regs,alt:regs.length>1},extra);
+const TGT = {
+  ent:{
+    S:{
+      cys:[O("首選",["nitro","fos","tmpsmx"],{note:"依感受性；Proteus 不用 nitrofurantoin",src:["IDSA_cys10"]}),O("替代",["lexPO","cxmPO","amcPO"],{note:"口服 β-lactam ×5–7 天",src:["IDSA_cys10"]})],
+      sys:[O("IV 首選",["cro1"],{src:["IDSA_cUTI25"]}),O("IV 替代",["czTx"],{cond:"Cefazolin 感受（尿路折點）時",src:["IDSA_cUTI25"]}),O("口服降階",["ciproPO","levo750","tmpsmx"],{cond:"感受時；FQ 5–7 天、TMP-SMX 7 天",src:["IDSA_cUTI25"]}),O("口服降階（替代）",["cxmPO","amcPO"],{note:"口服 β-lactam 用於上泌尿道感染效果較差",src:["IDSA_cys10"]})],
+      resp:[O("IV 首選",["cro1"],{src:["ATS19"]}),O("口服降階",["amcPO","levo750"],{cond:"感受時",src:["ATS19"]})]
+    },
+    ESBL:{
+      cys:[O("首選",["nitro","tmpsmx"],{cond:"TMP-SMX 需感受",src:["IDSA_AMR24"]}),O("替代",["fos","gentSingle","amcPO"],{note:"Fosfomycin 僅限 E. coli；amoxicillin-clavulanate 需感受",src:["IDSA_AMR24"]})],
+      sys:[O("首選（感受時）",["tmpsmx","ciproPO","levo750"],{note:"Pyelo／cUTI：若感受，優先 TMP-SMX 或 FQ",src:["IDSA_AMR24"]}),O("IV",["etp","mem"],{note:"重症或上列抗藥；穩定後可改 ertapenem 或口服",src:["IDSA_AMR24"]}),O("台灣常用替代",["flomoxef","cmz"],{note:"Carbapenem-sparing，觀察性與 PK/PD 資料，限非重症 UTI；IDSA AMR 2024 因證據不足不建議 cephamycin",src:["HAMADA22","IDSA_AMR24"]}),O("替代",["gentQ24"],{note:"cUTI 可用，宜短期",src:["IDSA_cUTI25"]})],
+      resp:[O("首選",["mem","etp"],{note:"泌尿道外 ESBL 感染以 carbapenem 為首選；穩定且感受時可改口服 FQ／TMP-SMX",src:["IDSA_AMR24"]})]
+    },
+    CRE:{
+      cys:[O("首選（感受時）",["ciproPO","levo750","tmpsmx","nitro","fos"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
+      sys:[O("首選",["cza"],{note:"先確認 carbapenemase 型別並會診感染科。NDM 等 MBL：ceftazidime-avibactam ＋ aztreonam 或 cefiderocol",src:["IDSA_AMR24"]}),O("口服（感受時）",["tmpsmx","ciproPO"],{cond:"Pyelo／cUTI 且感受",src:["IDSA_AMR24"]})],
+      resp:[O("首選",["cza"],{note:"會診感染科",src:["IDSA_AMR24"]})]
+    }
+  },
+  ampc:{
+    S:{
+      cys:[O("首選",["nitro","tmpsmx","ciproPO"],{src:["IDSA_AMR24"]}),O("替代",["cro1"],{note:"單純膀胱炎可用 ceftriaxone",src:["IDSA_AMR24"]})],
+      sys:[O("首選",["fep2q12"],{note:"Cefepime MIC ≤2；侵襲性感染避免 ceftriaxone",src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO","levo750"],{cond:"感受時",src:["IDSA_AMR24"]}),O("若 cefepime MIC ≥4 或合併 ESBL",["mem","etp"],{src:["IDSA_AMR24"]})],
+      resp:[O("首選",["fep2q8"],{src:["IDSA_AMR24"]}),O("替代",["mem","levo750"],{src:["IDSA_AMR24"]})]
+    },
+    R:{
+      cys:[O("首選",["nitro","tmpsmx","ciproPO"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
+      sys:[O("首選",["fep2q8"],{cond:"Cefepime MIC ≤2",src:["IDSA_AMR24"]}),O("替代",["mem","etp"],{src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO"],{cond:"感受時",src:["IDSA_AMR24"]})]
+    }
+  },
+  psa:{
+    S:{
+      cys:[O("首選",["ciproPO","levo750"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
+      sys:[O("IV 首選",["fep2q8","tzp"],{src:["IDSA_AMR24"]}),O("口服降階",["ciproPO","levo750"],{note:"PsA 全身性感染：ciprofloxacin 750 mg q12h",src:["IDSA_AMR24"]}),O("保留",["mem"],{note:"上列抗藥時",src:["IDSA_AMR24"]}),O("替代",["gentQ24","amkQ24"],{note:"UTI 可單用；泌尿道外需合併",src:["IDSA_AMR24"]})],
+      resp:[O("IV 首選",["fep2q8","tzp"],{src:["ATS19"]}),O("替代",["mem","levo750"],{src:["ATS19"]})]
+    },
+    DTR:{
+      cys:[O("首選",["ctz","cza","gentSingle"],{src:["IDSA_AMR24"]})],
+      sys:[O("首選",["ctz","cza"],{note:"會診感染科；肺炎 ceftolozane-tazobactam 3 g q8h",src:["IDSA_AMR24"]})]
+    }
+  },
+  entc:{
+    AS:{
+      cys:[O("首選",["amxEnt","nitro","fos"],{src:["IDSA_cys10"]})],
+      sys:[O("IV 首選",["ampIV"],{src:["LABEL"]}),O("口服降階",["amxEnt"],{src:["LABEL"]}),O("替代",["tzp"],{note:"需同時涵蓋 G(−) 時",src:["LABEL"]})]
+    },
+    VRE:{
+      cys:[O("首選",["nitro","fos","lzd"],{src:["IDSA_cys10"]})],
+      sys:[O("首選",["lzd"],{note:"菌血症可用高劑量 daptomycin（8–12 mg/kg），會診感染科",src:["LABEL"]})]
+    }
+  },
+  ssap:{any:{cys:[O("首選",["nitro","tmpsmx","lexPO"],{src:["IDSA_cys10"]})],sys:[O("首選",["cro1"],{src:["LABEL"]}),O("口服降階",["tmpsmx","lexPO"],{cond:"感受時",src:["LABEL"]})]}},
+  sa:{
+    MSSA:{cys:[O("首選",["lexPO","tmpsmx"],{src:["LABEL"]})],sys:[O("首選",["czTx"],{note:"S. aureus 菌血症（SAB）：會診感染科，需追蹤血液培養",src:["LABEL"]})],resp:[O("首選",["czTx"],{src:["ATS19"]})]},
+    MRSA:{cys:[O("首選",["tmpsmx","nitro","lzd"],{src:["LABEL"]})],sys:[O("首選",["vanco","teico"],{src:["VANCO20","TEICO_SPC"]}),O("替代",["lzd"],{note:"非菌血症",src:["LABEL"]})],resp:[O("首選",["vanco","lzd"],{src:["ATS19"]}),O("替代",["teico"],{src:["TEICO_SPC"]})]}
+  },
+  ng:{any:{sys:[O("首選",["croIM"],{note:"未排除 Chlamydia 時加 doxycycline 100 mg PO q12h（尿道炎 7 天、副睪炎 10 天）",src:["CDC_STI21"]}),O("Cephalosporin 過敏",["gentGC"],{plus:"Azithromycin 2 g PO 單次",src:["CDC_STI21"]})]}},
+  ct:{any:{sys:[O("首選",["doxy"],{note:"尿道炎 7 天；副睪炎 10 天",src:["CDC_STI21"]}),O("替代",["azi1g"],{note:"尿道炎用；副睪炎以 doxycycline 為主",src:["CDC_STI21"]})]}},
+  gas:{any:{sys:[O("首選",["penG","clinda"],{alt:false,note:"壞死性感染：penicillin ＋ clindamycin（抑制毒素）",src:["IDSA_SSTI14"]})]}},
+  anaer:{any:{sys:[O("首選",["metro"],{src:["IDSA_SSTI14"]}),O("已涵蓋厭氧菌之 β-lactam",["tzp","mem","samIV"],{note:"已用這些藥不需再加 metronidazole",src:["IDSA_SSTI14"]})]}},
+  spn:{
+    PS:{resp:[O("口服",["amxPO"],{src:["ATS19"]}),O("IV",["cro1","samIV"],{src:["ATS19"]})]},
+    PR:{resp:[O("IV 首選",["cro2"],{note:"非腦膜炎 ceftriaxone MIC ≤1 有效",src:["ATS19"]}),O("替代",["levo750","moxi"],{note:"台灣：使用前排除結核",src:["IDST_CAP"]}),O("Ceftriaxone 亦抗藥",["vanco","teico","lzd"],{src:["ATS19"]})]}
+  },
+  hflu:{
+    BN:{resp:[O("首選",["amxPO"],{src:["ATS19"]}),O("IV",["cro1"],{src:["ATS19"]}),O("替代",["doxy"],{src:["ATS19"]})]},
+    BP:{resp:[O("首選",["amcPO","cxmPO"],{src:["ATS19"]}),O("IV",["cro1"],{src:["ATS19"]}),O("替代",["levo750"],{src:["ATS19"]})]}
+  },
+  atyp:{any:{resp:[O("首選",["doxy","azi"],{note:"Macrolide 無效時改 doxycycline 或 FQ",src:["ATS19"]}),O("替代",["levo750","moxi"],{src:["ATS19"]})]}},
+  legio:{any:{resp:[O("首選",["levo750","azi"],{note:"療程 7–14 天，免疫抑制者較長",src:["ATS19"]})]}},
+  flu:{any:{resp:[]}},
+  cand:{any:{sys:[],cys:[]}}
+};
+
+/* ---------------- 部位 ---------------- */
+const SYS = {
+  gu:{n:"泌尿／生殖",subs:[
+    {id:"cys",n:"膀胱炎（單純）"},{id:"pyelo",n:"腎盂腎炎"},{id:"cuti",n:"複雜性 UTI（阻塞、結石、器械後）"},
+    {id:"cauti",n:"CAUTI（導尿管相關）"},{id:"abp",n:"急性細菌性前列腺炎"},{id:"cbp",n:"慢性細菌性前列腺炎"},
+    {id:"epi",n:"副睪睪丸炎"},{id:"fg",n:"Fournier 壞疽"},{id:"uti_unk",n:"不確定（UTI 未區分）"}]},
+  resp:{n:"呼吸道・CAP",subs:[
+    {id:"cap_out",n:"門診・無共病"},{id:"cap_outc",n:"門診・有共病"},{id:"cap_in",n:"住院・非重症"},
+    {id:"cap_sev",n:"住院・重症（ICU）"},{id:"cap_asp",n:"吸入性肺炎"},{id:"cap_unk",n:"不確定"}]}
+};
+const NEXT = ["血流感染","腹腔感染","皮膚軟組織","CNS","心內膜炎","骨關節","發燒性嗜中性球低下","C. difficile","HAP／VAP","抗黴菌（Candida）"];
+const CAPP = ["spn","mpn","cpn","hflu","kpn","legio","saur","psa","flu"];
+const PL = {
+  cys:["ecoli","kpn","pmir","ssap","efae"], pyelo:["ecoli","kpn","pmir","efae","psa","ampc"],
+  cuti:["ecoli","kpn","pmir","efae","psa","ampc","saur"], cauti:["ecoli","kpn","psa","efae","pmir","ampc","candida"],
+  abp:["ecoli","kpn","pmir","psa","efae","ngon","ctra"], cbp:["ecoli","efae","kpn","pmir","psa","ctra"],
+  epi:["ctra","ngon","ecoli","kpn","psa"], fg:["ecoli","gas","bact","saur","efae","kpn","psa"],
+  uti_unk:["ecoli","kpn","pmir","efae","psa","ampc"],
+  cap_out:CAPP,cap_outc:CAPP,cap_in:CAPP,cap_sev:CAPP,cap_unk:CAPP,cap_asp:["spn","saur","kpn","hflu","bact"]
+};
+const isCAP = s=>s && s.startsWith("cap");
+const siteClass = s=> (s==="cys"||s==="cand_uti") ? "cys" : (isCAP(s)||s==="vap"||(s&&s.startsWith("hap"))) ? "resp" : ["men_comm","men_old","men_hosp","brabs","cns_unk"].includes(s) ? "cns" : (s&&s.startsWith("ie_")) ? "ie" : "sys";
+const hasSev = s=> !!(SUBDEF[s]&&SUBDEF[s].sev);
+
+/* ---------------- 交互作用 ---------------- */
+const INTER = [
+  {d:["linezolid"],w:"SSRI／SNRI／MAOI／TCA、tramadol、meperidine、methylene blue",lv:"h",fx:"血清素症候群",m:"盡量避免；必須併用時監測發燒、肌躍、意識改變"},
+  {d:["linezolid"],w:"富含 tyramine 食物、pseudoephedrine",lv:"m",fx:"血壓上升",m:"衛教飲食"},
+  {d:["cipro","levo","moxi"],w:"含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）",lv:"h",fx:"FQ 吸收大減",m:"FQ 於這類藥前 2 小時或後 6 小時服用"},
+  {d:["cipro","levo","moxi","azithro"],w:"其他 QT 延長藥（amiodarone、sotalol、haloperidol、quetiapine、ondansetron、methadone）",lv:"h",fx:"QT 延長、torsades",m:"查 ECG、K、Mg；風險 moxifloxacin > levofloxacin > ciprofloxacin"},
+  {d:["cipro"],w:"Tizanidine",lv:"x",fx:"CYP1A2 抑制，tizanidine 濃度大增（低血壓、嗜睡）",m:"禁止併用"},
+  {d:["cipro"],w:"Theophylline",lv:"h",fx:"Theophylline 中毒",m:"監測濃度或換藥"},
+  {d:["cipro","levo","moxi"],w:"Warfarin",lv:"m",fx:"INR 上升",m:"監測 INR"},
+  {d:["cipro","levo","moxi"],w:"全身性類固醇（尤其老人）",lv:"m",fx:"肌腱炎、肌腱斷裂",m:"衛教，出現肌腱痛立即停藥"},
+  {d:["tmpsmx"],w:"Warfarin",lv:"h",fx:"CYP2C9 抑制，INR 明顯上升",m:"避免或密切監測 INR"},
+  {d:["tmpsmx"],w:"ACEI／ARB／spironolactone／鉀補充",lv:"h",fx:"高血鉀",m:"監測 K；老人與腎功能差者風險高"},
+  {d:["tmpsmx"],w:"Methotrexate",lv:"x",fx:"骨髓抑制",m:"避免併用"},
+  {d:["metro"],w:"Warfarin",lv:"h",fx:"INR 上升",m:"監測 INR，考慮減量"},
+  {d:["meropenem","ertapenem"],w:"Valproic acid",lv:"x",fx:"VPA 濃度大幅下降，可致癲癇",m:"避免併用，改其他抗生素或抗癲癇藥"},
+  {d:["vanco"],w:"Piperacillin-tazobactam",lv:"m",fx:"急性腎損傷風險增加（觀察性研究）",m:"監測 Cr；可考慮 cefepime／meropenem 搭配"},
+  {d:["vanco","teico","gent","amikacin"],w:"Aminoglycoside／glycopeptide 互相、loop diuretic、顯影劑、NSAID",lv:"h",fx:"腎毒性、耳毒性",m:"縮短療程、監測濃度與 Cr"},
+  {d:["doxy"],w:"含 Ca／Mg／Al／Fe 製劑",lv:"m",fx:"吸收下降",m:"間隔 2–3 小時"},
+  {d:["azithro"],w:"Digoxin",lv:"m",fx:"Digoxin 濃度上升",m:"監測症狀與濃度"},
+  {d:["clinda"],w:"—",lv:"m",fx:"C. difficile 感染風險高",m:"出現腹瀉時檢驗 C. difficile"}
+];
+
+/* ---------------- 泌尿手術預防 ---------------- */
+const PXR = {
+  cz:{n:"Cefazolin",t:"2 g IV（體重 ≥120 kg：3 g）",re:"q4h"},
+  cxm:{n:"Cefuroxime",t:"1.5 g IV",re:"q4h"},
+  cxmPO:{n:"Cefuroxime",t:"500 mg PO 單次"},
+  tmp:{n:"TMP-SMX",t:"1 DS 錠 PO 單次"},
+  gent:{n:"Gentamicin",t:"5 mg/kg IV 單次{AG:5}"},
+  cro:{n:"Ceftriaxone",t:"1 g IV 單次"},
+  fos:{n:"Fosfomycin trometamol",t:"3 g PO（術前，方案依院內）"},
+  metro:{n:"Metronidazole",t:"500 mg IV"},
+  vanco:{n:"Vancomycin",t:"15 mg/kg IV{TBW:15}（術前 120 分鐘內開始，輸注 ≥60 分鐘）"},
+  clinda:{n:"Clindamycin",t:"900 mg IV",re:"q6h"},
+  azt:{n:"Aztreonam",t:"2 g IV",re:"q4h"}
+};
+const PROC = [
+  {id:"cysto",n:"膀胱鏡（診斷）／尿動力學／單純支架拔除",need:"通常不需要",lvl:"ok",
+   pri:[],alt:[["tmp"],["cz"]],altLabel:"有宿主風險因子時（免疫抑制、尿路異常、長期導管）單次",
+   notes:["前提：術前尿液無菌。AUA 認為效益不確定、依宿主風險；EAU 不建議常規給予"],src:["AUA_PX19","EAU_UI25"]},
+  {id:"trbx",n:"經直腸攝護腺切片（TR biopsy）",need:"需要",lvl:"warn",
+   pri:[["cro"],["gent"],["fos"]],priLabel:"首選（或依直腸拭子培養做標靶預防、或兩類合併的加強預防）",alt:[],
+   notes:["EAU：優先改採經會陰路徑（感染併發症較低）","切片前以 povidone-iodine 清潔直腸","台灣 E. coli FQ 抗藥率高；EAU 因歐洲法規強烈建議避免 FQ，AUA 仍列 FQ 為選項，建議以直腸拭子培養做標靶預防"],
+   src:["EAU_UI25","AUA_PX19"],upd:true},
+  {id:"tpbx",n:"經會陰攝護腺切片（TP biopsy）",need:"低風險可不給",lvl:"ok",
+   pri:[],alt:[["cz"],["cxmPO"]],altLabel:"若給予：單次",
+   notes:["低風險、尿液無菌、會陰皮膚消毒確實者可不給預防性抗生素（多個 RCT；德國 AWMF S3 明文建議，EAU 2025 方向一致）","高風險（導管、近期 UTI、免疫抑制）仍給單次"],
+   src:["AWMF25","EAU_UI25"],upd:true},
+  {id:"turp",n:"TURP／雷射攝護腺手術（HoLEP、PVP）",need:"需要",lvl:"warn",
+   pri:[["cz"],["cxm"]],priLabel:"首選（術前單次）",alt:[["tmp"]],altLabel:"AUA 列為替代",
+   notes:["≤24 小時","術前留置導尿管或有菌尿：依尿液培養給予治療劑量（屬治療，非預防）"],src:["AUA_PX19","EAU_UI25"]},
+  {id:"turbt",n:"TURBT",need:"依風險",lvl:"ok",
+   pri:[],alt:[["cz"],["tmp"]],altLabel:"大型或壞死腫瘤、有宿主風險因子：單次",
+   notes:["EAU：低風險者不建議常規給予","AUA：依宿主風險因子決定，手術範圍越大感染風險越高"],src:["EAU_UI25","AUA_PX19"]},
+  {id:"urs",n:"輸尿管鏡（URS／RIRS）",need:"需要",lvl:"warn",
+   pri:[["cz"],["tmp"]],priLabel:"首選（術前單次）",alt:[["gent"]],altLabel:"替代",
+   notes:["≤24 小時；術後延長抗生素未減少感染","支架留置時間長為術後敗血症風險"],src:["AUA_PX19","EAU_UI25"]},
+  {id:"pcnl",n:"經皮腎造廔取石（PCNL）",need:"需要",lvl:"warn",
+   pri:[["cz"],["cro"]],priLabel:"首選（術前單次）",alt:[["gent","metro"]],altLabel:"替代",
+   notes:["≤24 小時","高風險（大結石、水腎、感染性結石、有導管）：部分研究支持術前依培養口服 1 週","術前尿液培養陽性：先治療"],src:["AUA_PX19","EAU_UI25"]},
+  {id:"swl",n:"體外震波碎石（ESWL）",need:"通常不需要",lvl:"ok",
+   pri:[],alt:[["cz"],["tmp"]],altLabel:"有支架、腎造廔或感染性結石時",
+   notes:["前提：術前尿液無菌"],src:["EAU_UI25","AUA_PX19"]},
+  {id:"rp",n:"根除性攝護腺切除／腎臟手術（進入泌尿道）",need:"需要",lvl:"warn",
+   pri:[["cz"]],priLabel:"術前單次",alt:[["cxm"]],altLabel:"替代",
+   notes:["≤24 小時；手術超過 4 小時追加"],src:["AUA_PX19","ASHP13"]},
+  {id:"rc",n:"根除性膀胱切除＋尿路改道（使用腸道）",need:"需要",lvl:"warn",
+   pri:[["cz","metro"],["cxm","metro"]],priLabel:"首選",alt:[["gent","metro"]],altLabel:"替代",
+   notes:["≤24 小時","乾淨-污染手術，需涵蓋腸道 G(−) 與厭氧菌"],src:["AUA_PX19","ASHP13"]},
+  {id:"pros",n:"陰莖人工植入物／人工尿道括約肌",need:"需要",lvl:"warn",
+   pri:[["vanco","gent"],["cz","gent"]],priLabel:"首選",alt:[],
+   notes:["≤24 小時","MRSA 帶菌者以 vancomycin 為主"],src:["AUA_PX19"]},
+  {id:"clean",n:"未進入泌尿道之手術（如腎上腺切除）",need:"單次即可",lvl:"ok",
+   pri:[["cz"]],priLabel:"術前單次",alt:[],
+   notes:["乾淨手術，依院內規範"],src:["AUA_PX19","ASHP13"]}
+];
+const PX_ALLERGY = [["vanco","gent"],["clinda","gent"],["azt"]];
+
+/* ---------------- 狀態 ---------------- */
+const S = {
+  pt:{age:null,sex:"M",wt:null,ht:null,scr:null,method:"cg",crcl:null,egfr:null,aki:false},
+  allergy:"none", preg:false, tab:"emp",
+  sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
+  cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,org:"",ph:"",sus:{}},
+  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null}
+};
+let R = null;
+
+/* ---------------- 計算 ---------------- */
+const num = v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
+const r0 = v=>Math.round(v);
+function weights(){
+  const p=S.pt; if(!p.wt) return null;
+  const tbw=p.wt; let ibw=null, adj=null, bmi=null;
+  if(p.ht){ ibw=(p.sex==="M"?50:45.5)+0.9055*(p.ht-152.4); bmi=tbw/Math.pow(p.ht/100,2); adj=ibw+0.4*(tbw-ibw); }
+  let dw=tbw, dl="實際體重（未填身高）", ds="實際體重";
+  if(ibw){ if(tbw<ibw){dw=tbw;dl="實際體重（低於 IBW）";} else if(tbw<=1.2*ibw){dw=ibw;dl="IBW";ds="IBW";} else {dw=adj;dl="AdjBW（體重 >120% IBW）";ds="AdjBW";} }
+  return {tbw,ibw,adj,bmi,dw,dl,ds};
+}
+function calcCG(){
+  const p=S.pt, w=weights();
+  if(!p.age||!p.scr||!w) return null;
+  const crcl=(140-p.age)*w.dw/(72*p.scr)*(p.sex==="F"?0.85:1);
+  return {crcl,w};
+}
+function getRenal(){
+  const p=S.pt;
+  if(["hd","pd","crrt"].includes(p.method)){
+    const lab={hd:"血液透析（HD）",pd:"腹膜透析（PD）",crrt:"CRRT"}[p.method];
+    return {mode:p.method,label:lab,short:p.method.toUpperCase()};
+  }
+  if(p.method==="crcl") return p.crcl>=0&&p.crcl!==null?{mode:"crcl",val:p.crcl,label:`CrCl ${r0(p.crcl)} mL/min（手動輸入）`,short:`CrCl ${r0(p.crcl)}`}:null;
+  if(p.method==="egfr") return p.egfr>=0&&p.egfr!==null?{mode:"crcl",val:p.egfr,label:`eGFR ${r0(p.egfr)}（以 CrCl 近似）`,short:`eGFR ${r0(p.egfr)}`}:null;
+  const cg=calcCG(); if(!cg) return null;
+  return {mode:"crcl",val:cg.crcl,label:`CrCl ${r0(cg.crcl)} mL/min`,short:`CrCl ${r0(cg.crcl)}`,cg};
+}
+function fillW(t){
+  const w=weights();
+  return t.replace(/\{(AG|TBW|KG):([\d.]+)\}/g,(m,k,n)=>{
+    if(!w) return "";
+    const kg=k==="AG"?w.dw:w.tbw; const step=k==="TBW"?250:10;
+    const mg=Math.round(parseFloat(n)*kg/step)*step;
+    return ` ≈ ${mg} mg（以${k==="AG"?w.ds:"實際體重"} ${r0(kg)} kg 計）`;
+  });
+}
+function plainW(t){return fillW(t);}
+function bandRange(b,i){
+  const lo=b[i][0], hi=i>0?b[i-1][0]:null;
+  const loD=Number.isInteger(lo)?lo:Math.ceil(lo);
+  const hiD=hi===null?null:(Number.isInteger(hi)?hi-1:Math.floor(hi));
+  if(i===0) return lo>0?(Number.isInteger(lo)?`CrCl ≥${lo}`:`CrCl >${Math.floor(lo)}`):"所有腎功能";
+  if(lo===0) return Number.isInteger(hi)?`CrCl <${hi}`:`CrCl ≤${Math.floor(hi)}`;
+  return `CrCl ${loD}–${hiD}`;
+}
+function doseOf(id){
+  const g=REG[id];
+  if(g.type==="vanco") return vancoBrief();
+  if(g.type==="teico") return teicoBrief("std");
+  let t, band, adj=false;
+  if(!R){ t=g.b[0][1]; band="未輸入腎功能，顯示正常腎功能劑量"; }
+  else if(R.mode==="crcl"){
+    const i=g.b.findIndex(x=>R.val>=x[0]); const k=i<0?g.b.length-1:i;
+    t=g.b[k][1]; adj=k>0; band=g.b.length===1?"無需腎調整":(adj?`已依腎功能調整（${bandRange(g.b,k)}）`:`正常劑量（${bandRange(g.b,0)}）`);
+  } else { t=g[R.mode]||"資料不足，請會診藥師"; adj=true; band=`${R.label}劑量`; }
+  const filled=fillW(t);
+  return {plain:filled, html:filled.replace(/ ≈ (.*)$/,' <span class="w">≈ $1</span>'), band, adj};
+}
+
+/* Vancomycin：一室模型（Matzke 1984）首劑估算 */
+function vancoCalc(){
+  const w=weights();
+  if(!w) return {err:"請先輸入體重。"};
+  if(R && R.mode!=="crcl") return {dial:R.mode,w};
+  if(!R) return {err:"請輸入年齡、性別、體重與 SCr（或直接輸入 CrCl）。",w};
+  const crcl=Math.min(Math.max(R.val,0),150);
+  const CL=(0.689*crcl+3.66)*0.06; const Vd=0.7*w.tbw; const k=CL/Vd; const th=0.693/k;
+  const tau= th<7?8 : th<12?12 : th<24?24 : 48;
+  const r250=x=>Math.max(250,Math.round(x/250)*250);
+  let dose=r250(S.vauc*CL*tau/24); let capped=false;
+  if(dose>2000){dose=2000;capped=true;}
+  const ld=Math.min(3000,r250(S.vld*w.tbw));
+  const auc=dose*24/tau/CL;
+  const tinf=Math.max(1,dose/1000);
+  const cmax=(dose/tinf)*(1-Math.exp(-k*tinf))/(Vd*k*(1-Math.exp(-k*tau)));
+  const cmin=cmax*Math.exp(-k*(tau-tinf));
+  return {w,crcl,CL,Vd,k,th,tau,dose,ld,auc,cmin,cmax,capped};
+}
+function vancoBrief(){
+  const v=vancoCalc();
+  if(v.dial){
+    const t={hd:"首劑 25 mg/kg（最多 3 g），之後每次透析後 5–10 mg/kg；依透析前濃度調整",pd:"首劑 20–25 mg/kg，之後依濃度補充（會診藥師）",crrt:"首劑 20–25 mg/kg，之後 7.5–10 mg/kg q12h，依濃度調整"}[v.dial];
+    return {plain:t,html:t,band:`${R.label}劑量`,adj:true};
+  }
+  if(v.err){ const t="首劑 20–35 mg/kg（重症 25–30），之後 15–20 mg/kg q8–12h，依 AUC 400–600 調整"; return {plain:t,html:t,band:"輸入腎功能與體重後可估算",adj:false}; }
+  const t=`首劑 ${v.ld} mg，之後 ${v.dose} mg IV q${v.tau}h`;
+  return {plain:t,html:t+' <span class="w">（估算 AUC ≈ '+r0(v.auc)+'；見「Vancomycin」頁）</span>',band:"一室模型估算，需依濃度調整",adj:v.tau>12};
+}
+
+/* 過敏判讀（AAAAI/ACAAI 2022） */
+function allergyCheck(drug){
+  const a=S.allergy, d=D[drug], bl=d.bl;
+  if(a==="none"||!bl) return null;
+  if(a==="bl_scar"){ if(bl==="mono") return {lvl:"warn",m:"SCAR 史：使用前會診過敏／感染科"}; return {lvl:"danger",m:"β-lactam SCAR 史：避免"}; }
+  if(a==="pen_low"){ if(bl==="pen") return {lvl:"danger",m:"Penicillin 過敏：避免或先評估"}; if(d.side==="amino") return {lvl:"warn",m:"側鏈與 amoxicillin 相同，謹慎"}; if(bl==="mono") return null; return {lvl:"ok",m:"交叉反應低，可使用"}; }
+  if(a==="pen_ana"){ if(bl==="pen") return {lvl:"danger",m:"Penicillin 過敏性休克：避免"}; if(d.side==="amino") return {lvl:"danger",m:"側鏈與 amoxicillin 相同：避免"}; if(bl==="carb") return {lvl:"warn",m:"交叉 <1%，首劑監測下可用"}; if(bl==="mono") return null; return {lvl:"warn",m:"側鏈不同，首劑監測下可用"}; }
+  if(a==="ceph"){ if(bl==="ceph"||bl==="ceph1") return {lvl:"danger",m:"Cephalosporin 過敏：避免（需評估側鏈）"}; if(bl==="pen") return {lvl:"warn",m:"交叉反應低，評估後使用"}; if(bl==="carb") return {lvl:"warn",m:"交叉 <1%，首劑監測下可用"}; return null; }
+  return null;
+}
+
+/* 天生抗藥 / 臨床無效 */
+const isBL = d=>!!(D[d]&&D[d].bl);
+function intrinsic(drug,org,ph){
+  const p=PATH[org]; if(!p) return null; const g=p.g; const has=a=>a.includes(drug);
+  const FUN = g.startsWith("c_")||g==="asp";
+  if(D[drug]&&D[drug].af&&!FUN) return {lvl:"bad",m:"抗黴菌藥，對細菌無效"};
+  if(FUN&&!(D[drug]&&D[drug].af)) return {lvl:"bad",m:"抗細菌藥，對黴菌無效"};
+  if((g==="c_kru"||g==="asp")&&drug==="fluco") return {lvl:"bad",m:"天生抗藥"};
+  if(g==="c_gla"&&drug==="fluco") return {lvl:"warn",m:"劑量依存或抗藥，需藥敏"};
+  if(g==="asp"&&["mica","caspo","anid"].includes(drug)) return {lvl:"warn",m:"僅作替代或合併"};
+  if(g==="list"&&(D[drug].bl==="ceph"||D[drug].bl==="ceph1")) return {lvl:"bad",m:"Listeria：cephalosporin 天生無效"};
+  if(g==="smalt"&&(D[drug].bl==="carb"||has(["gent","amikacin"]))) return {lvl:"bad",m:"天生抗藥"};
+  if(g==="ab"&&has(["ertapenem","ceftriaxone","cefazolin","cephalexin","cefuroxime","amoxicillin","ampicillin","amoxclav","flomoxef","cefmetazole","aztreonam","tmpsmx"])) return {lvl:"bad",m:"天生抗藥／無效"};
+  if(g==="ab"&&ph==="CR"&&D[drug].bl==="carb") return {lvl:"bad",m:"CRAB"};
+  if(g==="cdi"&&!["vancoPO","fidax","metro"].includes(drug)) return {lvl:"bad",m:"C. difficile 需口服 vancomycin 或 fidaxomicin"};
+  if(g==="cons"&&ph==="MR"&&isBL(drug)) return {lvl:"bad",m:"Oxacillin 抗藥：β-lactam 無效"};
+  const GN=["ent","ampc","psa","ab","smalt","vib","aero","melio","hacek","nmen"];
+  if(GN.includes(g)&&has(["vanco","teico","linezolid","clinda","metro","azithro","penG","oxa","dapto","fusidic","rifampin"])) return {lvl:"bad",m:"對 G(−) 桿菌無效"};
+  if(org==="kpn"&&has(["ampicillin","amoxicillin"])) return {lvl:"bad",m:"天生抗藥"};
+  if(org==="pmir"&&has(["nitrofurantoin","doxy","tige","colistin"])) return {lvl:"bad",m:"天生抗藥"};
+  if(g==="psa"&&has(["tige","oxa","cefazolin"])) return {lvl:"bad",m:"天生抗藥"};
+  if(["sa","entc","spn","gas","anaer"].includes(g)&&drug==="colistin") return {lvl:"bad",m:"對 G(+) 與厭氧菌無效"};
+  if(["sa","spn","gas"].includes(g)&&drug==="caz") return {lvl:"warn",m:"G(+) 活性差"};
+  if(g==="ampc"&&has(["ampicillin","amoxicillin","amoxclav","ampsulb","cefazolin","cephalexin","cefuroxime","cefmetazole","flomoxef"])) return {lvl:"bad",m:"AmpC：天生抗藥"};
+  if(g==="ampc"&&drug==="ceftriaxone") return {lvl:"warn",m:"侵襲性感染避免（治療中可能去抑制）"};
+  if(g==="psa"&&has(["ampicillin","amoxicillin","amoxclav","ampsulb","cefazolin","cephalexin","cefuroxime","ceftriaxone","flomoxef","cefmetazole","ertapenem","tmpsmx","nitrofurantoin","fosfomycin","doxy","moxi"])) return {lvl:"bad",m:"天生抗藥／無效"};
+  if(g==="ent"&&ph==="ESBL"){
+    if(has(["amoxicillin","ampicillin","cefazolin","cephalexin","cefuroxime","ceftriaxone"])) return {lvl:"bad",m:"ESBL 水解"};
+    if(drug==="cefepime") return {lvl:"bad",m:"ESBL：即使感受也不建議"};
+    if(drug==="piptazo") return {lvl:"warn",m:"ESBL：泌尿道外不建議；pyelo／cUTI 非首選"};
+  }
+  if(g==="ent"&&ph==="CRE"&&isBL(drug)&&drug!=="cza") return {lvl:"bad",m:"CRE：多數 β-lactam 無效"};
+  if(g==="entc"&&has(["oxa","caz","cps","cephalexin","cefuroxime","ceftriaxone","cefepime","flomoxef","cefmetazole","ertapenem","aztreonam","cza","ctz","tmpsmx","clinda","metro","cipro","moxi"])) return {lvl:"bad",m:"Enterococcus：天生抗藥／臨床無效"};
+  if(g==="entc"&&ph==="VRE"&&has(["vanco","teico","ampicillin","amoxicillin","amoxclav","ampsulb","piptazo","meropenem","penG"])) return {lvl:"bad",m:"Ampicillin 抗藥／VRE"};
+  if(g==="sa"&&has(["aztreonam","metro","cza","ctz"])) return {lvl:"bad",m:"對 S. aureus 無效"};
+  if(g==="sa"&&ph==="MRSA"&&isBL(drug)) return {lvl:"bad",m:"MRSA：β-lactam 無效"};
+  if((g==="atyp"||g==="legio"||g==="ct")&&isBL(drug)) return {lvl:"bad",m:"無細胞壁或細胞內菌：β-lactam 無效"};
+  if(g==="anaer"&&has(["cefazolin","ceftriaxone","cefepime","aztreonam","cipro","levo","gent","amikacin","tmpsmx"])) return {lvl:"bad",m:"對厭氧菌無效"};
+  if(["spn","hflu","gas"].includes(g)&&has(["gent","amikacin","metro","aztreonam"])) return {lvl:"bad",m:"無效"};
+  return null;
+}
+
+/* ---------------- 經驗性治療產生器 ---------------- */
+const N = (t,src=[],o={})=>Object.assign({t,src},o);
+function fxSet(){
+  const s=new Set(); MDR.forEach(m=>{ if(S.mdr.includes(m.id)) m.fx.forEach(f=>s.add(f)); });
+  if(S.sub==="cauti"){ s.add("psa"); s.add("ent"); }
+  return s;
+}
+function genCys(c){
+  const o=[], n=[];
+  if(c.fx.has("esbl")||c.fx.has("cre")){
+    o.push(O("首選",["nitro","tmpsmx"],{note:"ESBL 風險：TMP-SMX 需確認感受",src:["IDSA_AMR24"]}));
+    o.push(O("替代",["fos","gentSingle","amcPO"],{note:"Fosfomycin 用於 ESBL 僅限 E. coli；amoxicillin-clavulanate 需感受",src:["IDSA_AMR24"]}));
+  } else {
+    o.push(O("首選",["nitro","fos"],{note:"Nitrofurantoin ×5 天；fosfomycin 3 g 單次",src:["IDSA_cys10"]}));
+    o.push(O("首選（條件）",["tmpsmx"],{cond:"院內 E. coli TMP-SMX 抗藥率 <20% 或先前培養感受時；×3 天",src:["IDSA_cys10","TSAR"]}));
+    o.push(O("替代",["lexPO","cxmPO","amcPO"],{note:"口服 β-lactam ×5–7 天，療效略遜",src:["IDSA_cys10"]}));
+  }
+  n.push(N("FQ 不作單純膀胱炎首選：保留給其他選擇不可行時（FDA 安全性警示、台灣 E. coli FQ 抗藥率高）。",["IDSA_cys10","TSAR"]));
+  if(c.male) n.push(N("男性：IDSA 2025 將侷限於膀胱、無發燒的男性 UTI 歸為單純性；療程 7 天與 14 天效果相當。若發燒、會陰痛或尿滯留，改選前列腺炎或複雜性 UTI。",["IDSA_cUTI25","DREKONJA21"],{upd:true}));
+  n.push(N("Nitrofurantoin、fosfomycin 腎組織濃度不足，懷疑上泌尿道感染時不可使用。",["IDSA_cys10"]));
+  return {o,n,dur:{t:c.male?"7 天":"Nitrofurantoin 5 天｜TMP-SMX 3 天｜Fosfomycin 單次｜口服 β-lactam 5–7 天",days:c.male?7:5,src:c.male?["DREKONJA21"]:["IDSA_cys10"]}};
+}
+function genUp(c){
+  const o=[], n=[], sev=c.sev;
+  if(c.fx.has("cre")) o.push(O("首選（CRE 史）",["cza"],{note:"會診感染科，確認 carbapenemase 型別（KPC／OXA-48 或 NDM）",src:["IDSA_AMR24"]}));
+  if(sev==="shock"){
+    o.push(O("首選",["mem"],{note:"Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥 <10% 且無 ESBL 風險，可用 ceftriaxone 或 cefepime。",src:["IDSA_cUTI25","TSAR"]}));
+    if(c.fx.has("ent")) o.push(O("加上（懷疑 Enterococcus）",["ampIV"],{note:"或改用 piperacillin-tazobactam",src:["IDSA_CAUTI09"]}));
+  } else if(sev==="sepsis"){
+    if(c.fx.has("esbl")) o.push(O("首選",["mem","etp"],{note:"Sepsis 合併 ESBL 風險",src:["IDSA_cUTI25","IDSA_AMR24"]}));
+    else if(c.fx.has("psa")||c.fx.has("hcx")) o.push(O("首選",["fep2q8","tzp"],{note:"Sepsis 合併醫療照護暴露或 PsA 風險",src:["IDSA_cUTI25"]}));
+    else { o.push(O("首選",["cro2"],{note:"Sepsis、無抗藥風險",src:["IDSA_cUTI25"]})); o.push(O("升階（院內 ceftriaxone 抗藥 >20% 時）",["mem","etp"],{src:["IDSA_cUTI25"]})); }
+  } else {
+    if(c.fx.has("esbl")){
+      o.push(O("首選",["etp"],{note:"ESBL 風險、非重症",src:["IDSA_AMR24"]}));
+      o.push(O("替代（台灣常用）",["flomoxef","cmz"],{note:"Carbapenem-sparing；觀察性與 PK/PD 資料，限非重症 UTI。IDSA AMR 2024 因證據不足不建議 cephamycin。",src:["HAMADA22","IDSA_AMR24"]}));
+      o.push(O("替代",["gentQ24","amkQ24"],{note:"腎毒性，宜短期",src:["IDSA_cUTI25"]}));
+    } else if(c.fx.has("psa")){
+      o.push(O("首選",["fep2q8","tzp"],{note:"P. aeruginosa 風險（導管、器械、免疫抑制、過去 PsA）",src:["IDSA_cUTI25"]}));
+    } else {
+      o.push(O("首選",["cro1"],{note:"台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階",src:["IDSA_cys10","TSAR"]}));
+      o.push(O("口服（條件）",["ciproPO","levo750"],{cond:"僅限先前培養感受或院內 FQ 抗藥率 <10%；否則先給一劑 IV ceftriaxone",src:["IDSA_cys10"]}));
+    }
+  }
+  if(c.fx.has("ent")&&sev!=="shock") n.push(N("導管或器械相關：Enterococcus 機會增加，cephalosporin 與 ertapenem 無效。尿液 Gram stain 見 GPC 時改 piperacillin-tazobactam 或加 ampicillin。",["IDSA_CAUTI09"]));
+  n.push(N("發燒性 UTI 合併水腎或結石阻塞是泌尿科急症：需立即引流（DJ stent 或 PCN），抗生素無法單獨控制。",["EAU_UI25"],{lvl:"warn"}));
+  n.push(N("48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。",["EAU_UI25"]));
+  n.push(N("依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。",["IDSA_cUTI25"],{upd:true}));
+  n.push(N("Piperacillin-tazobactam 不作 ESBL pyelo／cUTI 首選；若已使用且臨床改善可續用，但微生物學失敗風險可能略高。",["IDSA_AMR24"],{upd:true}));
+  if(S.sub==="cauti") n.push(N("CAUTI：導管留置 >2 週者，先更換導管再採檢與治療。念珠菌尿多為移生。",["IDSA_CAUTI09"]));
+  if(S.sub==="uti_unk") n.push(N("部位未區分：依 cUTI（含 pyelonephritis）處理；確定為單純膀胱炎後可改窄效藥。",["IDSA_cUTI25"]));
+  const dur = S.sub==="cauti"
+    ? {t:"反應快 7 天；反應慢 10–14 天",days:7,src:["IDSA_CAUTI09"]}
+    : {t:"改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天",days:7,src:["IDSA_cUTI25","YAHAV19"],upd:true};
+  return {o,n,dur};
+}
+function genABP(c){
+  const o=[], n=[];
+  if(c.fx.has("esbl")||c.sev==="shock") o.push(O("首選（IV）",["mem","etp"],{note:"ESBL 風險或 septic shock。切片後感染多為 FQ 抗藥、ESBL E. coli",src:["EAU_UI25","IDSA_AMR24"]}));
+  else if(c.fx.has("psa")) o.push(O("首選（IV）",["tzp","fep2q8"],{src:["EAU_UI25"]}));
+  else o.push(O("首選（IV）",["cro1","tzp"],{note:"需住院或有全身症狀時",src:["EAU_UI25"]}));
+  o.push(O("口服（降階或輕症）",["levo500","ciproPO"],{cond:"依感受性；FQ 前列腺組織濃度最佳",src:["EAU_UI25"]}));
+  o.push(O("口服替代",["tmpsmx"],{cond:"依感受性",src:["EAU_UI25"]}));
+  n.push(N("避免前列腺按摩。尿滯留時導尿或恥骨上膀胱造廔皆可。",["EAU_UI25"]));
+  n.push(N("48–72 小時無改善：經直腸超音波或 MRI 排除前列腺膿瘍（≥1 cm 考慮引流）。",["EAU_UI25"],{lvl:"warn"}));
+  return {o,n,dur:{t:"2–4 週",days:14,src:["EAU_UI25"]}};
+}
+function genCBP(c){
+  const o=[], n=[];
+  o.push(O("首選",["levo500","ciproPO"],{note:"依感受性",src:["EAU_UI25"]}));
+  o.push(O("替代",["tmpsmx"],{note:"FQ 不可用時",src:["EAU_UI25"]}));
+  o.push(O("Chlamydia／非典型菌",["doxy"],{src:["EAU_UI25"]}));
+  n.push(N("β-lactam 前列腺滲透差，不建議用於慢性細菌性前列腺炎。治療前做 Meares-Stamey 2 或 4 杯試驗確認。",["EAU_UI25"]));
+  return {o,n,dur:{t:"FQ 4–6 週",days:28,src:["EAU_UI25"]}};
+}
+function genEpi(c){
+  const o=[], n=[];
+  if(c.sev!=="none"){ const up=genUp(c); up.o.forEach(x=>o.push(x)); }
+  o.push(O("STI 可能（性活躍、通常 <35 歲）",["croIM","doxy"],{alt:false,note:"Doxycycline ×10 天",src:["CDC_STI21"]}));
+  o.push(O("STI ＋ 腸道菌（肛交插入方）",["croIM","levo500"],{alt:false,note:"Levofloxacin ×10 天",src:["CDC_STI21"]}));
+  o.push(O("腸道菌為主（年長、器械後、BOO）",["levo500"],{note:"×10 天。台灣 FQ 抗藥率高，依尿液培養，可改感受的 β-lactam",src:["CDC_STI21","EAU_UI25"]}));
+  n.push(N("先以 Doppler 超音波排除睪丸扭轉。",["EAU_UI25"],{lvl:"warn"}));
+  n.push(N("無改善或疑膿瘍：影像追蹤。STI 病因者，性伴侶需一併治療。",["CDC_STI21"]));
+  return {o,n,dur:{t:"10 天",days:10,src:["CDC_STI21"]}};
+}
+function genFG(c){
+  const o=[], n=[];
+  const bl = c.fx.has("esbl")||c.sev==="shock" ? ["mem"] : ["tzp","mem"];
+  o.push(O("首選（合併）",bl,{add:[{regs:["vanco","teico","lzd"],alt:true},{regs:["clinda"],alt:false}],note:"廣效 G(−)／厭氧菌 ＋ MRSA ＋ clindamycin（抑制毒素）",src:["IDSA_SSTI14"]}));
+  n.push(N("緊急外科清創是治療關鍵，應於數小時內進行，並安排 24–48 小時後再次探查。",["IDSA_SSTI14","EAU_UI25"],{lvl:"danger"}));
+  n.push(N("術中組織培養後降階；clindamycin 於臨床穩定、毒素症狀緩解後停用。",["IDSA_SSTI14"]));
+  return {o,n,dur:{t:"持續至不需再清創、臨床改善且退燒 48–72 小時",days:null,src:["IDSA_SSTI14"]}};
+}
+function genCAP(c){
+  const sub = S.sub==="cap_unk" ? "cap_in" : S.sub;
+  const o=[], n=[];
+  const pMRSA=S.mdr.includes("prevMRSA"), pPSA=S.mdr.includes("prevPSA"), hcx=S.mdr.includes("hosp90")&&S.mdr.includes("abx90");
+  const sev = sub==="cap_sev";
+  if(sub==="cap_out"){
+    o.push(O("首選",["amxPO"],{src:["ATS19"]}));
+    o.push(O("替代",["doxy"],{src:["ATS19"]}));
+    n.push(N("Macrolide 單用僅適用於肺炎鏈球菌 macrolide 抗藥 <25% 地區，台灣不適用。",["ATS19","TW_SPN"],{lvl:"warn"}));
+    n.push(N("ATS 2025：門診、無共病且呼吸道病毒檢驗陽性者，建議不給抗生素（IDSA 未背書此更新）。",["ATS25"],{upd:true}));
+  } else if(sub==="cap_outc"){
+    o.push(O("首選（合併）",["amcPO","cxmPO"],{add:[{regs:["azi","doxy"],alt:true}],src:["ATS19"]}));
+    o.push(O("替代（單用）",["levo750","moxi"],{note:"台灣：使用 FQ 前先排除結核（痰 AFB）",src:["ATS19","IDST_CAP"]}));
+    n.push(N("共病：慢性心、肺、肝、腎疾病，糖尿病，酗酒，惡性腫瘤，無脾。",["ATS19"]));
+  } else if(sub==="cap_asp"){
+    o.push(O("首選",["samIV","cro1"],{note:"不常規加厭氧菌涵蓋，除非懷疑肺膿瘍或膿胸（ampicillin-sulbactam 已涵蓋厭氧菌）",src:["ATS19"]}));
+    n.push(N("化學性吸入（chemical pneumonitis）48 小時內常自行改善，未必需要抗生素。",["ATS19"]));
+  } else {
+    const bl = sev ? ["samIV","cro2"] : ["samIV","cro1"];
+    if(pPSA || (sev&&hcx)){
+      o.push(O("首選（PsA 風險）",["tzp","fep2q8","mem"],{add:[{regs:sev?["azi","levo750"]:["azi","doxy"],alt:true}],note:"取痰培養，陰性且改善時降回標準治療",src:["ATS19"]}));
+    } else {
+      o.push(O("首選（合併）",bl,{add:[{regs:sev?["azi"]:["azi","doxy"],alt:true}],src:["ATS19"]}));
+      o.push(O(sev?"替代（合併）":"替代（單用）",sev?bl:["levo750","moxi"],sev?{add:[{regs:["levo750","moxi"],alt:true}],note:"β-lactam ＋ 呼吸道 FQ",src:["ATS19"]}:{note:"台灣：使用 FQ 前先排除結核",src:["ATS19","IDST_CAP"]}));
+    }
+    if(pMRSA || (sev&&hcx)) o.push(O("加上（MRSA 風險）",["vanco","lzd","teico"],{note:"送痰培養與 MRSA 鼻腔 PCR；陰性可停",src:["ATS19","PARENTE18"]}));
+    if(!sev && hcx && !pMRSA && !pPSA) n.push(N("近期住院且接受 IV 抗生素（非重症）：先送痰培養與 MRSA 鼻腔 PCR，培養陽性再加 MRSA／PsA 涵蓋。",["ATS19"]));
+    if(sev) n.push(N("ATS 2025：重症 CAP 建議加 corticosteroid（流感肺炎除外）。",["ATS25"],{upd:true}));
+    n.push(N("驗流感：陽性者不論發病時間皆給 oseltamivir（本 app 不提供抗病毒劑量）。",["ATS19"]));
+  }
+  n.push(N("台灣：肺炎鏈球菌 macrolide 抗藥率高，macrolide 只作合併用藥；結核盛行，FQ 單用前先排除 TB；K. pneumoniae 為重要致病菌。",["TW_SPN","IDST_CAP"]));
+  let dur;
+  if(pMRSA||pPSA) dur={t:"MRSA／PsA：7 天",days:7,src:["ATS19"]};
+  else if(sev) dur={t:"臨床穩定後至少 5 天",days:5,src:["ATS25"],upd:true};
+  else dur={t:"臨床穩定後可 3–5 天（最少 3 天）",days:3,src:["ATS25"],upd:true};
+  return {o,n,dur};
+}
+const GEN = {cys:genCys,pyelo:genUp,cuti:genUp,cauti:genUp,uti_unk:genUp,abp:genABP,cbp:genCBP,epi:genEpi,fg:genFG,
+  cap_out:genCAP,cap_outc:genCAP,cap_in:genCAP,cap_sev:genCAP,cap_asp:genCAP,cap_unk:genCAP};
+function genAllergy(sub,c){
+  if(S.allergy==="none") return null;
+  const sy=Object.keys(SYS).find(k=>SYS[k].subs.some(x=>x.id===sub));
+  if(ALLERGY2[sy]) return ALLERGY2[sy]();
+  const sc=siteClass(sub);
+  if(sub==="cys") return O("過敏替代（非 β-lactam）",["nitro","fos","tmpsmx"],{src:["IDSA_cys10"]});
+  if(sub==="abp"||sub==="cbp") return O("過敏替代",["levo500","ciproPO","tmpsmx"],{src:["EAU_UI25"]});
+  if(sub==="epi") return O("過敏替代",["gentGC","levo500"],{note:"淋病：gentamicin 240 mg IM ＋ azithromycin 2 g PO；腸道菌：levofloxacin",src:["CDC_STI21"]});
+  if(sub==="fg") return O("過敏替代（合併）",["azt","ciproIV"],{add:[{regs:["metro"]},{regs:["vanco","teico","lzd"],alt:true},{regs:["clinda"]}],src:["IDSA_SSTI14"]});
+  if(sc==="resp") return O("過敏替代",["levo750","moxi"],{note:"PsA 風險另加 aztreonam；MRSA 風險加 vancomycin 或 linezolid",src:["ATS19"]});
+  return O("過敏替代",["azt","gentQ24","levo750"],{note:"FQ 需先前培養感受或院內抗藥率低。ESBL 風險：aminoglycoside；非 SCAR 者 carbapenem 交叉反應 <1%，可監測下使用",src:["ALLERGY22","IDSA_cUTI25"]});
+}
+
+/* ---------------- 繪製 ---------------- */
+const $ = id=>document.getElementById(id);
+const UPD = '<span class="upd" title="與先前版本相比的新建議（2024–2026 指引）">更新</span>';
+const srcTags = arr=>arr&&arr.length?`<div class="srcs">${[...new Set(arr)].map(k=>REF[k]?`<span class="src" title="${REF[k].f.replace(/"/g,"&quot;")}">${REF[k].s}</span>`:"").join("")}</div>`:"";
+function tierCls(t){ if(t.includes("過敏")) return "allergy"; if(t.startsWith("首選")||t.startsWith("IV 首選")) return "primary"; if(t.includes("口服")) return "po"; if(t.startsWith("加上")||t.startsWith("升階")) return "add"; return ""; }
+function rxRow(id){
+  const g=REG[id]; if(!g) return "";
+  const d=D[g.d]; const ds=doseOf(id);
+  const fl=[];
+  const al=allergyCheck(g.d); if(al) fl.push(`<span class="flag ${al.lvl}">${al.m}</span>`);
+  if(S.preg&&d.preg) fl.push(`<span class="flag warn">孕：${d.preg}</span>`);
+  if(d.tw==="limited") fl.push(`<span class="flag info">台灣供應有限，確認院內品項</span>`);
+  if(d.restrict) fl.push(`<span class="flag info">管制抗生素・會診感染科</span>`);
+  const ix=INTER.filter(x=>x.d.includes(g.d));
+  const copyTxt=`${d.n} ${ds.plain}${R?`（${R.short}）`:""}`;
+  return `<div class="rx${al&&al.lvl==="danger"?" blocked":""}">
+    <div class="rx-head"><span class="rx-name">${d.n}</span><span class="route">${g.r}</span>${fl.join("")}</div>
+    <div class="rx-dose">${ds.html}</div>
+    <div class="rx-meta">${ds.adj?`<span class="adj">${ds.band}</span>`:ds.band}${g.note?` ・ ${g.note}`:""}</div>
+    ${ix.length?`<details class="ix"><summary>交互作用 ${ix.length} 項</summary><ul>${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></details>`:""}
+    <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copyTxt)}">複製</button>
+  </div>`;
+}
+function optCard(o){
+  const many=o.regs.length>1;
+  let body = many ? `<div class="pick">${o.alt?"選一":"合併使用"}</div>`:"";
+  body += o.regs.map(rxRow).join("");
+  (o.add||[]).forEach(gp=>{ body+=`<div class="plus">＋ ${gp.alt&&gp.regs.length>1?"合併以下其一":"合併"}</div>`+gp.regs.map(rxRow).join(""); });
+  if(o.plus) body+=`<div class="plus">＋ ${o.plus}</div>`;
+  const cls=tierCls(o.tier);
+  return `<div class="opt${cls==="primary"?" primary":""}">
+    <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?UPD:""}</div>
+    ${body}
+    ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
+    ${o.note?`<div class="onote">${o.note}</div>`:""}
+    ${srcTags(o.src)}
+  </div>`;
+}
+function noteBlock(n){ return `<div class="note ${n.lvl||""}">${n.upd?UPD+" ":""}${n.t}${srcTags(n.src)}</div>`; }
+function renalBar(){
+  if(!R) return `<div class="note warn">尚未輸入腎功能：以下為<b>正常腎功能</b>劑量。請在左側輸入年齡、體重、SCr 或選擇透析方式。</div>`;
+  let s=`<div class="note">劑量依 <b>${R.label}</b> 計算`;
+  if(S.pt.aki) s+=`；腎功能不穩定：首劑給足量（不減量），24–48 小時後再評估`;
+  if(R.mode==="crcl"&&R.val>130) s+=`；CrCl >130 可能為 ARC，β-lactam 考慮延長輸注或較高劑量`;
+  return s+`。</div>`;
+}
+
+function ctxNote(){
+  if(CTX2[S.sys]) return `<div class="ctx"><b>重點：</b>${CTX2[S.sys][0]}${srcTags(CTX2[S.sys][1])}</div>`;
+  if(S.sys==="gu") return `<div class="ctx"><b>台灣抗藥性：</b>社區 E. coli 對 FQ 與 TMP-SMX 不感受比例高，3rd-gen ceph 不感受與 ESBL 逐年上升。優先參考院內 antibiogram：sepsis 時排除抗藥率 >20% 的藥，septic shock 排除 >10%。${UPD}${srcTags(["TSAR","IDSA_cUTI25"])}</div>`;
+  return `<div class="ctx"><b>台灣抗藥性：</b>肺炎鏈球菌 macrolide 抗藥率歷年監測超過 80%，macrolide 只作合併用藥；結核盛行，FQ 單用前先排除 TB。台灣 CAP 常見菌依序為 S. pneumoniae、M. pneumoniae、C. pneumoniae、H. influenzae、K. pneumoniae。${srcTags(["TW_SPN","IDST_CAP"])}</div>`;
+}
+
+function favs(){ try{ return JSON.parse(localStorage.getItem("abx_favs")||"[]"); }catch(e){ return []; } }
+function saveFavs(a){ try{ localStorage.setItem("abx_favs",JSON.stringify(a)); }catch(e){} }
+function scenarioName(){
+  const sub=SYS[S.sys].subs.find(x=>x.id===S.sub); let s=sub?sub.n:"";
+  if(hasSev(S.sub)&&S.sev!=="none") s+=" ・ "+(S.sev==="sepsis"?"sepsis":"shock");
+  if(S.mdr.length) s+=" ・ MDR×"+S.mdr.length;
+  if(S.path) s+=" ・ "+PATH[S.path].n.split(" ")[0];
+  return s;
+}
+
+function renderEmp(){
+  const sys=SYS[S.sys];
+  const fv=favs();
+  let h=`<div class="favs"><button class="btn" type="button" data-act="fav-save">☆ 收藏此情境</button>${fv.map((f,i)=>`<span class="fav"><button type="button" data-act="fav-load" data-i="${i}">${f.name}</button><button type="button" data-act="fav-del" data-i="${i}" aria-label="刪除收藏">×</button></span>`).join("")}</div>`;
+  h+=`<div class="step"><h3><span class="k">01</span>感染部位</h3><div class="chips">
+    ${Object.keys(SYS).map(k=>`<button class="chip" type="button" data-act="sys" data-v="${k}" aria-pressed="${S.sys===k}">${SYS[k].n}</button>`).join("")}
+  </div></div>`;
+  h+=`<div class="step"><h3><span class="k">02</span>細分診斷</h3><div class="chips">
+    ${sys.subs.map(s=>`<button class="chip" type="button" data-act="sub" data-v="${s.id}" aria-pressed="${S.sub===s.id}">${s.n}</button>`).join("")}
+  </div>${isCAP(S.sub)?`<div class="hint">重症：需呼吸器或升壓劑，或符合 ≥3 項次要條件（RR ≥30、P/F ≤250、多葉浸潤、意識混亂、BUN ≥20、WBC <4000、Plt <100k、體溫 <36°C、需大量輸液之低血壓）。</div>`:""}</div>`;
+  h+=`<div class="step"><h3><span class="k">03</span>臨床情境</h3>`;
+  if(hasSev(S.sub)) h+=`<div class="lbl">嚴重度</div><div class="chips">${["none","sepsis","shock"].map((v,i)=>[v,(SUBDEF[S.sub].sevL||["無 sepsis","Sepsis","Septic shock"])[i]]).map(([v,n])=>`<button class="chip" type="button" data-act="sev" data-v="${v}" aria-pressed="${S.sev===v}">${n}</button>`).join("")}</div>`;
+  h+=`<details class="mdr" ${S.mdr.length?"open":""}><summary>MDR（多重抗藥菌）危險因子 ${S.mdr.length?`・已勾 ${S.mdr.length} 項`:"・勾選符合項目"}</summary>
+    <div class="hint">這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。${isCAP(S.sub)?"CAP 只依「過去呼吸道培養出 MRSA／PsA」及「90 天內住院且用過 IV 抗生素」判斷（ATS/IDSA 2019）。":""}</div>
+    <div class="mdrlist">${MDR.map(m=>`<label class="chk"><input type="checkbox" data-act="mdr" data-v="${m.id}" ${S.mdr.includes(m.id)?"checked":""}><span>${m.t}</span></label>`).join("")}</div>
+  </details></div>`;
+
+  const c={fx:fxSet(),sev:hasSev(S.sub)?S.sev:"none",male:S.pt.sex==="M"};
+  const r=GEN[S.sub](c);
+  h+=`<div class="step"><h3><span class="k">04</span>建議</h3>${renalBar()}<div class="mt"></div>${ctxNote()}`;
+  h+=`<div class="sec-title">常見致病菌（依常見順序，點選看標靶治療）</div><div class="paths">${(PL[S.sub]||[]).map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div>`;
+  if(S.path) h+=`<div class="mt">${targetPanel(S.path,S.ph,siteClass(S.sub))}</div>`;
+  h+=`<div class="sec-title mt">經驗性治療</div><div class="res">`;
+  const al=genAllergy(S.sub,c); if(al) h+=optCard(al);
+  h+=r.o.map(optCard).join("");
+  h+=`<div class="dur"><span class="k">療程</span><span class="v">${r.dur.t}</span>${r.dur.upd?UPD:""}${srcTags(r.dur.src)}</div>`;
+  h+=`<div class="notes">${r.n.map(noteBlock).join("")}<div class="note">IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。${srcTags(["IDSA_cUTI25","ATS19"])}</div></div>`;
+  h+=`</div></div>`;
+  return h;
+}
+function targetPanel(pid,ph,sc){
+  const p=PATH[pid], g=p.g, phs=PHL[g]?Object.keys(PHL[g]):["any"];
+  const cur = ph&&phs.includes(ph)?ph:phs[0];
+  const t=(TGT[g]||{})[cur]||{};
+  const list=t[sc]||t.sys||t.resp||t.cys||[];
+  let h=`<div class="tgt"><h3>${p.n}</h3><div class="pnote">${p.note||""}</div>`;
+  if(PCOL[pid]!==undefined) h+=`<div style="margin:-4px 0 10px"><button class="linkbtn" type="button" data-act="spec-go" data-v="${pid==="saur"&&cur==="MRSA"?2:PCOL[pid]}">在抗菌譜查看所有可用藥物</button></div>`;
+  if(PHL[g]) h+=`<div class="lbl">藥敏表現型</div><div class="chips" style="margin-bottom:10px">${phs.map(k=>`<button class="chip" type="button" data-act="ph" data-v="${k}" aria-pressed="${cur===k}">${PHL[g][k]}</button>`).join("")}</div>`;
+  if(list.length) h+=`<div class="res">${list.map(optCard).join("")}</div>`;
+  else h+=`<div class="note">${g==="cand"?"抗黴菌將在下一批加入。":g==="flu"?"抗病毒不在本 app 範圍；請依院內流感治療規範。":"此部位無對應標靶建議。"}</div>`;
+  if(g==="ent"&&cur==="ESBL") h+=`<div class="note mt">${UPD} Piperacillin-tazobactam：膀胱炎已用且改善可不換；pyelo／cUTI 非首選；泌尿道外感染即使感受也不建議。Cefepime 不建議。${srcTags(["IDSA_AMR24"])}</div>`;
+  return h+`</div>`;
+}
+
+/* 目前用藥 */
+const ESC = {
+  ceftriaxone:"PsA 風險 → cefepime 或 piperacillin-tazobactam；ESBL 風險 → ertapenem／meropenem",
+  cefazolin:"改 ceftriaxone；有 PsA／ESBL 風險依上列升階",cephalexin:"改 IV ceftriaxone",cefuroxime:"改 IV ceftriaxone",
+  amoxicillin:"改 IV ampicillin-sulbactam 或 ceftriaxone",amoxclav:"改 IV ceftriaxone 或 ampicillin-sulbactam",ampsulb:"改 ceftriaxone；PsA 風險 → piperacillin-tazobactam",
+  cipro:"台灣 FQ 抗藥率高 → 改 IV ceftriaxone；ESBL 風險 → ertapenem",levo:"UTI：改 IV ceftriaxone；CAP：加 β-lactam",moxi:"加 β-lactam；檢查結核",
+  tmpsmx:"改 IV ceftriaxone；ESBL 風險 → ertapenem",nitrofurantoin:"出現發燒或腰痛 → 視為上泌尿道感染，改 IV ceftriaxone",fosfomycin:"出現發燒或腰痛 → 改 IV ceftriaxone",
+  piptazo:"ESBL 風險 → meropenem；確認來源控制",cefepime:"ESBL 風險 → meropenem；確認來源控制",
+  ertapenem:"懷疑 PsA 或 Enterococcus → meropenem 或 piperacillin-tazobactam",
+  meropenem:"會診感染科：CRE → ceftazidime-avibactam；DTR-PA → ceftolozane-tazobactam；考慮黴菌與來源控制",
+  flomoxef:"改 ertapenem／meropenem",cefmetazole:"改 ertapenem／meropenem",
+  azithro:"確認已合併 β-lactam；考慮 Legionella、非典型菌以外病因",doxy:"確認已合併 β-lactam",
+  vanco:"確認 MRSA 證據與濃度是否達標",teico:"確認 MRSA 證據；負荷劑量是否足夠、trough 是否達標",linezolid:"確認 MRSA 證據",gent:"確認濃度；aminoglycoside 單用僅限 UTI",amikacin:"確認濃度"
+};
+function curPathList(){ return [...new Set([...(PL[S.sub]||[]),"ecoli","kpn","pmir","psa","ampc","efae","saur"])]; }
+function renderCur(){
+  const C=S.cur; const sc=siteClass(S.sub);
+  const subN=(SYS[S.sys].subs.find(x=>x.id===S.sub)||{}).n;
+  let h=`<div class="note">感染部位：<b>${SYS[S.sys].n} ・ ${subN}</b>（在「經驗性治療」頁更改）</div>`;
+  h+=`<div class="step mt"><h3><span class="k">01</span>目前使用的抗生素</h3><div class="chips">${Object.keys(D).map(k=>`<button class="chip" type="button" data-act="cur-drug" data-v="${k}" aria-pressed="${C.drugs.includes(k)}">${D[k].n}</button>`).join("")}</div></div>`;
+  h+=`<div class="step"><h3><span class="k">02</span>病程</h3><div class="grid2" style="max-width:520px">
+    <div class="field"><label for="curDay">已使用天數（第一劑有效抗生素起算）</label><input id="curDay" type="number" min="0" max="60" value="${C.day}" data-act="cur-day"></div>
+    <div class="field"><span class="lbl">臨床反應</span><div class="chips">${[["improve","改善"],["none","無改善"],["worse","惡化"]].map(([v,n])=>`<button class="chip" type="button" data-act="cur-resp" data-v="${v}" aria-pressed="${C.resp===v}">${n}</button>`).join("")}</div></div>
+  </div>
+  <div class="mt" style="display:grid;gap:6px">
+    <label class="chk"><input type="checkbox" data-act="cur-flag" data-v="afeb" ${C.afeb?"checked":""}><span>退燒 ≥24–48 小時</span></label>
+    <label class="chk"><input type="checkbox" data-act="cur-flag" data-v="stable" ${C.stable?"checked":""}><span>血行動力學穩定</span></label>
+    <label class="chk"><input type="checkbox" data-act="cur-flag" data-v="po" ${C.po?"checked":""}><span>可進食，腸胃吸收正常</span></label>
+  </div></div>`;
+  h+=`<div class="step"><h3><span class="k">03</span>培養結果</h3><div class="chips">
+    <button class="chip" type="button" data-act="cur-org" data-v="" aria-pressed="${C.org===""}">尚無結果</button>
+    <button class="chip" type="button" data-act="cur-org" data-v="neg" aria-pressed="${C.org==="neg"}">培養陰性</button>
+    ${curPathList().filter(p=>PATH[p].g!=="flu"&&PATH[p].g!=="cand").map(p=>`<button class="chip" type="button" data-act="cur-org" data-v="${p}" aria-pressed="${C.org===p}"><i>${PATH[p].n}</i></button>`).join("")}
+  </div>`;
+  let tlist=[];
+  if(C.org&&C.org!=="neg"){
+    const g=PATH[C.org].g, phs=PHL[g]?Object.keys(PHL[g]):["any"]; const ph=phs.includes(C.ph)?C.ph:phs[0];
+    if(PHL[g]) h+=`<div class="lbl mt">藥敏表現型</div><div class="chips">${phs.map(k=>`<button class="chip" type="button" data-act="cur-ph" data-v="${k}" aria-pressed="${ph===k}">${PHL[g][k]}</button>`).join("")}</div>`;
+    const t=(TGT[g]||{})[ph]||{}; tlist=t[sc]||t.sys||t.resp||t.cys||[];
+    const drugs=[...new Set([...C.drugs,...tlist.flatMap(o=>o.regs.map(r=>REG[r].d))])];
+    h+=`<div class="lbl mt">藥敏結果（只需填報告上有的）</div><div class="sus">${drugs.map(d=>`<span>${D[d].n}</span><div class="seg">${[["","未知"],["S","S"],["R","R"]].map(([v,n])=>`<button class="chip" type="button" data-act="cur-sus" data-d="${d}" data-v="${v}" aria-pressed="${(C.sus[d]||"")===v}">${n}</button>`).join("")}</div>`).join("")}</div>`;
+  }
+  h+=`</div>`;
+  h+=`<div class="step"><h3><span class="k">04</span>評估與下一步</h3>${renalBar()}<div class="res mt">${curEval(tlist)}</div></div>`;
+  return h;
+}
+function regOK(rid,org,ph){ const d=REG[rid].d; if(S.cur.sus[d]==="R") return false; const i=intrinsic(d,org,ph); return !(i&&i.lvl==="bad"); }
+function curEval(tlist){
+  const C=S.cur; const out=[]; const org=C.org&&C.org!=="neg"?C.org:null;
+  const g=org?PATH[org].g:null; const phs=g&&PHL[g]?Object.keys(PHL[g]):["any"]; const ph=org?(phs.includes(C.ph)?C.ph:phs[0]):null;
+  const poReady=C.afeb&&C.stable&&C.po&&C.resp==="improve";
+  if(!C.drugs.length) out.push(`<div class="note">先在上方點選目前使用的抗生素。</div>`);
+  const bad=[];
+  if(C.drugs.length){
+    const rows=C.drugs.map(d=>{
+      let st="info", m="尚無培養，暫時無法判斷";
+      if(org){ const i=intrinsic(d,org,ph);
+        if(C.sus[d]==="R"){st="danger";m="藥敏抗藥";bad.push(d);}
+        else if(i&&i.lvl==="bad"){st="danger";m=i.m;bad.push(d);}
+        else if(i&&i.lvl==="warn"){st="warn";m=i.m;}
+        else if(C.sus[d]==="S"){st="ok";m="藥敏感受";}
+        else {st="info";m="未填藥敏";}
+      } else if(C.org==="neg"){ st="info"; m="培養陰性：依臨床反應判斷"; }
+      const al=allergyCheck(d);
+      return `<div class="rx"><div class="rx-head"><span class="rx-name">${D[d].n}</span><span class="flag ${st}">${m}</span>${al&&al.lvl==="danger"?`<span class="flag danger">${al.m}</span>`:""}</div></div>`;
+    }).join("");
+    out.push(`<div class="opt"><div class="opt-head"><span class="tier">目前用藥評估</span></div>${rows}</div>`);
+  }
+  if(org&&tlist.length){
+    const ivC=[], poC=[];
+    tlist.forEach(o=>o.regs.forEach(r=>{ if(regOK(r,org,ph)){ const rt=REG[r].r; if(rt.includes("PO")) poC.push(r); if(rt.includes("IV")||rt==="IM") ivC.push(r);} }));
+    const best=(poReady&&poC.length)?poC[0]:(ivC[0]||poC[0]);
+    const curMax=Math.max(0,...C.drugs.map(d=>D[d].rank));
+    if(bad.length&&best){
+      out.push(optCard(O("需更換",[best],{note:`${bad.map(d=>D[d].n).join("、")} 對此菌無效。`,src:["IDSA_AMR24"]})));
+    } else if(best&&C.drugs.length&&curMax>D[REG[best].d].rank&&!C.drugs.includes(REG[best].d)){
+      out.push(optCard(O("可降階",[best],{note:"目前用藥抗菌譜較廣，可依藥敏改為較窄效藥物",src:["IDSA_cUTI25"]})));
+    } else if(best&&!C.drugs.length){
+      out.push(optCard(O("建議",[best],{src:["IDSA_AMR24"]})));
+    } else if(C.drugs.length) out.push(`<div class="note">目前用藥已對症，抗菌譜適當。</div>`);
+    if(poReady){
+      const po=[...new Set(poC)];
+      out.push(po.length?optCard(Object.assign(O("口服降階",po.slice(0,4)),{note:"已符合 IV 轉口服條件",src:["IDSA_cUTI25","ATS19"]})):`<div class="note warn">已符合轉口服條件，但沒有感受的口服藥，請續用 IV 或會診感染科。</div>`);
+    }
+  } else if(!org){
+    if(C.drugs.length&&C.resp!=="improve"&&C.day>=2){
+      const lines=C.drugs.filter(d=>ESC[d]).map(d=>`<li><b>${D[d].n}</b>：${ESC[d]}</li>`).join("");
+      const chk = siteClass(S.sub)==="resp"
+        ? "重新評估診斷（肺栓塞、心衰竭、結核、黴菌）；找併發症（膿胸、肺膿瘍）；送痰與血液培養、肺炎鏈球菌與 Legionella 尿液抗原；確認劑量依腎功能是否偏低"
+        : "影像排除阻塞或膿瘍（需引流）；更換導尿管後重新採檢；送尿液與血液培養；確認劑量依腎功能是否偏低；考慮非感染原因";
+      out.push(`<div class="opt"><div class="opt-head"><span class="tier esc">48–72 小時${C.resp==="worse"?"惡化":"無改善"}</span></div><div class="onote"><b>先找原因再升階：</b>${chk}。</div>${lines?`<div class="onote"><b>升階方向：</b><ul>${lines}</ul></div>`:""}${srcTags(["EAU_UI25","ATS19"])}</div>`);
+    } else if(C.drugs.length&&C.resp==="improve"){
+      out.push(`<div class="note">${C.org==="neg"?"培養陰性但臨床改善：續用目前治療，依療程停藥；":"等待培養期間臨床改善："}${poReady?"已符合 IV 轉口服條件。"+(siteClass(S.sub)==="resp"?"CAP 可改 amoxicillin-clavulanate 或 cefuroxime ＋ doxycycline／azithromycin，或呼吸道 FQ（排除 TB 後）。":"UTI 無培養時，口服藥選擇需參考先前培養或院內 antibiogram。"):"尚未符合 IV 轉口服條件。"}</div>`);
+    }
+  }
+  if(C.drugs.some(d=>d==="vanco"||d==="teico"||d==="linezolid")){
+    if(org&&org!=="saur") out.push(`<div class="note">培養未見 S. aureus：若無其他 MRSA 證據，可停 vancomycin／teicoplanin／linezolid。</div>`);
+    else if(!org&&siteClass(S.sub)==="resp") out.push(`<div class="note">MRSA 鼻腔 PCR 陰性時，MRSA 肺炎可能性低（陰性預測值高），可考慮停用。${srcTags(["PARENTE18"])}</div>`);
+  }
+  if(C.drugs.includes("piptazo")&&C.drugs.includes("vanco")) out.push(`<div class="note warn">Vancomycin ＋ piperacillin-tazobactam：急性腎損傷風險增加，監測 Cr。</div>`);
+  const c={fx:fxSet(),sev:hasSev(S.sub)?S.sev:"none",male:S.pt.sex==="M"};
+  const dur=GEN[S.sub](c).dur;
+  const rem = dur.days? Math.max(0,dur.days-C.day):null;
+  out.push(`<div class="dur"><span class="k">療程</span><span class="v">${dur.t}</span>${dur.days?`<span class="muted">已用 ${C.day} 天，依最短療程約剩 ${rem} 天</span>`:""}${srcTags(dur.src)}</div>`);
+  return out.join("");
+}
+
+/* 手術預防 */
+function pxRow(k){
+  const p=PXR[k]; const t=fillW(p.t);
+  return `<div class="rx"><div class="rx-head"><span class="rx-name">${p.n}</span>${p.re?`<span class="flag info">追加 ${p.re}</span>`:""}</div><div class="rx-dose">${t.replace(/ ≈ (.*?)$/,' <span class="w">≈ $1</span>')}</div><button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(p.n+" "+t)}">複製</button></div>`;
+}
+function pxGroup(label,groups,tcls){
+  if(!groups.length) return "";
+  const multi=groups.length>1, combo=groups.some(g=>g.length>1);
+  const body=groups.map((gp,i)=>{
+    const names=gp.map(k=>PXR[k].n).join(" ＋ ");
+    const head=multi?`方案 ${"ABCDE"[i]}：${names}${gp.length>1?"（同時給）":""}`:(gp.length>1?`${names}（同時給）`:"");
+    const inner=(head?`<div class="plan-h">${head}</div>`:"")+gp.map(pxRow).join("");
+    return (multi||combo)?`${i?'<div class="pick">或</div>':""}<div class="plan">${inner}</div>`:inner;
+  }).join("");
+  const hint=multi?`<div class="hint" style="margin:0 0 4px">選一個方案${combo?"；同一方案內的藥一起給":""}</div>`:"";
+  return `<div class="opt${tcls==="primary"?" primary":""}"><div class="opt-head"><span class="tier ${tcls}">${label}</span></div>${hint}${body}</div>`;
+}
+function renderPx(){
+  let h=`<div class="step"><h3><span class="k">01</span>手術或處置</h3><div class="chips">${PROC.map(p=>`<button class="chip" type="button" data-act="proc" data-v="${p.id}" aria-pressed="${S.proc===p.id}">${p.n}</button>`).join("")}</div></div>`;
+  const p=PROC.find(x=>x.id===S.proc);
+  h+=`<div class="step"><h3><span class="k">02</span>${p.n}</h3><div class="res">`;
+  h+=`<div class="dur"><span class="k">是否需要</span><span class="v">${p.need}</span>${p.upd?UPD:""}${srcTags(p.src)}</div>`;
+  h+=pxGroup(p.priLabel||"首選",p.pri,"primary");
+  h+=pxGroup(p.altLabel||"替代",p.alt,"");
+  if(S.allergy!=="none") h+=pxGroup("β-lactam 過敏",PX_ALLERGY,"allergy");
+  h+=`<div class="notes">${p.notes.map(t=>`<div class="note">${t}</div>`).join("")}
+    <div class="note">通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。${srcTags(["ASHP13","AUA_PX19","EAU_UI25"])}</div></div>`;
+  return h+`</div></div>`;
+}
+
+/* Vancomycin */
+function renderVanco(){
+  const v=vancoCalc();
+  let h=`<div class="step"><h3><span class="k">01</span>設定</h3><div class="grid2" style="max-width:520px">
+    <div class="field"><label for="vauc">目標 AUC24（mg·h/L）</label><input id="vauc" type="number" min="400" max="600" step="25" value="${S.vauc}" data-act="vauc"></div>
+    <div class="field"><label for="vld">首劑（mg/kg，實際體重）</label><input id="vld" type="number" min="20" max="35" step="5" value="${S.vld}" data-act="vld"></div>
+  </div><div class="hint">首劑：一般 20–25 mg/kg，重症 25–30（最多 3 g）。目標 AUC24 400–600。</div></div>`;
+  h+=`<div class="step"><h3><span class="k">02</span>結果</h3>`;
+  if(v.err) h+=`<div class="note warn">${v.err}</div>`;
+  else if(v.dial){
+    const t={hd:"首劑 25 mg/kg（實際體重，最多 3 g）。之後每次透析後 5–10 mg/kg，依透析前濃度（約 15–20 mg/L）調整。",pd:"首劑 20–25 mg/kg，之後依隨機濃度補充；請會診藥師。",crrt:"首劑 20–25 mg/kg，之後 7.5–10 mg/kg q12h，依濃度調整。"}[v.dial];
+    h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">${R.label}</span></div><div class="onote">${t}</div><div class="rx-dose mt">首劑 ≈ ${Math.min(3000,Math.round(S.vld*v.w.tbw/250)*250)} mg</div>${srcTags(["VANCO20"])}</div>`;
+  } else {
+    h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">建議起始</span></div>
+      <div class="rx-dose">首劑 ${v.ld} mg IV，之後 ${v.dose} mg IV q${v.tau}h</div>
+      <div class="rx-meta">輸注時間 ≥${Math.max(1,v.dose/1000)} 小時（每 1 g 至少 1 小時）${v.capped?" ・ 單次劑量上限 2 g，AUC 可能不足，請監測濃度":""}</div>
+      <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(`Vancomycin loading ${v.ld} mg IV, then ${v.dose} mg IV q${v.tau}h（${R.short}）`)}">複製</button></div>
+      <div class="card"><dl class="kv">
+        <dt>CrCl（上限 150）</dt><dd>${r0(v.crcl)} mL/min</dd>
+        <dt>Vancomycin CL</dt><dd>${v.CL.toFixed(2)} L/h</dd>
+        <dt>Vd（0.7 L/kg）</dt><dd>${v.Vd.toFixed(1)} L</dd>
+        <dt>半衰期</dt><dd>${v.th.toFixed(1)} h</dd>
+        <dt>預估 AUC24</dt><dd>${r0(v.auc)} mg·h/L</dd>
+        <dt>預估穩定態 trough</dt><dd>${v.cmin.toFixed(1)} mg/L</dd>
+        <dt>預估 peak</dt><dd>${v.cmax.toFixed(1)} mg/L</dd>
+      </dl></div>`;
+  }
+  h+=`<div class="notes mt">
+    <div class="note warn">這是以 Matzke 一室模型做的<b>首劑估算</b>，不能取代濃度監測。2020 共識建議以 Bayesian 軟體或兩點濃度（peak＋trough）計算 AUC，並在給藥 24–48 小時內開始監測。${srcTags(["VANCO20","MATZKE84"])}</div>
+    <div class="note">肥胖（BMI ≥30）：首劑 20–25 mg/kg（實際體重），初始每日劑量通常不超過 4.5 g；Vd 估計誤差較大，提早監測濃度。${srcTags(["VANCO20"])}</div>
+    <div class="note">AKI 或 Cr 不穩定：給足 loading，之後依濃度給藥，不依此估算。</div>
+  </div></div>`;
+  return h;
+}
+
+
+/* Teicoplanin（仿單 EMA Article 30） */
+const TIND = {
+  std:{n:"一般感染（cSSTI、肺炎、cUTI）",mk:6,ln:[3],tg:"> 15 mg/L（FPIA）／≥10 mg/L（HPLC）"},
+  bone:{n:"骨關節感染",mk:12,ln:[3,4,5],tg:"> 20 mg/L（FPIA）"},
+  ie:{n:"感染性心內膜炎／嚴重感染",mk:12,ln:[3,4,5],tg:"30–40 mg/L（FPIA）／15–30 mg/L（HPLC）"}
+};
+function teicoCalc(ind){
+  const t=TIND[ind]; const w=weights();
+  const r100=x=>Math.max(100,Math.round(x/100)*100);
+  const mg=w?r100(t.mk*w.tbw):null;
+  const md=mg?`${mg} mg`:`${t.mk} mg/kg`;
+  let renal, adj=false;
+  if(!R){ renal=`${md} q24h（未輸入腎功能，以正常腎功能顯示）`; }
+  else if(R.mode==="crcl"){
+    if(R.val>80) renal=`${md} q24h（不需調整）`;
+    else if(R.val>=30){ renal=`${md} q48h，或 ${mg?r100(mg/2)+" mg":t.mk/2+" mg/kg"} q24h（減半）`; adj=true; }
+    else { renal=`${md} q72h，或 ${mg?r100(mg/3)+" mg":(t.mk/3)+" mg/kg"} q24h（1/3 量）`; adj=true; }
+  } else if(R.mode==="hd"||R.mode==="pd"){ renal=`${md} q72h，或 ${mg?r100(mg/3)+" mg":(t.mk/3)+" mg/kg"} q24h（1/3 量）；透析不會移除`; adj=true; }
+  else { renal="仿單無 CRRT 建議：負荷劑量照給，之後依 trough 濃度給藥（會診藥師）"; adj=true; }
+  return {t,w,mg,md,renal,adj};
+}
+function teicoBrief(ind){
+  const c=teicoCalc(ind);
+  const t=`負荷 ${c.md} IV q12h ×${c.t.ln[0]} 劑 → 維持 ${c.md} q24h；第 4 天起：${c.renal}`;
+  return {plain:t,html:t+(c.w?` <span class="w">（以實際體重 ${r0(c.w.tbw)} kg、${c.t.mk} mg/kg 計）</span>`:""),band:R?(c.adj?`第 4 天起依 ${R.short} 調整，負荷劑量不減`:"不需調整"):"未輸入腎功能，顯示正常腎功能劑量",adj:c.adj};
+}
+function renderTeico(){
+  const c=teicoCalc(S.tind); const lnOpts=c.t.ln; const ln=lnOpts.includes(S.tln)?S.tln:lnOpts[0];
+  let h=`<div class="step"><h3><span class="k">01</span>適應症</h3><div class="chips">${Object.keys(TIND).map(k=>`<button class="chip" type="button" data-act="tind" data-v="${k}" aria-pressed="${S.tind===k}">${TIND[k].n}</button>`).join("")}</div>`;
+  if(lnOpts.length>1) h+=`<div class="lbl mt">負荷劑量次數（仿單 3–5 劑）</div><div class="chips">${lnOpts.map(n=>`<button class="chip" type="button" data-act="tln" data-v="${n}" aria-pressed="${ln===n}">${n} 劑</button>`).join("")}</div>`;
+  h+=`</div><div class="step"><h3><span class="k">02</span>建議劑量</h3>${renalBar()}`;
+  if(!c.w) h+=`<div class="note warn mt">請在左側輸入體重，才能換算成 mg。</div>`;
+  const copy=`Teicoplanin loading ${c.md} IV q12h x${ln} doses, then ${c.md} IV/IM q24h${R?`; from day 4: ${c.renal}（${R.short}）`:""}`;
+  h+=`<div class="res mt">
+    <div class="opt primary"><div class="opt-head"><span class="tier primary">負荷劑量（不依腎功能減量）</span></div>
+      <div class="rx-dose">${c.md} IV q12h ×${ln} 劑</div>
+      <div class="rx-meta">${c.t.mk} mg/kg，以實際體重計${c.w?`（${r0(c.w.tbw)} kg）`:""}；半衰期很長，沒有負荷劑量要好幾天才達有效濃度</div></div>
+    <div class="opt"><div class="opt-head"><span class="tier">維持劑量（最後一劑負荷後 24 小時開始）</span></div>
+      <div class="rx-dose">${c.md} IV／IM q24h</div>
+      <div class="rx-meta">第 4 天前不需依腎功能調整</div></div>
+    <div class="opt"><div class="opt-head"><span class="tier ${c.adj?"add":""}">第 4 天起</span></div>
+      <div class="rx-dose">${c.renal}</div>
+      <div class="rx-meta">CrCl >80：不調整｜30–80：減半｜<30 或 HD：1/3</div>
+      <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copy)}">複製</button></div>
+    <div class="dur"><span class="k">目標 trough</span><span class="v">${c.t.tg}</span>${srcTags(["TEICO_SPC"])}</div>
+  </div>
+  <div class="notes mt">
+    <div class="note">抽血時機：負荷劑量結束後第 3–5 天抽下一劑前 trough，之後每週至少一次；腎功能變化時提早複驗。目標值依檢驗方法而不同（FPIA 比 HPLC 高），請先確認院內方法。${srcTags(["TEICO_SPC"])}</div>
+    <div class="note">與 vancomycin 比較：可每日一次、可 IV push 或 IM、腎毒性與輸注反應較少；但 MRSA 肺炎與菌血症的證據不如 vancomycin，美國指引未列入。${srcTags(["TEICO_SPC","VANCO20"])}</div>
+    <div class="note">VRE：VanA 型（台灣 E. faecium 多為此型）對 teicoplanin 也抗藥；VanB 型可能感受，依藥敏。</div>
+    <div class="note">腹膜透析相關腹膜炎：仿單另有腹腔內給藥方案（首劑 6 mg/kg IV，之後透析液 20 mg/L），全身性感染則依 1/3 量原則。${srcTags(["TEICO_SPC"])}</div>
+    <div class="note">肥胖：仿單依實際體重給藥，未設上限；單次劑量很大時提早監測濃度。</div>
+  </div></div>`;
+  return h;
+}
+
+
+/* ================= 抗菌譜（校正後） ================= */
+Object.assign(REF,{
+  CLSI:{s:"CLSI M100",f:"CLSI M100 Performance Standards for Antimicrobial Susceptibility Testing（最新版），Appendix B：Intrinsic Resistance。"},
+  MANDELL:{s:"Mandell 9th",f:"Bennett JE, Dolin R, Blaser MJ. Mandell, Douglas, and Bennett's Principles and Practice of Infectious Diseases, 9th ed. Elsevier 2020."},
+  POLY19:{s:"Polymyxin 共識 2019",f:"Tsuji BT, et al. International Consensus Guidelines for the Optimal Use of the Polymyxins. Pharmacotherapy 2019;39:10-39."},
+  CPS_LABEL:{s:"Sulbactam/cefoperazone 仿單",f:"Sulbactam/cefoperazone（Pfizer）仿單：成人劑量、sulbactam 每日上限 4 g、腎功能調整。"},
+  BPR_LABEL:{s:"Ceftobiprole 仿單",f:"Zevtera (ceftobiprole medocaril) SmPC, UK eMC."},
+  IPM_LABEL:{s:"Imipenem 仿單",f:"Imipenem and Cilastatin for Injection, US prescribing information, Table 3（依 CrCl 劑量）。"},
+  IDSA_MRSA11:{s:"IDSA MRSA 2011",f:"Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55."},
+  IDSA_CAND16:{s:"IDSA Candida 2016",f:"Pappas PG, et al. Clinical Practice Guideline for the Management of Candidiasis: 2016 Update by IDSA. Clin Infect Dis 2016;62:e1-50."},
+  IDSA_ASP16:{s:"IDSA Aspergillus 2016",f:"Patterson TF, et al. Practice Guidelines for the Diagnosis and Management of Aspergillosis: 2016 Update by IDSA. Clin Infect Dis 2016;63:e1-60."},
+  IDSA_CRYPTO10:{s:"IDSA Cryptococcus 2010",f:"Perfect JR, et al. Clinical Practice Guidelines for the Management of Cryptococcal Disease: 2010 Update by IDSA. Clin Infect Dis 2010;50:291-322."},
+  IDSA_HISTO07:{s:"IDSA Histoplasma 2007",f:"Wheat LJ, et al. Clinical Practice Guidelines for the Management of Patients with Histoplasmosis: 2007 Update by IDSA. Clin Infect Dis 2007;45:807-25."},
+  MUCOR19:{s:"ECMM Mucor 2019",f:"Cornely OA, et al. Global guideline for the diagnosis and management of mucormycosis. Lancet Infect Dis 2019;19:e405-21."}
+});
+Object.assign(D,{
+  oxa:{n:"Oxacillin",bl:"pen",rank:1},
+  caz:{n:"Ceftazidime",bl:"ceph",rank:4},
+  cps:{n:"Cefoperazone-sulbactam（Brosym）",bl:"ceph",rank:4},
+  bpr:{n:"Ceftobiprole",bl:"ceph",rank:4},
+  imipenem:{n:"Imipenem-cilastatin",bl:"carb",rank:5},
+  dapto:{n:"Daptomycin",rank:3},
+  tige:{n:"Tigecycline",rank:4,preg:"避免（tetracycline 類）"},
+  fusidic:{n:"Fusidic acid",rank:2},
+  colistin:{n:"Colistin（colistimethate）",rank:6,restrict:true},
+  rifampin:{n:"Rifampin",rank:2},
+  amb:{n:"Amphotericin B deoxycholate",rank:3,af:true},
+  lamb:{n:"Liposomal amphotericin B",rank:3,af:true,restrict:true},
+  mica:{n:"Micafungin",rank:3,af:true},
+  caspo:{n:"Caspofungin",rank:3,af:true},
+  anid:{n:"Anidulafungin",rank:3,af:true},
+  posa:{n:"Posaconazole",rank:3,af:true,preg:"避免"},
+  vori:{n:"Voriconazole",rank:3,af:true,preg:"避免（致畸）"},
+  itra:{n:"Itraconazole",rank:2,af:true,preg:"避免"},
+  fluco:{n:"Fluconazole",rank:2,af:true,preg:"高劑量長期使用避免（第一孕期）"}
+});
+D.ampsulb.n="Ampicillin-sulbactam（Unasyn）";
+D.piptazo.n="Piperacillin-tazobactam（Tazocin）";
+const SAME = t=>({b:[[0,t]],hd:t,pd:t,crrt:t});
+const COLT=[[90,360],[80,340],[70,300],[60,275],[50,245],[40,220],[30,195],[20,175],[10,160],[5,145],[0,130]];
+Object.assign(REG,{
+  oxa:{d:"oxa",r:"IV",...SAME("2 g IV q4h"),note:"無需腎調整",src:["LABEL"]},
+  cxmIV:{d:"cefuroxime",r:"IV",b:[[20.01,"1.5 g IV q8h"],[10,"750 mg IV q12h"],[0,"750 mg IV q24h"]],...DIAL("750 mg IV q24h（透析日於透析後）","750 mg IV q24h","750 mg–1.5 g IV q12h"),src:["LABEL"]},
+  caz:{d:"caz",r:"IV",b:[[50.01,"2 g IV q8h"],[30.01,"1 g IV q12h"],[15.01,"1 g IV q24h"],[5.01,"500 mg IV q24h"],[0,"500 mg IV q48h"]],...DIAL("首劑 1 g，之後每次透析後 1 g","500 mg IV q24h","2 g IV q12h"),note:"仿單：重症可增加 50%；G(+) 活性差",src:["LABEL"]},
+  cps:{d:"cps",r:"IV",b:[[30,"2 g（1:1）IV q12h；重症可至 4 g q12h"],[15,"2 g（1:1）IV q12h（sulbactam 上限 2 g/day）"],[0,"1 g（1:1）IV q12h（sulbactam 上限 1 g/day）"]],...DIAL("1 g（1:1）IV q12h，透析日於透析後","1 g（1:1）IV q12h","2 g（1:1）IV q12h（資料有限）"),note:"Sulbactam 每日上限 4 g；重症需更多 cefoperazone 時另外加；監測 PT（vitamin K 缺乏）",src:["CPS_LABEL"]},
+  bpr:{d:"bpr",r:"IV",b:[[50,"500 mg IV q8h（輸注 2 h）"],[30,"500 mg IV q12h"],[10,"250 mg IV q12h"],[0,"250 mg IV q24h"]],...DIAL("250 mg IV q24h（透析日於透析後）","250 mg IV q24h","資料有限，請會診藥師"),note:"仿單適應症：CAP、HAP（非 VAP）；CrCl >150 延長輸注至 4 h",src:["BPR_LABEL"]},
+  ipm:{d:"imipenem",r:"IV",b:[[90,"500 mg IV q6h（或 1 g q8h）"],[60,"400 mg IV q6h（或 500 mg q6h）"],[30,"300 mg IV q6h（或 500 mg q8h）"],[15,"200 mg IV q6h（或 500 mg q12h）"],[0,"不建議，除非 48 小時內開始透析"]],...DIAL("依 CrCl 15–29 劑量（200 mg q6h），透析後給","資料有限，請會診藥師","500 mg IV q6–8h（資料有限）"),note:"括號為 1 g q8h 方案（PsA 等）；癲癇風險較高",src:["IPM_LABEL"]},
+  dap6:{d:"dapto",r:"IV",b:[[30,"6 mg/kg IV q24h{KG:6}"],[0,"6 mg/kg IV q48h{KG:6}"]],...DIAL("6 mg/kg IV q48h（透析後）{KG:6}","6 mg/kg IV q48h{KG:6}","資料有限：常用 8 mg/kg q48h，請會診藥師{KG:8}"),note:"菌血症／心內膜炎常用 8–10 mg/kg，VRE 8–12 mg/kg；不可用於肺炎；每週驗 CK",src:["LABEL","IDSA_MRSA11"]},
+  tgc:{d:"tige",r:"IV",...SAME("首劑 100 mg IV，之後 50 mg IV q12h"),note:"無需腎調整；Child-Pugh C 維持 25 mg q12h；不用於菌血症、UTI",src:["LABEL"]},
+  fus:{d:"fusidic",r:"PO",...SAME("500 mg PO q8h"),note:"無需腎調整；需合併用藥避免抗藥；肝毒性",src:["LABEL"]},
+  col:{d:"colistin",r:"IV",b:COLT.map(([c,mg])=>[c,`首劑 300 mg CBA（≈9 MIU），12–24 h 後 ${mg/2} mg CBA（≈${(mg/2*0.0303).toFixed(1)} MIU）q12h`]),hd:"首劑 300 mg CBA；非透析日 130 mg CBA/day 分 q12h，透析日於透析後加 40 mg（3 h）或 50 mg（4 h）",pd:"資料有限：首劑 300 mg CBA，之後約 130 mg CBA/day（會診藥師）",crrt:"首劑 300 mg CBA，之後 220 mg CBA（≈6.65 MIU）q12h",note:"CBA = colistin base activity；需合併其他藥；腎毒性、神經毒性",src:["POLY19"]},
+  rif:{d:"rifampin",r:"PO/IV",...SAME("600 mg q24h（S. aureus 輔助：300–450 mg q12h）"),note:"不可單用；強力 CYP3A4 誘導",src:["LABEL","IDSA_MRSA11"]},
+  amb:{d:"amb",r:"IV",...SAME("0.7–1 mg/kg IV q24h{KG:1}"),note:"不需腎調整但腎毒性大：輸注前 NS 500 mL、監測 K／Mg／Cr；Cr 上升改 liposomal",src:["IDSA_CAND16"]},
+  lamb:{d:"lamb",r:"IV",...SAME("3–5 mg/kg IV q24h{KG:5}"),note:"Mucormycosis 5–10 mg/kg；腎毒性較低",src:["IDSA_CAND16","MUCOR19"]},
+  mica:{d:"mica",r:"IV",...SAME("100 mg IV q24h"),note:"無需腎、肝調整；尿中濃度低",src:["IDSA_CAND16"]},
+  caspo:{d:"caspo",r:"IV",...SAME("首劑 70 mg IV，之後 50 mg IV q24h"),note:"無需腎調整；Child-Pugh B 維持 35 mg",src:["IDSA_CAND16"]},
+  anid:{d:"anid",r:"IV",...SAME("首劑 200 mg IV，之後 100 mg IV q24h"),note:"無需腎、肝調整",src:["IDSA_CAND16"]},
+  fluco:{d:"fluco",r:"PO/IV",b:[[50.01,"首劑 800 mg（12 mg/kg），之後 400 mg（6 mg/kg）q24h"],[0,"首劑 800 mg，之後 200 mg q24h（減半）"]],...DIAL("首劑 800 mg，之後每次透析後 400 mg","首劑 800 mg，之後 200 mg q24h","首劑 800 mg，之後 400–800 mg q24h（CRRT 清除高，勿減量）"),note:"Candidemia 劑量；首劑不依腎功能減量",src:["IDSA_CAND16","LABEL"]},
+  vori:{d:"vori",r:"PO/IV",b:[[50,"IV 首日 6 mg/kg q12h ×2，之後 4 mg/kg q12h{KG:4}；PO 200 mg q12h（重症 300 mg）"],[0,"建議改 PO 200 mg q12h（IV 載體 SBECD 會蓄積）；需 IV 時評估效益"]],...DIAL("建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h；IV 時會診藥師"),note:"TDM trough 1–5.5 mg/L；Child-Pugh A/B 維持劑量減半",src:["IDSA_ASP16","LABEL"]},
+  posa:{d:"posa",r:"PO/IV",b:[[50,"300 mg q12h ×1 天，之後 300 mg q24h（DR 錠或 IV）"],[0,"DR 錠 300 mg q12h ×1 天，之後 300 mg q24h（IV 載體 SBECD 會蓄積，盡量口服）"]],...DIAL("DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）"),note:"TDM：治療 trough >1 mg/L；DR 錠隨餐",src:["IDSA_ASP16","LABEL"]},
+  itra:{d:"itra",r:"PO",...SAME("200 mg PO q8h ×3 天，之後 200 mg PO q12h"),note:"無需腎調整；膠囊隨餐、口服液空腹；TDM >1 mg/L；心衰竭禁用",src:["IDSA_HISTO07","LABEL"]}
+});
+INTER.push(
+  {d:["fusidic"],w:"Statin",lv:"x",fx:"橫紋肌溶解（含致死案例）",m:"禁止併用；停 statin 至 fusidic acid 停藥後 7 天"},
+  {d:["rifampin"],w:"Warfarin、DOAC、tacrolimus／cyclosporine、口服避孕藥、HIV 藥、azole 抗黴菌",lv:"x",fx:"強力 CYP3A4／P-gp 誘導，併用藥濃度大降",m:"開立前逐一檢查"},
+  {d:["vori","posa","itra"],w:"Tacrolimus／cyclosporine／sirolimus、simvastatin、midazolam、vincristine",lv:"x",fx:"CYP3A4 抑制，併用藥濃度大增",m:"調整劑量、監測濃度或避免"},
+  {d:["fluco"],w:"Warfarin、sulfonylurea、phenytoin",lv:"h",fx:"CYP2C9 抑制，濃度上升",m:"監測 INR、血糖、phenytoin 濃度"},
+  {d:["dapto"],w:"Statin",lv:"m",fx:"CK 上升、肌病變",m:"考慮暫停 statin，每週驗 CK"},
+  {d:["cps"],w:"酒精、warfarin",lv:"m",fx:"Disulfiram 樣反應；vitamin K 缺乏致出血",m:"避免飲酒；監測 PT／INR"}
+);
+INTER.find(x=>x.fx.startsWith("VPA")).d.push("imipenem");
+INTER.find(x=>x.fx.startsWith("腎毒性")).d.push("colistin");
+INTER.find(x=>x.fx.startsWith("QT")).d.push("vori","posa","fluco");
+Object.assign(ESC,{caz:"ESBL 風險 → meropenem；需 G(+) 涵蓋時改 cefepime",cps:"改 meropenem；CRAB 會診感染科",imipenem:ESC.meropenem,colistin:"會診感染科",tige:"菌血症或 UTI 不適用，改其他藥",dapto:"肺炎無效；確認 CK 與劑量"});
+
+const SPC = ["Strep","MSSA","MRSA","E. faecalis","E. faecium","GNB","AmpC 菌","P. aeruginosa","A. baumannii","厭氧菌","非典型"];
+const SPC_FULL = ["鏈球菌（肺炎鏈球菌、GAS、viridans）","MSSA","MRSA","Enterococcus faecalis","Enterococcus faecium","一般腸道 G(−)（E. coli、Klebsiella、Proteus）","Enterobacter 等 AmpC 菌","Pseudomonas aeruginosa","Acinetobacter baumannii","厭氧菌","非典型菌（Mycoplasma、Chlamydophila、Legionella）"];
+const SPEC_ROWS = [
+  ["pen","penG",["penG"],"pen"],["oxa","oxa",["oxa"],"pen"],["amp","ampicillin",["ampIV"],"pen"],["sam","ampsulb",["samIV"],"pen"],["tzp","piptazo",["tzp"],"pen"],
+  ["cfz","cefazolin",["czTx"],"ceph","Cefazolin（1st）"],["cxm","cefuroxime",["cxmIV","cxmPO"],"ceph","Cefuroxime（2nd）"],["cmz","cefmetazole",["cmz"],"ceph"],["cro","ceftriaxone",["cro1","cro2"],"ceph"],["caz","caz",["caz"],"ceph"],["fmx","flomoxef",["flomoxef"],"ceph"],["cps","cps",["cps"],"ceph"],["fep","cefepime",["fep2q8"],"ceph"],["bpr","bpr",["bpr"],"ceph"],
+  ["etp","ertapenem",["etp"],"carb"],["ipm","imipenem",["ipm"],"carb"],["mem","meropenem",["mem"],"carb"],
+  ["cip","cipro",["ciproIV","ciproPO"],"fq"],["lvx","levo",["levo750"],"fq"],["mxf","moxi",["moxi"],"fq"],
+  ["van","vanco",["vanco"],"gp"],["tei","teico",["teico"],"gp"],["dap","dapto",["dap6"],"gp"],["lzd","linezolid",["lzd"],"gp"],["tgc","tige",["tgc"],"gp"],["fus","fusidic",["fus"],"gp"],
+  ["dox","doxy",["doxy"],"oth"],["col","colistin",["col"],"oth"],["sxt","tmpsmx",["tmpsmx"],"oth"],["gen","gent",["gentQ24"],"oth"],["amk","amikacin",["amkQ24"],"oth"],["cli","clinda",["clinda"],"oth"],["mtz","metro",["metro"],"oth"],["azm","azithro",["azi"],"oth"],["fos","fosfomycin",["fos"],"oth"],["rif","rifampin",["rif"],"oth"]
+];
+const SPEC_ORIG = {pen:"31030000000",oxa:"23000000000",amp:"21031200030",sam:"22021200230",tzp:"22021322230",cfz:"23000100000",cxm:"22000200000",cmz:"22000200020",cro:"22010300000",caz:"10000302000",fmx:"22000300030",cps:"22000322220",fep:"22000323000",bpr:"22200303000",etp:"23010220030",ipm:"22010222330",mem:"22010322230",cip:"12010222202",lvx:"12020222203",mxf:"22021220223",van:"22331000000",tei:"22331000000",dap:"22322000000",lzd:"23323000000",tgc:"22322220222",fus:"23311000020",dox:"12211000003",col:"00000222200",sxt:"12200120100",gen:"11111222000",amk:"00000222000",cli:"02100000020",mtz:"00000000030",azm:"00000000003",fos:"22211221000",rif:"11111000000"};
+// [列, 欄, 校正後, 理由, 出處]
+const SCORR = [
+  ["pen",1,0,"多數 S. aureus 產 penicillinase",["MANDELL"]],["pen",4,0,"E. faecium 多對 ampicillin／penicillin 抗藥",["MANDELL"]],
+  ["amp",1,0,"多數 S. aureus 產 penicillinase",["MANDELL"]],["amp",4,0,"E. faecium 多對 ampicillin 抗藥",["MANDELL"]],["amp",5,1,"台灣 E. coli ampicillin 抗藥比例高、Klebsiella 天生抗藥",["TSAR","CLSI"]],["amp",9,1,"B. fragilis 產 β-lactamase",["MANDELL"]],
+  ["sam",4,0,"E. faecium 多對 ampicillin 抗藥",["MANDELL"]],["sam",5,1,"台灣 E. coli 對 ampicillin-sulbactam 抗藥比例高",["TSAR"]],
+  ["tzp",4,0,"E. faecium 多對 ampicillin 抗藥",["MANDELL"]],["tzp",7,3,"主要 anti-pseudomonal 藥物",["IDSA_AMR24"]],["tzp",8,1,"對 A. baumannii 活性差",["IDSA_AMR24"]],
+  ["cro",0,3,"肺炎鏈球菌（含 penicillin 不感受株，非腦膜炎）首選",["ATS19"]],["cro",3,0,"Enterococcus 對 cephalosporin 天生抗藥",["CLSI"]],["cro",5,2,"台灣 ESBL 比例上升",["TSAR"]],
+  ["caz",5,2,"台灣 ESBL 比例上升",["TSAR"]],["caz",7,3,"主要 anti-pseudomonal 藥物",["IDSA_AMR24"]],
+  ["fep",5,2,"ESBL 即使感受也不建議",["IDSA_AMR24"]],["fep",6,3,"AmpC 菌首選",["IDSA_AMR24"]],
+  ["bpr",3,1,"對 ampicillin 感受 E. faecalis 有活性",["BPR_LABEL"]],["bpr",5,2,"會被 ESBL 水解",["BPR_LABEL"]],["bpr",6,2,"對 AmpC 穩定性與 cefepime 相近",["BPR_LABEL"]],
+  ["etp",3,0,"不涵蓋 Enterococcus",["IDSA_AMR24"]],["etp",5,3,"涵蓋 ESBL，為 ESBL 首選之一",["IDSA_AMR24"]],["etp",6,3,"AmpC 穩定",["IDSA_AMR24"]],
+  ["ipm",5,3,"涵蓋 ESBL",["IDSA_AMR24"]],["ipm",6,3,"AmpC 穩定",["IDSA_AMR24"]],["ipm",8,1,"台灣 CRAB 比例高",["IDSA_AMR24"]],
+  ["mem",6,3,"AmpC 穩定",["IDSA_AMR24"]],["mem",8,1,"台灣 CRAB 比例高",["IDSA_AMR24"]],
+  ["cip",0,0,"肺炎鏈球菌活性差，不屬呼吸道 FQ",["ATS19"]],["cip",1,1,"單用易產生抗藥",["MANDELL"]],["cip",5,1,"台灣 E. coli FQ 抗藥率高",["TSAR"]],["cip",8,1,"CRAB 多對 FQ 抗藥",["IDSA_AMR24"]],
+  ["lvx",0,3,"Levofloxacin 750 mg 為呼吸道 FQ",["ATS19"]],["lvx",5,1,"台灣 E. coli FQ 抗藥率高",["TSAR"]],["lvx",8,1,"CRAB 多對 FQ 抗藥",["IDSA_AMR24"]],
+  ["mxf",0,3,"呼吸道 FQ",["ATS19"]],["mxf",4,0,"E. faecium 多抗藥",["MANDELL"]],["mxf",5,1,"台灣 E. coli FQ 抗藥率高；尿中濃度低",["TSAR"]],["mxf",8,1,"CRAB 多對 FQ 抗藥",["IDSA_AMR24"]],["mxf",9,1,"B. fragilis 抗藥上升",["MANDELL"]],
+  ["cli",0,1,"GAS 多感受；台灣肺炎鏈球菌抗藥高",["TW_SPN"]],
+  ["fos",1,1,"S. aureus 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]],["fos",2,1,"MRSA 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]]
+];
+function specV(){ const V={}; for(const k in SPEC_ORIG) V[k]=SPEC_ORIG[k].split("").map(Number); SCORR.forEach(([k,c,to])=>{V[k][c]=to;}); return V; }
+const SPV = specV();
+const SYM=["−","±","+","++"];
+const COLNOTE = [
+  ["台灣肺炎鏈球菌對 macrolide、clindamycin、TMP-SMX、tetracycline 抗藥率高。",["TW_SPN"]],
+  ["β-lactam（cefazolin、oxacillin）療效優於 vancomycin；MSSA 菌血症確定治療勿用 vancomycin。",["IDSA_MRSA11"]],
+  ["菌血症：vancomycin、daptomycin；肺炎：vancomycin、linezolid（daptomycin 無效）；SSTI 口服：TMP-SMX、doxycycline、linezolid。",["IDSA_MRSA11"]],
+  ["Ampicillin 首選；cephalosporin 天生無效；心內膜炎需合併 ceftriaxone 或 gentamicin。",["CLSI","MANDELL"]],
+  ["多對 ampicillin 抗藥；VRE 用 linezolid 或高劑量 daptomycin。",["MANDELL"]],
+  ["台灣 ESBL 與 FQ 抗藥率高，重症以 carbapenem 為宜；先看院內 antibiogram。",["TSAR","IDSA_AMR24"]],
+  ["Enterobacter、C. freundii、K. aerogenes、Serratia：cefepime 首選；3rd-gen ceph 治療中可能失敗。",["IDSA_AMR24"]],
+  ["DTR-PA：ceftolozane-tazobactam、ceftazidime-avibactam；會診感染科。",["IDSA_AMR24"]],
+  ["CRAB：高劑量 sulbactam（ampicillin-sulbactam、cefoperazone-sulbactam）合併 colistin、tigecycline 或 minocycline；會診感染科。",["IDSA_AMR24"]],
+  ["橫膈以下（B. fragilis）：metronidazole、β-lactam/BLI、carbapenem；clindamycin、moxifloxacin、cephamycin 抗藥上升。",["MANDELL"]],
+  ["β-lactam 無效；Legionella 首選 levofloxacin 或 azithromycin。",["ATS19"]]
+];
+const DNOTE = {
+  pen:"GAS、感受的肺炎鏈球菌、梅毒首選。S. aureus 多產 penicillinase。",
+  oxa:"MSSA 菌血症、心內膜炎首選之一（與 cefazolin 相當），不需腎調整。",
+  amp:"E. faecalis、Listeria 首選；台灣 E. coli 多已抗藥。",
+  sam:"吸入性肺炎、咬傷、CRAB（高劑量 sulbactam 合併他藥）。台灣 E. coli 抗藥比例高。",
+  tzp:"院內感染、PsA、腹腔感染主力；ESBL 泌尿道外感染不建議。與 vancomycin 併用 AKI 風險增加。",
+  cfz:"MSSA 首選（菌血症與 oxacillin 相當）、手術預防；腦膜炎不適用。",
+  cxm:"CAP 口服降階、手術預防。",
+  cmz:"Cephamycin：耐 ESBL 水解、有厭氧菌活性；台灣、日本用於非重症 ESBL UTI，國際指引認為證據不足。",
+  cro:"CAP、腦膜炎、社區 UTI、淋病；不需腎調整。不涵蓋 Enterococcus、PsA、厭氧菌。",
+  caz:"PsA 主力，但 G(+) 活性差，不用於肺炎鏈球菌、S. aureus。",
+  fmx:"Oxacephem：耐 ESBL、有厭氧菌活性；台灣常用於非重症 ESBL UTI 與腹腔感染。",
+  cps:"膽道排泄高（膽道感染常用）；sulbactam 對 A. baumannii 有活性。注意 vitamin K 缺乏出血與 disulfiram 樣反應。",
+  fep:"PsA、AmpC 菌（Enterobacter）首選；ESBL 不建議；腎功能差未減量易神經毒性。",
+  bpr:"第五代 cephalosporin，同時涵蓋 MRSA 與 PsA；仿單限 CAP、HAP（非 VAP）。",
+  etp:"每日一次，ESBL 首選之一；不涵蓋 PsA、A. baumannii、Enterococcus。",
+  ipm:"對 ampicillin 感受 E. faecalis 有些活性；癲癇風險較高，CNS 感染不用。",
+  mem:"重症 ESBL、院內感染主力；腦膜炎 2 g q8h；禁與 valproic acid 併用。",
+  cip:"G(−)、PsA 為主，肺炎鏈球菌活性差；台灣 E. coli 抗藥率高。",
+  lvx:"750 mg 為呼吸道 FQ，也涵蓋 PsA 與尿路；台灣使用前先排除結核。",
+  mxf:"呼吸道 FQ、部分厭氧菌；尿中濃度低，不用於 UTI；不涵蓋 PsA。",
+  van:"MRSA 主力，依 AUC 400–600 調整；MSSA 療效不如 β-lactam。",
+  tei:"每日一次、腎毒性較低；VanA 型 VRE 抗藥；MRSA 肺炎證據較少。",
+  dap:"MRSA 菌血症、心內膜炎、VRE；會被肺泡表面張力素失活，不可用於肺炎；每週驗 CK。",
+  lzd:"MRSA 肺炎、VRE；口服生體可用率約 100%；>14 天注意骨髓抑制；與 SSRI 注意血清素症候群。",
+  tgc:"抗菌譜廣（MRSA、VRE、ESBL、CRAB），但血中與尿中濃度低，不用於菌血症、UTI；PsA、Proteus 天生抗藥；FDA 警示全死因死亡率增加。",
+  fus:"MRSA SSTI、骨關節感染（合併 rifampin）；單用易抗藥；禁與 statin 併用。",
+  dox:"非典型菌、MRSA SSTI 口服、恙蟲病、立克次體；台灣肺炎鏈球菌抗藥率高。",
+  col:"CRAB、CRE、DTR-PA 的最後選擇，需合併治療；腎毒性、神經毒性。Proteus、Serratia、Providencia 天生抗藥。",
+  sxt:"PJP、S. maltophilia、Nocardia、MRSA SSTI 口服；台灣 E. coli 抗藥率高；注意高血鉀。",
+  gen:"G(−) 與 Enterococcus 心內膜炎協同治療；單用只適合 UTI；腎毒、耳毒。",
+  amk:"對 gentamicin 抗藥的 G(−)、PsA 常仍有效；也用於結核與 NTM。",
+  cli:"GAS 壞死性感染抑制毒素、口腔厭氧菌、MSSA；B. fragilis 抗藥上升；C. difficile 風險高。",
+  mtz:"厭氧菌（含 B. fragilis）、C. difficile、Trichomonas、阿米巴。",
+  azm:"非典型菌（合併 β-lactam 治療 CAP）；台灣肺炎鏈球菌抗藥 >80%，不可單用。",
+  fos:"口服 3 g 用於膀胱炎（含 ESBL E. coli）；口服劑型不用於腎盂腎炎或全身性感染。",
+  rif:"S. aureus 人工植入物、骨關節感染的合併用藥、結核；絕不可單用；交互作用極多。"
+};
+
+/* 抗黴菌 */
+const FCOLS = [["amb","Amphotericin B",["lamb","amb"]],["mica","Micafungin",["mica"]],["caspo","Caspofungin",["caspo"]],["anid","Anidulafungin",["anid"]],["posa","Posaconazole",["posa"]],["vori","Voriconazole",["vori"]],["itra","Itraconazole",["itra"]],["fluco","Fluconazole",["fluco"]]];
+const FROWS = [
+  ["C. albicans","23332223","Candidemia：echinocandin 首選，穩定且感受時降階 fluconazole；拔除中心靜脈導管、眼底檢查，血培養轉陰後治療 14 天。",["IDSA_CAND16"]],
+  ["C. tropicalis","33332223","Echinocandin 首選，感受時降階 fluconazole。",["IDSA_CAND16"]],
+  ["C. parapsilosis","32222223","Echinocandin MIC 較高，感受時以 fluconazole 為首選；與導管、TPN 相關。",["IDSA_CAND16"]],
+  ["C. krusei","33332200","Fluconazole 天生抗藥；echinocandin 首選，降階用 voriconazole。",["IDSA_CAND16"]],
+  ["C. glabrata","33331111","Echinocandin 首選；fluconazole 需高劑量（800 mg）且確認感受。",["IDSA_CAND16"]],
+  ["Cryptococcus neoformans","31112223","腦膜炎：liposomal AmB ＋ flucytosine 誘導，之後 fluconazole 鞏固與維持；echinocandin 無效。",["IDSA_CRYPTO10"]],
+  ["Aspergillus fumigatus","21112310","侵襲性麴菌症：voriconazole 首選（isavuconazole 為替代），liposomal AmB 替代。",["IDSA_ASP16"]],
+  ["Aspergillus terreus","01112310","Amphotericin B 天生抗藥，用 voriconazole。",["IDSA_ASP16"]],
+  ["Aspergillus flavus","21112310","Voriconazole 首選。",["IDSA_ASP16"]],
+  ["Mucormycosis","30002000","Liposomal AmB 5–10 mg/kg ＋ 緊急清創；posaconazole 或 isavuconazole 降階；voriconazole 無效。",["MUCOR19"]],
+  ["Fusarium","10001110","Voriconazole 或 liposomal AmB（常合併）；多重抗藥，會診感染科。",["MANDELL"]],
+  ["Histoplasma","30002231","重症 liposomal AmB 誘導後改 itraconazole；輕中度 itraconazole。",["IDSA_HISTO07"]],
+  ["Blastomyces","30002231","重症 liposomal AmB 誘導後改 itraconazole；輕中度 itraconazole。",["MANDELL"]],
+  ["Coccidioides","30002233","Fluconazole 或 itraconazole；重症 liposomal AmB。",["MANDELL"]]
+];
+const FCORR = [
+  [5,1,0,"Echinocandin 對 Cryptococcus 無效",["IDSA_CRYPTO10"]],[5,2,0,"Echinocandin 對 Cryptococcus 無效",["IDSA_CRYPTO10"]],[5,3,0,"Echinocandin 對 Cryptococcus 無效",["IDSA_CRYPTO10"]],
+  [6,6,2,"Itraconazole 為麴菌症替代藥",["IDSA_ASP16"]],[7,6,2,"Itraconazole 為麴菌症替代藥",["IDSA_ASP16"]],[8,6,2,"Itraconazole 為麴菌症替代藥",["IDSA_ASP16"]],
+  [10,5,2,"Voriconazole 為 Fusarium 首選之一",["MANDELL"]],[10,6,0,"Itraconazole 對 Fusarium 多無效",["MANDELL"]]
+];
+const FV = FROWS.map(r=>r[1].split("").map(Number)); FCORR.forEach(([r,c,to])=>{FV[r][c]=to;});
+const FNOTE = {
+  amb:"廣效（Candida、Cryptococcus、Mucor、地方性真菌）；A. terreus、C. lusitaniae 天生抗藥。Liposomal 腎毒性低。",
+  mica:"Echinocandin：Candidemia 首選；對 Cryptococcus、Mucor、Fusarium 無效；尿中濃度低。",
+  caspo:"Echinocandin：Candidemia 首選；對 Cryptococcus、Mucor、Fusarium 無效。",
+  anid:"Echinocandin：Candidemia 首選；不需肝腎調整。",
+  posa:"Mucormycosis 降階與預防、麴菌症；DR 錠隨餐，需 TDM。",
+  vori:"麴菌症首選、Fusarium；TDM 1–5.5 mg/L；視覺異常、肝毒性、交互作用多。",
+  itra:"Histoplasma、Blastomyces 首選（輕中度）；吸收不穩，需 TDM；心衰竭禁用。",
+  fluco:"C. albicans、C. parapsilosis、Cryptococcus 鞏固治療；C. krusei 天生抗藥、C. glabrata 劑量依存；對黴菌（mold）無效。"
+};
+const PKPD = [
+  ["β-lactam（penicillin、cephalosporin、carbapenem）","時間依賴：%fT>MIC","殺菌","延長或連續輸注、縮短給藥間隔；重症與 ARC 尤其重要"],
+  ["Glycopeptide（vancomycin、teicoplanin）","AUC/MIC","緩慢殺菌","Vancomycin 目標 AUC 400–600；teicoplanin 看 trough"],
+  ["Aminoglycoside","濃度依賴：Cmax/MIC ≥8–10","殺菌，有 PAE","每日一次給藥，降低腎毒性"],
+  ["Fluoroquinolone","AUC/MIC（Cmax/MIC）","殺菌","一次給足量（levofloxacin 750 mg）"],
+  ["Daptomycin","Cmax/MIC、AUC/MIC","殺菌","每日一次高劑量"],
+  ["Metronidazole","濃度依賴","殺菌","可 q8–12h"],
+  ["Colistin","AUC/MIC","殺菌","需負荷劑量"],
+  ["Linezolid、tigecycline、macrolide、tetracycline、clindamycin","AUC/MIC","抑菌","重症菌血症避免單用抑菌藥"],
+  ["TMP-SMX","時間依賴","抑菌（兩藥合併有殺菌效果）",""],
+  ["Fluconazole、voriconazole","AUC/MIC","抑菌（對 Candida）","需負荷劑量；voriconazole 做 TDM"],
+  ["Echinocandin、amphotericin B","Cmax/MIC","對 Candida 殺菌","每日一次"]
+];
+const MDRQ = [
+  ["MRSA","Vancomycin、Teicoplanin、Daptomycin（非肺炎）、Linezolid、Tigecycline（非菌血症）、Ceftobiprole；SSTI 口服：TMP-SMX、Doxycycline、Linezolid",true,["IDSA_MRSA11"]],
+  ["P. aeruginosa","Piperacillin-tazobactam、Ceftazidime、Cefepime、Imipenem、Meropenem、Ciprofloxacin、Levofloxacin、Aminoglycoside、Aztreonam；DTR：Ceftolozane-tazobactam、Ceftazidime-avibactam、Colistin",true,["IDSA_AMR24"]],
+  ["ESBL","全身性：Carbapenem 首選；pyelo／cUTI 感受時 TMP-SMX、FQ；膀胱炎：Nitrofurantoin、TMP-SMX、Fosfomycin（限 E. coli）、單劑 aminoglycoside；台灣非重症 UTI：Flomoxef、Cefmetazole。Tigecycline 不用於 UTI、菌血症",true,["IDSA_AMR24","HAMADA22"]],
+  ["VRE","Linezolid、高劑量 Daptomycin；膀胱炎：Nitrofurantoin、Fosfomycin；Tigecycline 不用於菌血症",true,["IDSA_MRSA11","MANDELL"]],
+  ["CRAB","高劑量 sulbactam（Ampicillin-sulbactam、Cefoperazone-sulbactam）合併 Colistin、Tigecycline 或 Minocycline；會診感染科（已對 carbapenem 抗藥，不列入）",true,["IDSA_AMR24"]],
+  ["CRE","KPC／OXA-48：Ceftazidime-avibactam；NDM：Ceftazidime-avibactam ＋ Aztreonam；會診感染科",false,["IDSA_AMR24"]],
+  ["PRSP","Ceftriaxone（非腦膜炎）、Levofloxacin、Moxifloxacin、Vancomycin、Teicoplanin、Linezolid",true,["ATS19"]],
+  ["厭氧菌","Metronidazole、Ampicillin-sulbactam、Piperacillin-tazobactam、Carbapenem、Tigecycline；B. fragilis 抗藥上升：Clindamycin、Moxifloxacin、Cephamycin。Daptomycin 不涵蓋",true,["MANDELL"]]
+];
+const PCOL = {ecoli:5,kpn:5,pmir:5,ampc:6,psa:7,efae:3,saur:1,spn:0,gas:0,bact:9,mpn:10,cpn:10,legio:10,ssap:1};
+
+const dot = (v,title)=>`<span class="dot s${v}" title="${title||""}">${SYM[v]}</span>`;
+function rowLabel(r){ return r[4] || D[r[1]].n; }
+function corrOf(k,c){ return SCORR.find(x=>x[0]===k&&x[1]===c); }
+function specGrid(){
+  const sp=S.spec; let grp="";
+  let h=`<div class="tbl-wrap spec"><table class="grid"><thead><tr><th class="stick">藥物</th>${SPC.map((c,i)=>`<th><button type="button" class="colbtn" data-act="spec-col" data-v="${i}" aria-pressed="${sp.cols.includes(i)}" title="${SPC_FULL[i]}">${c}</button></th>`).join("")}</tr></thead><tbody>`;
+  SPEC_ROWS.forEach(r=>{
+    if(r[3]!==grp){ grp=r[3]; h+=`<tr class="gap"><td colspan="12"></td></tr>`; }
+    const v=SPV[r[0]];
+    h+=`<tr class="${sp.drug===r[0]?"sel":""}"><th class="stick"><button type="button" class="rowbtn" data-act="spec-drug" data-v="${r[0]}">${rowLabel(r)}</button></th>${v.map((x,i)=>{const c=corrOf(r[0],i);return `<td class="${sp.cols.includes(i)?"hl":""}">${dot(x,c?`已校正：原圖 ${SYM[SPEC_ORIG[r[0]][i]]}，${c[3]}`:"")}</td>`;}).join("")}</tr>`;
+  });
+  return h+`</tbody></table></div>`;
+}
+function regsOf(key){ const r=SPEC_ROWS.find(x=>x[0]===key); return r?r[2]:[]; }
+function specAdvice(){
+  const sp=S.spec;
+  if(sp.drug){
+    const r=SPEC_ROWS.find(x=>x[0]===sp.drug); const v=SPV[sp.drug];
+    const by=s=>v.map((x,i)=>x===s?SPC[i]:null).filter(Boolean).join("、")||"—";
+    return `<div class="opt primary"><div class="opt-head"><span class="tier primary">${rowLabel(r)}</span></div>
+      <dl class="kv"><dt>++ 強</dt><dd>${by(3)}</dd><dt>+ 可用</dt><dd>${by(2)}</dd><dt>± 不穩定</dt><dd>${by(1)}</dd><dt>− 無效</dt><dd>${by(0)}</dd></dl>
+      <div class="onote">${DNOTE[sp.drug]||""}</div>${r[2].map(rxRow).join("")}</div>`;
+  }
+  if(!sp.cols.length) return `<div class="note">點上方欄位（菌種，可複選）看哪些藥可用；點左側藥名看這個藥的強弱項與劑量。</div>`;
+  if(sp.cols.length===1){
+    const c=sp.cols[0];
+    const list=SPEC_ROWS.filter(r=>SPV[r[0]][c]>=2).sort((a,b)=>SPV[b[0]][c]-SPV[a[0]][c]||D[a[1]].rank-D[b[1]].rank);
+    const top=list.filter(r=>SPV[r[0]][c]===3), plus=list.filter(r=>SPV[r[0]][c]===2);
+    let h=`<div class="note">${UPD.replace("更新","重點")} ${COLNOTE[c][0]}${srcTags(COLNOTE[c][1])}</div>`;
+    h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">${SPC_FULL[c]}：++ 強效（窄效在前）</span></div>${top.length?top.map(r=>r[2].slice(0,1).map(rxRow).join("")).join(""):'<div class="onote">無</div>'}</div>`;
+    h+=`<div class="opt"><div class="opt-head"><span class="tier">+ 可用</span></div>${plus.slice(0,8).map(r=>r[2].slice(0,1).map(rxRow).join("")).join("")}${plus.length>8?`<div class="onote">其他：${plus.slice(8).map(rowLabel).join("、")}</div>`:""}</div>`;
+    return h;
+  }
+  const cols=sp.cols;
+  const singles=SPEC_ROWS.filter(r=>cols.every(c=>SPV[r[0]][c]>=2)).sort((a,b)=>cols.reduce((s,c)=>s+SPV[b[0]][c]-SPV[a[0]][c],0)||D[a[1]].rank-D[b[1]].rank);
+  let h=`<div class="note">同時涵蓋：${cols.map(c=>SPC_FULL[c]).join("、")}</div>`;
+  h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">單一藥物即可涵蓋</span></div>${singles.length?singles.slice(0,6).map(r=>rxRow(r[2][0])).join(""):'<div class="onote">沒有單一藥物能涵蓋全部（皆 ≥ +），請看下方合併方案。</div>'}</div>`;
+  if(singles.length<3){
+    const pairs=[];
+    for(let i=0;i<SPEC_ROWS.length;i++)for(let j=i+1;j<SPEC_ROWS.length;j++){
+      const a=SPEC_ROWS[i],b=SPEC_ROWS[j];
+      if(a[3]===b[3]||(D[a[1]].bl&&D[b[1]].bl)) continue;
+      if(singles.includes(a)||singles.includes(b)) continue;
+      if(!cols.every(c=>Math.max(SPV[a[0]][c],SPV[b[0]][c])>=2)) continue;
+      const pen=x=>(["fus","rif","tgc","col","fos"].includes(x[0])?15:0);
+      const score=cols.reduce((s,c)=>s+Math.max(SPV[a[0]][c],SPV[b[0]][c]),0)*10-(D[a[1]].rank+D[b[1]].rank)-pen(a)-pen(b);
+      pairs.push([a,b,score]);
+    }
+    pairs.sort((x,y)=>y[2]-x[2]);
+    if(pairs.length) h+=pairs.slice(0,4).map(([a,b])=>`<div class="opt"><div class="opt-head"><span class="tier add">合併：${rowLabel(a)} ＋ ${rowLabel(b)}</span></div>${rxRow(a[2][0])}${rxRow(b[2][0])}</div>`).join("");
+  }
+  return h+`<div class="note">抗菌譜只是第一步，仍需考慮感染部位的藥物濃度（如 daptomycin 不用於肺炎、tigecycline 不用於菌血症）。</div>`;
+}
+function fungalGrid(){
+  const sp=S.spec;
+  let h=`<div class="tbl-wrap spec"><table class="grid"><thead><tr><th class="stick">菌種</th>${FCOLS.map(c=>`<th><button type="button" class="colbtn" data-act="f-drug" data-v="${c[0]}" aria-pressed="${sp.fdrug===c[0]}">${c[1]}</button></th>`).join("")}</tr></thead><tbody>`;
+  FROWS.forEach((r,ri)=>{
+    h+=`<tr class="${sp.frow===ri?"sel":""}"><th class="stick"><button type="button" class="rowbtn" data-act="f-row" data-v="${ri}"><i>${r[0]}</i></button></th>${FV[ri].map((x,ci)=>{const c=FCORR.find(y=>y[0]===ri&&y[1]===ci);return `<td class="${sp.fdrug===FCOLS[ci][0]?"hl":""}">${dot(x,c?`已校正：原圖 ${SYM[+r[1][ci]]}，${c[3]}`:"")}</td>`;}).join("")}</tr>`;
+  });
+  return h+`</tbody></table></div>`;
+}
+function fungalAdvice(){
+  const sp=S.spec;
+  if(sp.fdrug){
+    const ci=FCOLS.findIndex(c=>c[0]===sp.fdrug);
+    const by=s=>FROWS.map((r,ri)=>FV[ri][ci]===s?r[0]:null).filter(Boolean).join("、")||"—";
+    return `<div class="opt primary"><div class="opt-head"><span class="tier primary">${FCOLS[ci][1]}</span></div><dl class="kv"><dt>++ 強</dt><dd>${by(3)}</dd><dt>+ 可用</dt><dd>${by(2)}</dd><dt>± 不穩定</dt><dd>${by(1)}</dd><dt>− 無效</dt><dd>${by(0)}</dd></dl><div class="onote">${FNOTE[sp.fdrug]}</div>${FCOLS[ci][2].map(rxRow).join("")}</div>`;
+  }
+  if(sp.frow===null||sp.frow===undefined) return `<div class="note">點菌種看建議藥物與劑量；點上方藥名看該藥的抗菌譜。</div>`;
+  const r=FROWS[sp.frow]; const order=FCOLS.map((c,ci)=>[c,FV[sp.frow][ci]]).filter(x=>x[1]>=2).sort((a,b)=>b[1]-a[1]);
+  return `<div class="note">${r[2]}${srcTags(r[3])}</div><div class="opt primary"><div class="opt-head"><span class="tier primary"><i>${r[0]}</i>：可用藥物（強效在前）</span></div>${order.map(([c,v])=>`<div class="pick">${SYM[v]}</div>${c[2].map(rxRow).join("")}`).join("")}</div>`;
+}
+function renderSpec(){
+  const sp=S.spec;
+  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
+  const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
+  if(sp.view==="bac"){
+    h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
+  } else if(sp.view==="fun"){
+    h+=`${renalBar()}${legend}<div class="hint">點菌種或藥名。</div>${fungalGrid()}<div id="specAdv" class="res mt">${fungalAdvice()}</div>`;
+  } else if(sp.view==="pk"){
+    h+=`<div class="tbl-wrap"><table><thead><tr><th>藥物類別</th><th>PK/PD 指標</th><th>殺菌／抑菌</th><th>臨床應用</th></tr></thead><tbody>${PKPD.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table></div>${srcTags(["MANDELL","VANCO20"])}`;
+  } else if(sp.view==="mdr"){
+    h+=`<div class="tbl-wrap"><table><thead><tr><th>抗藥菌</th><th>可用藥物</th></tr></thead><tbody>${MDRQ.map(r=>`<tr><td><b>${r[0]}</b>${r[2]?` <span class="upd">已校正</span>`:""}</td><td>${r[1]}${srcTags(r[3])}</td></tr>`).join("")}</tbody></table></div>`;
+  } else {
+    h+=`<div class="note">原圖與目前指引或台灣抗藥資料不一致之處已直接改正，列表如下（游標停在表格圓點上也會顯示）。</div><div class="tbl-wrap mt"><table><thead><tr><th>藥物</th><th>欄位</th><th>原圖 → 校正</th><th>理由</th></tr></thead><tbody>
+      ${SCORR.map(([k,c,to,why,src])=>`<tr><td>${rowLabel(SPEC_ROWS.find(r=>r[0]===k))}</td><td>${SPC[c]}</td><td>${SYM[SPEC_ORIG[k][c]]} → ${SYM[to]}</td><td>${why}${srcTags(src)}</td></tr>`).join("")}
+      ${FCORR.map(([r,c,to,why,src])=>`<tr><td>${FCOLS[c][1]}</td><td><i>${FROWS[r][0]}</i></td><td>${SYM[+FROWS[r][1][c]]} → ${SYM[to]}</td><td>${why}${srcTags(src)}</td></tr>`).join("")}
+    </tbody></table></div><div class="hint">另外：移除 cefpirome、doripenem；藥名改為學名，台灣常用者括號註明商品名；拼字更正（C. glabrata、Cryptococcus neoformans）。</div>`;
+  }
+  return h;
+}
+
+
+/* ================= 第二批：其餘系統 ================= */
+Object.assign(REF,{
+  SSC21:{s:"SSC 2021",f:"Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49:e1063-143."},
+  IDSA_CRBSI09:{s:"IDSA CRBSI 2009",f:"Mermel LA, et al. Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by IDSA. Clin Infect Dis 2009;49:1-45."},
+  BALANCE:{s:"BALANCE 2024",f:"BALANCE Investigators. Antibiotic Treatment for 7 versus 14 Days in Patients with Bloodstream Infections. N Engl J Med 2024 (doi:10.1056/NEJMoa2404991)."},
+  SABATO:{s:"SABATO 2024",f:"Kaasch AJ, et al. Efficacy and safety of an early oral switch in low-risk Staphylococcus aureus bloodstream infection (SABATO). Lancet Infect Dis 2024 (PMID 38244557)."},
+  IDSA_IAI10:{s:"SIS/IDSA cIAI 2010",f:"Solomkin JS, et al. Diagnosis and Management of Complicated Intra-abdominal Infection in Adults and Children: Guidelines by SIS and IDSA. Clin Infect Dis 2010;50:133-64."},
+  STOPIT:{s:"STOP-IT 2015",f:"Sawyer RG, et al. Trial of Short-Course Antimicrobial Therapy for Intraabdominal Infection. N Engl J Med 2015;372:1996-2005."},
+  TG18:{s:"Tokyo Guidelines 2018",f:"Gomi H, et al. Tokyo Guidelines 2018: antimicrobial therapy for acute cholangitis and cholecystitis. J Hepatobiliary Pancreat Sci 2018;25:3-16."},
+  AASLD21:{s:"AASLD 2021",f:"Biggins SW, et al. Diagnosis, Evaluation, and Management of Ascites, SBP and Hepatorenal Syndrome: 2021 Practice Guidance by AASLD. Hepatology 2021;74:1014-48."},
+  SIU12:{s:"Siu 2012",f:"Siu LK, et al. Klebsiella pneumoniae liver abscess: a new invasive syndrome. Lancet Infect Dis 2012;12:881-7."},
+  MOLTON20:{s:"Molton 2020",f:"Molton JS, et al. Oral vs Intravenous Antibiotics for Patients With Klebsiella pneumoniae Liver Abscess: A Randomized, Controlled Noninferiority Study. Clin Infect Dis 2020;71:952-9."},
+  IWGDF23:{s:"IWGDF/IDSA 2023",f:"Senneville É, et al. IWGDF/IDSA Guidelines on the Diagnosis and Treatment of Diabetes-related Foot Infections (IWGDF/IDSA 2023). Clin Infect Dis 2023."},
+  TALAN16:{s:"Talan 2016",f:"Talan DA, et al. Trimethoprim-Sulfamethoxazole versus Placebo for Uncomplicated Skin Abscess. N Engl J Med 2016;374:823-32."},
+  CDC_VIB:{s:"CDC Vibrio 2024",f:"CDC. Clinical Overview of Vibriosis（2024 更新）：3rd-gen cephalosporin（如 ceftazidime）＋ doxycycline，並積極清創。"},
+  MELIO:{s:"Melioidosis NEJM",f:"Wiersinga WJ, Currie BJ, Peacock SJ. Melioidosis. N Engl J Med 2012;367:1035-44."},
+  IDSA_MEN04:{s:"IDSA 腦膜炎 2004",f:"Tunkel AR, et al. Practice Guidelines for the Management of Bacterial Meningitis. Clin Infect Dis 2004;39:1267-84."},
+  ESCMID_MEN16:{s:"ESCMID 腦膜炎 2016",f:"van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacterial meningitis. Clin Microbiol Infect 2016;22 Suppl 3:S37-62."},
+  IDSA_VENT17:{s:"IDSA 院內腦膜炎 2017",f:"Tunkel AR, et al. 2017 IDSA Clinical Practice Guidelines for Healthcare-Associated Ventriculitis and Meningitis. Clin Infect Dis 2017;64:e34-65."},
+  ESCMID_BA24:{s:"ESCMID 腦膿瘍 2024",f:"Bodilsen J, et al. ESCMID guidelines on diagnosis and treatment of brain abscess in children and adults. Clin Microbiol Infect 2024;30:66-89."},
+  TW_KPMEN:{s:"台灣 Klebsiella 腦膜炎",f:"Klebsiella meningitis in Taiwan: an overview. Epidemiol Infect（Cambridge）。"},
+  ESC_IE23:{s:"ESC IE 2023",f:"Delgado V, et al. 2023 ESC Guidelines for the management of endocarditis. Eur Heart J 2023;44:3948-4042."},
+  POET19:{s:"POET 2019",f:"Iversen K, et al. Partial Oral versus Intravenous Antibiotic Treatment of Endocarditis. N Engl J Med 2019;380:415-24."},
+  IDSA_VO15:{s:"IDSA 脊椎骨髓炎 2015",f:"Berbari EF, et al. 2015 IDSA Clinical Practice Guidelines for the Diagnosis and Treatment of Native Vertebral Osteomyelitis in Adults. Clin Infect Dis 2015;61:e26-46."},
+  IDSA_PJI13:{s:"IDSA PJI 2013",f:"Osmon DR, et al. Diagnosis and Management of Prosthetic Joint Infection: Clinical Practice Guidelines by IDSA. Clin Infect Dis 2013;56:e1-25."},
+  OVIVA19:{s:"OVIVA 2019",f:"Li HK, et al. Oral versus Intravenous Antibiotics for Bone and Joint Infection. N Engl J Med 2019;380:425-36."},
+  DATIPO21:{s:"DATIPO 2021",f:"Bernard L, et al. Antibiotic Therapy for 6 or 12 Weeks for Prosthetic Joint Infection. N Engl J Med 2021;384:1991-2001."},
+  GJIKA19:{s:"Gjika 2019",f:"Gjika E, et al. Two weeks versus four weeks of antibiotic therapy after surgical drainage for native joint bacterial arthritis: a prospective, randomised, non-inferiority trial. Ann Rheum Dis 2019;78:1114-21."},
+  IDSA_FN10:{s:"IDSA FN 2010",f:"Freifeld AG, et al. Clinical Practice Guideline for the Use of Antimicrobial Agents in Neutropenic Patients with Cancer: 2010 Update by IDSA. Clin Infect Dis 2011;52:e56-93."},
+  ASCO18:{s:"ASCO/IDSA 2018",f:"Taplitz RA, et al. Outpatient Management of Fever and Neutropenia in Adults Treated for Malignancy: ASCO and IDSA Clinical Practice Guideline Update. J Clin Oncol 2018;36:1443-53."},
+  ECIL4:{s:"ECIL-4",f:"Averbuch D, et al. European guidelines for empirical antibacterial therapy for febrile neutropenic patients in the era of growing resistance (ECIL-4). Haematologica 2013;98:1826-35."},
+  HOWLONG:{s:"How Long 2017",f:"Aguilar-Guisado M, et al. Optimisation of empirical antimicrobial therapy in patients with haematological malignancies and febrile neutropenia (How Long study). Lancet Haematol 2017;4:e573-83."},
+  IDSA_CDI21:{s:"IDSA/SHEA CDI 2021",f:"Johnson S, et al. Clinical Practice Guideline by IDSA and SHEA: 2021 Focused Update Guidelines on Management of Clostridioides difficile Infection in Adults. Clin Infect Dis 2021;73:e1029-44."},
+  BEZLO:{s:"Bezlotoxumab 下市",f:"Merck 於 2025 年初將 bezlotoxumab（ZINPLAVA）自全球市場撤出。"},
+  IDSA_HAP16:{s:"IDSA/ATS HAP/VAP 2016",f:"Kalil AC, et al. Management of Adults With Hospital-acquired and Ventilator-associated Pneumonia: 2016 Clinical Practice Guidelines by IDSA and ATS. Clin Infect Dis 2016;63:e61-111."},
+  ERS_HAP17:{s:"ERS/ESICM HAP/VAP 2017",f:"Torres A, et al. International ERS/ESICM/ESCMID/ALAT guidelines for the management of HAP and VAP. Eur Respir J 2017;50:1700582."},
+  ECMM_CAND25:{s:"ECMM Candida 2025",f:"Cornely OA, et al. Global guideline for the diagnosis and management of candidiasis: an initiative of ECMM in cooperation with ISHAM and ASM. Lancet Infect Dis 2025."}
+});
+Object.assign(D,{
+  vancoPO:{n:"Vancomycin（口服）",rank:2},
+  fidax:{n:"Fidaxomicin",rank:1,tw:"limited"},
+  mino:{n:"Minocycline",rank:3,preg:"避免（tetracycline 類）"},
+  isavu:{n:"Isavuconazole",rank:3,af:true,preg:"避免"}
+});
+Object.assign(REG,{
+  cro2q12:{d:"ceftriaxone",r:"IV",...SAME("2 g IV q12h"),note:"腦膜炎、腦膿瘍、E. faecalis IE 劑量；無需腎調整",src:["IDSA_MEN04"]},
+  memMen:{d:"meropenem",r:"IV",b:[[50.01,"2 g IV q8h"],[26,"2 g IV q12h"],[10,"1 g IV q12h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","1 g IV q24h","2 g IV q12h"),note:"CNS 劑量；延長輸注依院內規範",src:["LABEL","IDSA_VENT17"]},
+  ampMen:{d:"ampicillin",r:"IV",b:[[50.01,"2 g IV q4h"],[10,"2 g IV q6–8h"],[0,"2 g IV q8–12h"]],...DIAL("2 g IV q12h（透析日於透析後）","2 g IV q12h","2 g IV q6h"),note:"腦膜炎（Listeria）、IE 劑量",src:["IDSA_MEN04","ESC_IE23"]},
+  dap10:{d:"dapto",r:"IV",b:[[30,"10 mg/kg IV q24h{KG:10}"],[0,"10 mg/kg IV q48h{KG:10}"]],...DIAL("10 mg/kg IV q48h（透析後）{KG:10}","10 mg/kg IV q48h{KG:10}","資料有限，請會診藥師"),note:"IE、MRSA／VRE 菌血症高劑量；每週驗 CK",src:["ESC_IE23"]},
+  gentIE:{d:"gent",r:"IV",b:[[60,"3 mg/kg IV q24h{AG:3}"],[30,"3 mg/kg IV q36–48h，依濃度{AG:3}"],[0,"依濃度給藥（會診藥師）"]],...DIAL("1–1.5 mg/kg 每次透析後，依濃度{AG:1.5}","依濃度給藥（會診藥師）","依濃度給藥（會診藥師）"),note:"協同劑量；目標 trough <1 mg/L；監測腎功能與聽力",src:["ESC_IE23"]},
+  rifIE:{d:"rifampin",r:"PO/IV",...SAME("900–1200 mg/day 分 2–3 次（如 300–400 mg q8h）"),note:"僅用於人工瓣膜或異物；血培養轉陰後再加以免抗藥",src:["ESC_IE23"]},
+  samHD:{d:"ampsulb",r:"IV",b:[[50.01,"9 g（sulbactam 3 g）IV q8h，輸注 4 h"],[0,"腎功能不全：依 sulbactam 劑量調整，請會診藥師"]],...DIAL("請會診藥師","請會診藥師","請會診藥師"),note:"CRAB 高劑量 sulbactam 方案，需合併第二個藥",src:["IDSA_AMR24"]},
+  tmpHD:{d:"tmpsmx",r:"IV/PO",b:[[30.01,"TMP 4 mg/kg q8h（8–12 mg/kg/day，以 TMP 計）{KG:4}"],[15,"TMP 4 mg/kg q12h（減半）{KG:4}"],[0,"不建議；必要時會診藥師"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","會診藥師"),note:"S. maltophilia、Listeria、Nocardia 高劑量；監測 K、Cr、血球",src:["IDSA_AMR24"]},
+  mino:{d:"mino",r:"PO/IV",...SAME("200 mg PO/IV q12h"),note:"無需腎調整；CRAB、S. maltophilia 合併用藥；IV 劑型台灣供應有限",src:["IDSA_AMR24"]},
+  lexSSTI:{d:"cephalexin",r:"PO",b:[[60,"500 mg PO q6h"],[30,"500 mg PO q12h（每日上限 1 g）"],[15,"250 mg PO q8–12h"],[0,"250 mg PO q24h"]],...DIAL("250 mg PO q24h（透析日於透析後）","250 mg PO q24h","500 mg PO q12h"),src:["LABEL","IDSA_SSTI14"]},
+  clindaPO:{d:"clinda",r:"PO",...SAME("300–450 mg PO q6–8h"),note:"無需腎調整；C. difficile 風險高",src:["IDSA_SSTI14"]},
+  vpo125:{d:"vancoPO",r:"PO",...SAME("125 mg PO q6h ×10 天"),note:"口服不吸收，無需腎調整",src:["IDSA_CDI21"]},
+  vpo500:{d:"vancoPO",r:"PO/NG",...SAME("500 mg PO／NG q6h（腸阻塞加 vancomycin 灌腸）"),note:"猛爆型劑量",src:["IDSA_CDI21"]},
+  vpoTaper:{d:"vancoPO",r:"PO",...SAME("125 mg q6h ×10–14 天 → q12h ×7 天 → q24h ×7 天 → 每 2–3 天一次 ×2–8 週"),note:"遞減—間歇（taper-pulse）",src:["IDSA_CDI21"]},
+  fidax:{d:"fidax",r:"PO",...SAME("200 mg PO q12h ×10 天"),note:"復發率較 vancomycin 低",src:["IDSA_CDI21"]},
+  fidaxEP:{d:"fidax",r:"PO",...SAME("200 mg PO q12h ×5 天，之後 200 mg 隔日一次（第 7–25 天）"),note:"延長間歇方案",src:["IDSA_CDI21"]},
+  metroCDI:{d:"metro",r:"PO",...SAME("500 mg PO q8h ×10–14 天"),note:"僅在無 fidaxomicin、口服 vancomycin 時用於非重症",src:["IDSA_CDI21"]},
+  isavu:{d:"isavu",r:"PO/IV",...SAME("200 mg q8h ×6 劑，之後 200 mg q24h"),note:"無需腎調整（IV 無 SBECD）；QT 縮短",src:["IDSA_ASP16","MUCOR19"]},
+  flu200:{d:"fluco",r:"PO",b:[[50.01,"200 mg PO q24h ×14 天"],[0,"100 mg PO q24h ×14 天（減半）"]],...DIAL("200 mg 每次透析後","100 mg PO q24h","200 mg PO q24h"),note:"念珠菌 UTI；腎功能差時尿中濃度下降",src:["IDSA_CAND16"]}
+});
+INTER.find(x=>x.fx.startsWith("CYP3A4 抑制")).d.push("isavu");
+
+/* 新菌種 */
+Object.assign(PATH,{
+  cons:{n:"Coagulase-negative staphylococci（CoNS）",g:"cons",note:"單套血培養多為污染；≥2 套陽性或有人工裝置（導管、瓣膜、關節）才視為感染。"},
+  vgs:{n:"Viridans streptococci（含 S. anginosus）",g:"strep",note:"IE 常見；S. anginosus group 易形成膿瘍（肝、腦）。"},
+  gbs:{n:"Streptococcus agalactiae（GBS）",g:"strep",note:"糖尿病、老人之 SSTI、菌血症、骨關節感染。"},
+  lmono:{n:"Listeria monocytogenes",g:"list",note:">50 歲、免疫低下、孕婦之腦膜炎；所有 cephalosporin 天生無效。"},
+  nmen:{n:"Neisseria meningitidis",g:"nmen",note:"密切接觸者需化學預防；需通報。"},
+  hacek:{n:"HACEK 群",g:"hacek",note:"培養陰性 IE 常見原因之一。"},
+  abau:{n:"Acinetobacter baumannii",g:"ab",note:"台灣 ICU 常見，carbapenem 抗藥（CRAB）比例高。"},
+  smalt:{n:"Stenotrophomonas maltophilia",g:"smalt",note:"Carbapenem 天生抗藥；多見於 ICU、長期使用 carbapenem 者。"},
+  cdif:{n:"Clostridioides difficile",g:"cdi",note:"停用誘發的抗生素；接觸隔離，酒精乾洗手無效需肥皂洗手。"},
+  vvul:{n:"Vibrio vulnificus",g:"vib",note:"海水傷口或生食海鮮＋肝硬化；出血性水泡、快速進展的壞死性筋膜炎，死亡率高。"},
+  aero:{n:"Aeromonas spp.",g:"aero",note:"淡水傷口；部分菌株帶 carbapenemase（CphA），避免 carbapenem 單用。"},
+  past:{n:"Pasteurella multocida",g:"past",note:"貓狗咬傷，24 小時內快速發炎。"},
+  bpse:{n:"Burkholderia pseudomallei（類鼻疽）",g:"melio",note:"南台灣颱風、淹水後；糖尿病為主要危險因子；可致肺炎、菌血症、多處膿瘍。"},
+  asp:{n:"Aspergillus spp.",g:"asp",note:"嗜中性球低下持續發燒；胸部 CT、血清 galactomannan。"},
+  c_alb:{n:"Candida albicans",g:"c_alb",note:"多對 fluconazole 感受。"},
+  c_gla:{n:"Candida glabrata（Nakaseomyces glabratus）",g:"c_gla",note:"Fluconazole 劑量依存或抗藥；echinocandin 抗藥逐漸出現。"},
+  c_par:{n:"Candida parapsilosis",g:"c_par",note:"與導管、TPN 相關；echinocandin MIC 較高。"},
+  c_tro:{n:"Candida tropicalis",g:"c_tro",note:"嗜中性球低下、癌症病人常見；依藥敏選擇。"},
+  c_kru:{n:"Candida krusei（Pichia kudriavzevii）",g:"c_kru",note:"Fluconazole 天生抗藥。"},
+  c_aur:{n:"Candida auris",g:"c_aur",note:"多重抗藥、院內群聚；需通報並接觸隔離，會診感染科。"}
+});
+PATH.candida.g="c_alb"; PATH.candida.note="未分種：依 C. albicans 處理，待菌種與藥敏。"+PATH.candida.note;
+Object.assign(PHL,{cons:{MS:"Oxacillin 感受",MR:"Oxacillin 抗藥"},ab:{S:"Carbapenem 感受",CR:"CRAB"}});
+Object.assign(PCOL,{vgs:0,gbs:0,abau:8,cons:1});
+const ECH = ["mica","caspo","anid"];
+Object.assign(TGT,{
+  cons:{
+    MS:{sys:[O("首選",["czTx","oxa"],{src:["IDSA_CRBSI09"]})],ie:[O("首選",["oxa","czTx"],{note:"人工瓣膜：合併 rifampin ＋ gentamicin（2 週）",src:["ESC_IE23"]})]},
+    MR:{sys:[O("首選",["vanco","teico"],{src:["IDSA_CRBSI09"]}),O("替代",["dap6","lzd"],{src:["IDSA_CRBSI09"]})],ie:[O("首選（人工瓣膜合併）",["vanco","rifIE","gentIE"],{alt:false,note:"Gentamicin 2 週",src:["ESC_IE23"]})]}
+  },
+  strep:{any:{
+    sys:[O("首選",["penG","cro2"],{src:["IDSA_SSTI14"]}),O("口服降階",["amxPO"],{src:["LABEL"]})],
+    ie:[O("首選",["penG","cro2"],{note:"原生瓣膜 4 週（加 gentamicin 可縮為 2 週）；人工瓣膜 6 週",src:["ESC_IE23"]})],
+    cns:[O("首選",["penG","ampMen"],{src:["IDSA_MEN04"]})],
+    resp:[O("首選",["cro1"],{src:["ATS19"]})]
+  }},
+  list:{any:{cns:[O("首選（合併）",["ampMen","gentIE"],{alt:false,note:"至少 21 天；gentamicin 可視情況省略",src:["IDSA_MEN04"]}),O("Penicillin 過敏",["tmpHD"],{src:["IDSA_MEN04"]})],sys:[O("首選",["ampMen"],{src:["IDSA_MEN04"]}),O("Penicillin 過敏",["tmpHD"],{src:["IDSA_MEN04"]})]}},
+  nmen:{any:{cns:[O("首選",["cro2q12"],{note:"7 天；確認 penicillin 感受可改 penicillin G",src:["IDSA_MEN04"]})],sys:[O("首選",["cro2q12"],{src:["IDSA_MEN04"]})]}},
+  hacek:{any:{ie:[O("首選",["cro2"],{note:"原生瓣膜 4 週、人工瓣膜 6 週",src:["ESC_IE23"]}),O("替代",["ciproIV"],{src:["ESC_IE23"]})],sys:[O("首選",["cro2"],{src:["ESC_IE23"]})]}},
+  ab:{
+    S:{sys:[O("首選",["mem","ipm"],{src:["IDSA_AMR24"]}),O("替代",["samIV","cps"],{note:"Sulbactam 感受時",src:["IDSA_AMR24"]})]},
+    CR:{sys:[O("首選（合併）",["samHD"],{add:[{regs:["col","tgc","mino"],alt:true}],note:"高劑量 sulbactam ＋ 第二個有效藥；會診感染科。Sulbactam-durlobactam 台灣尚未普及",src:["IDSA_AMR24","POLY19"]}),O("替代",["cps"],{note:"台灣常用 cefoperazone-sulbactam 提供 sulbactam，但劑量常不足以達高劑量方案",src:["CPS_LABEL"]})]}
+  },
+  smalt:{any:{sys:[O("首選（中重度合併其一）",["tmpHD"],{add:[{regs:["mino","levo750","tgc"],alt:true}],note:"IDSA AMR 2024 建議中重度感染兩藥合併，臨床改善後可單用",src:["IDSA_AMR24"]})]}},
+  cdi:{any:{sys:[O("首選",["fidax","vpo125"],{src:["IDSA_CDI21"]})]}},
+  vib:{any:{sys:[O("首選（合併）",["caz","doxy"],{alt:false,note:"立即給藥、不等培養；積極清創或截肢",src:["CDC_VIB"]}),O("替代（合併）",["cro2","ciproIV"],{alt:false,src:["CDC_VIB"]})]}},
+  aero:{any:{sys:[O("首選",["fep2q8","ciproIV","tmpsmx"],{note:"依藥敏；避免 carbapenem 單用",src:["MANDELL"]})]}},
+  past:{any:{sys:[O("口服",["amcPO"],{src:["IDSA_SSTI14"]}),O("IV",["samIV"],{src:["IDSA_SSTI14"]}),O("Penicillin 過敏",["doxy"],{src:["IDSA_SSTI14"]})]}},
+  melio:{any:{sys:[O("首選（加強期 ≥10–14 天）",["caz","mem"],{note:"之後 TMP-SMX 根除期 ≥3 個月",src:["MELIO"]})],resp:[O("首選",["caz","mem"],{src:["MELIO"]})]}},
+  asp:{any:{sys:[O("首選",["vori"],{src:["IDSA_ASP16"]}),O("替代",["isavu","lamb"],{src:["IDSA_ASP16"]})],resp:[O("首選",["vori"],{src:["IDSA_ASP16"]}),O("替代",["isavu","lamb"],{src:["IDSA_ASP16"]})]}},
+  c_alb:{any:{sys:[O("首選",ECH,{src:["IDSA_CAND16","ECMM_CAND25"]}),O("降階",["fluco"],{cond:"臨床穩定、感受、血培養轉陰後",src:["ECMM_CAND25"]}),O("替代",["lamb"],{src:["IDSA_CAND16"]})],cys:[O("首選",["flu200"],{src:["IDSA_CAND16"]})]}},
+  c_tro:{any:{sys:[O("首選",ECH,{src:["IDSA_CAND16"]}),O("降階",["fluco"],{cond:"感受時",src:["IDSA_CAND16"]})],cys:[O("首選",["flu200"],{cond:"感受時",src:["IDSA_CAND16"]})]}},
+  c_par:{any:{sys:[O("首選",["fluco"],{cond:"感受時；已用 echinocandin 且改善可續用",src:["IDSA_CAND16"]}),O("替代",ECH.concat(["lamb"]),{src:["IDSA_CAND16"]})],cys:[O("首選",["flu200"],{src:["IDSA_CAND16"]})]}},
+  c_gla:{any:{sys:[O("首選",ECH,{src:["IDSA_CAND16"]}),O("降階",["fluco","vori"],{cond:"確認感受；fluconazole 用 800 mg（12 mg/kg）",src:["IDSA_CAND16"]}),O("替代",["lamb"],{src:["IDSA_CAND16"]})],cys:[O("首選",["amb"],{note:"Fluconazole 抗藥時：amphotericin B deoxycholate 0.3–0.6 mg/kg ×1–7 天或膀胱灌洗",src:["IDSA_CAND16"]})]}},
+  c_kru:{any:{sys:[O("首選",ECH,{src:["IDSA_CAND16"]}),O("降階",["vori"],{cond:"感受時",src:["IDSA_CAND16"]}),O("替代",["lamb"],{src:["IDSA_CAND16"]})],cys:[O("首選",["amb"],{note:"Amphotericin B deoxycholate 0.3–0.6 mg/kg ×1–7 天",src:["IDSA_CAND16"]})]}},
+  c_aur:{any:{sys:[O("首選",ECH,{note:"會診感染科；依藥敏，echinocandin 抗藥時改 liposomal AmB",src:["ECMM_CAND25"]})]}}
+});
+// 既有菌群補上 CNS／IE 建議
+TGT.spn.PS.cns=[O("首選",["penG","cro2q12"],{note:"Penicillin MIC ≤0.06 才用 penicillin；10–14 天",src:["IDSA_MEN04"]})];
+TGT.spn.PR.cns=[O("首選（合併）",["cro2q12","vanco"],{alt:false,note:"Ceftriaxone MIC ≥1 加 rifampin；10–14 天",src:["IDSA_MEN04"]})];
+TGT.hflu.BN.cns=TGT.hflu.BP.cns=[O("首選",["cro2q12"],{note:"7 天",src:["IDSA_MEN04"]})];
+TGT.ent.S.cns=[O("首選",["cro2q12"],{note:"21 天；台灣社區型腦膜炎 K. pneumoniae 比例高",src:["IDSA_MEN04","TW_KPMEN"]}),O("替代",["fep2q8"],{src:["IDSA_VENT17"]})];
+TGT.ent.ESBL.cns=[O("首選",["memMen"],{note:"21 天",src:["IDSA_VENT17"]})];
+TGT.ent.CRE.cns=[O("會診感染科",["cza"],{src:["IDSA_AMR24"]})];
+TGT.ampc.S.cns=TGT.ampc.R.cns=[O("首選",["fep2q8","memMen"],{src:["IDSA_VENT17"]})];
+TGT.psa.S.cns=[O("首選",["fep2q8","caz","memMen"],{src:["IDSA_VENT17"]})];
+TGT.sa.MSSA.cns=[O("首選",["oxa"],{note:"Cefazolin 中樞滲透差",src:["IDSA_MEN04"]})];
+TGT.sa.MRSA.cns=[O("首選",["vanco"],{note:"Trough 15–20 mg/L；可加 rifampin",src:["IDSA_MRSA11"]}),O("替代",["lzd"],{src:["IDSA_MRSA11"]})];
+TGT.sa.MSSA.ie=[O("首選",["oxa","czTx"],{note:"原生瓣膜 4–6 週，不加 gentamicin；人工瓣膜 6 週＋rifampin＋gentamicin 2 週",src:["ESC_IE23"]})];
+TGT.sa.MRSA.ie=[O("首選",["vanco","dap10"],{note:"原生瓣膜 4–6 週；人工瓣膜加 rifampin＋gentamicin 2 週",src:["ESC_IE23"]})];
+TGT.entc.AS.ie=[O("首選（合併）",["ampMen","cro2q12"],{alt:false,note:"6 週；腎毒性低於 ampicillin＋gentamicin",src:["ESC_IE23"]}),O("替代（合併）",["ampMen","gentIE"],{alt:false,note:"Gentamicin 2 週",src:["ESC_IE23"]})];
+TGT.entc.VRE.ie=[O("會診感染科",["dap10","lzd"],{src:["ESC_IE23"]})];
+
+/* 部位 */
+Object.assign(SYS,{
+  bsi:{n:"血流感染",subs:[{id:"bsi_unk",n:"敗血症・來源不明",sev:true},{id:"crbsi",n:"導管相關（CRBSI）",sev:true},{id:"sab",n:"S. aureus 菌血症",sev:false},{id:"gnb_bsi",n:"G(−) 菌血症（來源已知）",sev:true}]},
+  iai:{n:"腹腔感染",subs:[{id:"ciai_mild",n:"cIAI・社區輕中度",sev:false},{id:"ciai_sev",n:"cIAI・重症或醫療照護相關",sev:true},{id:"biliary",n:"膽道感染（膽管炎／膽囊炎）",sev:true,sevL:["Grade I（輕度）","Grade II（中度）","Grade III（重度）"]},{id:"pla",n:"化膿性肝膿瘍",sev:true},{id:"sbp",n:"SBP（自發性腹膜炎）",sev:true},{id:"iai_unk",n:"不確定",sev:true}]},
+  ssti:{n:"皮膚軟組織",subs:[{id:"cell",n:"蜂窩性組織炎（非化膿）",sev:true,sevL:["輕症","有全身症狀","重症／快速進展"]},{id:"abscess",n:"膿瘍（化膿性）",sev:true,sevL:["輕症","有全身症狀","重症／快速進展"]},{id:"nf",n:"壞死性筋膜炎",sev:false},{id:"dfi",n:"糖尿病足感染",sev:true,sevL:["輕度","中度","重度（全身症狀）"]},{id:"bite",n:"動物咬傷",sev:true,sevL:["預防／輕症","有全身症狀","重症"]},{id:"water",n:"海水／淡水傷口",sev:false},{id:"ssti_unk",n:"不確定",sev:true,sevL:["輕症","有全身症狀","重症／快速進展"]}]},
+  cns:{n:"CNS",subs:[{id:"men_comm",n:"社區型腦膜炎（18–50 歲）",sev:false},{id:"men_old",n:"腦膜炎・>50 歲或免疫低下",sev:false},{id:"men_hosp",n:"術後／院內腦膜炎（含 shunt、EVD）",sev:false},{id:"brabs",n:"腦膿瘍",sev:false},{id:"cns_unk",n:"不確定",sev:false}]},
+  ie:{n:"心內膜炎",subs:[{id:"ie_nve",n:"原生瓣膜／晚期人工瓣膜（≥12 月）",sev:false},{id:"ie_pve",n:"早期人工瓣膜（<12 月）／醫療照護相關",sev:false},{id:"ie_unk",n:"不確定",sev:false}]},
+  bone:{n:"骨關節",subs:[{id:"joint",n:"化膿性關節炎（原生）",sev:true},{id:"vo",n:"脊椎骨髓炎",sev:true},{id:"om",n:"四肢／術後骨髓炎",sev:true},{id:"pji",n:"人工關節感染（PJI）",sev:true},{id:"dfo",n:"糖尿病足骨髓炎",sev:true},{id:"bone_unk",n:"不確定",sev:true}]},
+  fn:{n:"發燒性嗜中性球低下",subs:[{id:"fn_low",n:"低風險（MASCC ≥21，可門診）",sev:false},{id:"fn_high",n:"高風險（住院）",sev:true}]},
+  cdi:{n:"C. difficile",subs:[{id:"cdi_init",n:"首次（非重症或重症）",sev:false},{id:"cdi_fulm",n:"猛爆型",sev:false},{id:"cdi_rec1",n:"第一次復發",sev:false},{id:"cdi_rec2",n:"第二次以上復發",sev:false}]},
+  hap:{n:"HAP／VAP",subs:[{id:"hap",n:"HAP・非高死亡風險",sev:false},{id:"hap_hr",n:"HAP・高死亡風險（呼吸器或休克）",sev:false},{id:"vap",n:"VAP",sev:false},{id:"hap_unk",n:"不確定",sev:false}]},
+  cand:{n:"抗黴菌（Candida）",subs:[{id:"cand_bsi",n:"念珠菌血症（非嗜中性球低下）",sev:false},{id:"cand_neut",n:"念珠菌血症（嗜中性球低下）",sev:false},{id:"cand_iai",n:"腹腔念珠菌感染",sev:false},{id:"cand_uti",n:"念珠菌尿／UTI",sev:false}]}
+});
+SYS.gu.subs.forEach(s=>{s.sev=!["cys","cbp"].includes(s.id);}); SYS.resp.subs.forEach(s=>{s.sev=false;});
+SYS.gu.def="pyelo"; SYS.resp.def="cap_in";
+const SUBDEF={}; Object.values(SYS).forEach(sy=>sy.subs.forEach(s=>{SUBDEF[s.id]=s;}));
+Object.assign(PL,{
+  bsi_unk:["ecoli","kpn","saur","spn","psa","efae","gas","vvul","bpse","candida"], crbsi:["cons","saur","efae","kpn","psa","c_alb","c_par"], sab:["saur"], gnb_bsi:["ecoli","kpn","psa","ampc","abau"],
+  ciai_mild:["ecoli","kpn","bact","vgs","efae"], ciai_sev:["ecoli","kpn","bact","efae","ampc","psa","c_alb"], biliary:["ecoli","kpn","efae","bact","psa"], pla:["kpn","ecoli","vgs","bact"], sbp:["ecoli","kpn","spn","efae"], iai_unk:["ecoli","kpn","bact","efae","psa"],
+  cell:["gas","gbs","saur"], abscess:["saur","gas"], nf:["gas","saur","ecoli","bact","vvul","aero","kpn"], dfi:["saur","gas","gbs","ecoli","psa","bact","efae"], bite:["past","saur","gas","bact"], water:["vvul","aero","saur"], ssti_unk:["gas","saur","ecoli","bact"],
+  men_comm:["spn","nmen","kpn","hflu","saur"], men_old:["spn","kpn","lmono","nmen","hflu","saur"], men_hosp:["cons","saur","psa","abau","kpn","ecoli"], brabs:["vgs","bact","saur","kpn"], cns_unk:["spn","nmen","kpn","lmono","hflu"],
+  ie_nve:["saur","vgs","efae","cons","gbs","hacek"], ie_pve:["cons","saur","efae","vgs","c_alb"], ie_unk:["saur","vgs","efae","cons","hacek"],
+  joint:["saur","gas","gbs","ngon","ecoli","psa"], vo:["saur","ecoli","vgs","bpse"], om:["saur","cons","psa","ecoli"], pji:["cons","saur","vgs","efae","ecoli"], dfo:["saur","gas","ecoli","psa","bact"], bone_unk:["saur","cons","ecoli","psa"],
+  fn_low:["ecoli","kpn","psa","vgs","saur"], fn_high:["ecoli","kpn","psa","cons","saur","vgs","efae","c_alb","asp"],
+  cdi_init:["cdif"], cdi_fulm:["cdif"], cdi_rec1:["cdif"], cdi_rec2:["cdif"],
+  hap:["psa","kpn","abau","saur","ecoli","ampc","smalt"], hap_hr:["psa","kpn","abau","saur","ecoli","ampc","smalt"], vap:["psa","abau","kpn","saur","ecoli","smalt"], hap_unk:["psa","kpn","abau","saur","ecoli"],
+  cand_bsi:["c_alb","c_gla","c_par","c_tro","c_kru","c_aur"], cand_neut:["c_tro","c_alb","c_kru","c_gla","asp"], cand_iai:["c_alb","c_gla","c_tro","c_par"], cand_uti:["c_alb","c_gla","c_tro","c_kru"]
+});
+
+/* 產生器 */
+const PLUSV = {regs:["vanco","teico","lzd"],alt:true};
+function genBSI(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="sab"){
+    o.push(O("經驗性（藥敏前）",["vanco"],{note:"確認 MSSA 後立即改 cefazolin 或 oxacillin",src:["IDSA_MRSA11"]}));
+    o.push(O("MSSA",["czTx","oxa"],{src:["IDSA_MRSA11"]}));
+    o.push(O("MRSA",["vanco","dap6"],{note:"持續菌血症可用 daptomycin 8–10 mg/kg",src:["IDSA_MRSA11"]}));
+    n.push(N("會診感染科（可降低死亡率）；每 24–48 小時追蹤血培養至轉陰；心臟超音波（TTE，高風險做 TEE）；移除導管或引流病灶。",["IDSA_MRSA11"],{lvl:"warn"}));
+    n.push(N("低風險 SAB（無併發症、無不可移除異物、無嚴重共病）：IV 5–7 天後改口服與繼續 IV 效果相當。",["SABATO"],{upd:true}));
+    return {o,n,dur:{t:"單純型：自首次血培養轉陰起 ≥14 天；複雜型（持續菌血症、心內膜炎、轉移性感染）：4–6 週",days:14,src:["IDSA_MRSA11"]}};
+  }
+  if(c.fx.has("cre")) o.push(O("首選（CRE 史）",["cza"],{note:"會診感染科",src:["IDSA_AMR24"]}));
+  let bl;
+  if(c.fx.has("esbl")||(c.sev==="shock"&&c.fx.has("hcx"))) bl=["mem"];
+  else if(c.fx.has("psa")||c.fx.has("hcx")||s==="crbsi") bl=["fep2q8","tzp"];
+  else bl=["cro2"];
+  if(s==="crbsi"){
+    o.push(O("首選（合併）",["vanco","teico"],{add:[{regs:bl,alt:bl.length>1}],note:"G(−) 涵蓋：重症、嗜中性球低下、股靜脈導管時必須",src:["IDSA_CRBSI09"]}));
+    n.push(N("移除導管：S. aureus、P. aeruginosa、Candida、黴菌、分枝桿菌一律移除；CoNS 隧道式導管可考慮保留＋抗生素封管。",["IDSA_CRBSI09"],{lvl:"warn"}));
+    n.push(N("Candida 風險（TPN、廣效抗生素、股靜脈導管、血液腫瘤、多處移生）：加 echinocandin。",["IDSA_CRBSI09","IDSA_CAND16"]));
+    return {o,n,dur:{t:"CoNS（導管已移除）5–7 天；G(−) 7 天；S. aureus ≥14 天；Candida 血培養轉陰後 14 天",days:7,src:["IDSA_CRBSI09","BALANCE"],upd:true}};
+  }
+  if(s==="gnb_bsi"){
+    o.push(O("經驗性",bl,{src:["IDSA_cUTI25","IDSA_AMR24"]}));
+    n.push(N("來源已控制、臨床改善：7 天療程與 14 天相當（不含 S. aureus、免疫嚴重低下、需長療程的感染）。",["BALANCE","YAHAV19"],{upd:true}));
+    n.push(N("穩定後可改高生體可用率口服藥（FQ、TMP-SMX，依藥敏）。",["IDSA_cUTI25"]));
+    return {o,n,dur:{t:"7 天（改善中、來源已控制）",days:7,src:["BALANCE"],upd:true}};
+  }
+  o.push(O("首選",bl,{add:(c.fx.has("mrsa")||c.fx.has("hcx")||c.sev==="shock")?[PLUSV]:[],note:bl[0]==="cro2"?"社區、無抗藥風險":"醫療照護暴露、PsA 或 ESBL 風險",src:["SSC21"]}));
+  if(!(c.fx.has("mrsa")||c.fx.has("hcx")||c.sev==="shock")) n.push(N("MRSA 風險（MRSA 帶菌、導管、皮膚感染、近期住院）時加 vancomycin。",["SSC21"]));
+  n.push(N("Septic shock：1 小時內給抗生素；疑似 sepsis 無休克：3 小時內完成評估後給藥。給藥前抽 2 套血培養。",["SSC21"],{lvl:"warn"}));
+  n.push(N("台灣特殊病原：海水／海鮮接觸＋肝硬化 → Vibrio vulnificus（ceftazidime＋doxycycline）；南部颱風後、糖尿病 → 類鼻疽（ceftazidime 或 meropenem）；野外、焦痂 → 恙蟲病（doxycycline）。",["CDC_VIB","MELIO"]));
+  return {o,n,dur:{t:"依來源；G(−) 菌血症改善中 7 天",days:7,src:["BALANCE"],upd:true}};
+}
+function genIAI(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="biliary"){
+    const g=c.sev;
+    if(c.fx.has("hcx")||c.fx.has("esbl")){ o.push(O("首選（醫療照護相關）",c.fx.has("esbl")?["mem"]:["tzp","fep2q8","mem"],{add:[{regs:["vanco"],alt:false}],note:"Vancomycin 涵蓋 Enterococcus；有膽腸吻合加厭氧菌涵蓋",src:["TG18"]})); }
+    else if(g==="none") o.push(O("首選（Grade I）",["cro1","czTx","etp"],{note:"Cephalosporin 若有膽腸吻合加 metronidazole",src:["TG18"]}));
+    else if(g==="sepsis") o.push(O("首選（Grade II）",["tzp","cro1","etp"],{note:"Ceftriaxone ± metronidazole",src:["TG18"]}));
+    else o.push(O("首選（Grade III）",["tzp","fep2q8","mem"],{note:"Cefepime ± metronidazole；加 vancomycin 涵蓋 Enterococcus",src:["TG18"]}));
+    n.push(N("引流是關鍵：中重度膽管炎早期 ERCP／PTCD；膽囊炎依嚴重度膽囊切除或 PTGBD。",["TG18"],{lvl:"warn"}));
+    return {o,n,dur:{t:"膽囊炎：切除後 24 小時內停藥（Grade I–II）；膽管炎：引流後 4–7 天；G(+) 菌血症 ≥2 週",days:4,src:["TG18"]}};
+  }
+  if(s==="pla"){
+    o.push(O("首選",c.fx.has("esbl")?["etp","mem"]:["cro2"],{note:"台灣以高毒力 K. pneumoniae 為主；膽道或腸道來源加 metronidazole",src:["SIU12"]}));
+    o.push(O("口服降階",["ciproPO"],{cond:"臨床改善、感受時",src:["MOLTON20"]}));
+    n.push(N(">5 cm 或多房性：經皮引流；K. pneumoniae 肝膿瘍需眼科檢查（內因性眼內炎）並注意腦膜炎、壞死性筋膜炎等轉移性感染。",["SIU12"],{lvl:"warn"}));
+    n.push(N("鑑別阿米巴肝膿瘍（旅遊史、男同志）：metronidazole。",["MANDELL"]));
+    return {o,n,dur:{t:"總療程 4–6 週（依影像與臨床）",days:28,src:["SIU12","MOLTON20"]}};
+  }
+  if(s==="sbp"){
+    o.push(O("首選",c.fx.has("hcx")||c.fx.has("esbl")?["tzp","mem"]:["cro2"],{note:c.fx.has("hcx")?"院內或近期抗生素暴露":"社區型（AASLD：cefotaxime 2 g q8h 或 ceftriaxone）",src:["AASLD21"]}));
+    n.push(N("白蛋白：第 1 天 1.5 g/kg、第 3 天 1 g/kg（Cr >1 mg/dL、BUN >30 或 bilirubin >4 時），降低 HRS 與死亡。",["AASLD21"],{lvl:"warn"}));
+    n.push(N("治療後需次發性預防（ciprofloxacin 或 TMP-SMX）。",["AASLD21"]));
+    return {o,n,dur:{t:"5–7 天",days:5,src:["AASLD21"]}};
+  }
+  const sev = s==="ciai_sev" || c.sev==="shock" || c.fx.has("hcx");
+  if(!sev){
+    o.push(O("首選（合併）",["cro1","czTx"],{add:[{regs:["metro"],alt:false}],src:["IDSA_IAI10"]}));
+    o.push(O("替代（單用）",["etp"],{note:c.fx.has("esbl")?"ESBL 風險首選":"",src:["IDSA_IAI10"]}));
+    n.push(N("台灣 E. coli 對 ampicillin-sulbactam、FQ 抗藥率高，不作經驗用藥；cefotetan、clindamycin 對 B. fragilis 抗藥高。",["IDSA_IAI10","TSAR"]));
+  } else {
+    o.push(O("首選",c.fx.has("esbl")?["mem"]:["tzp","mem"],{src:["IDSA_IAI10"]}));
+    o.push(O("替代（合併）",["fep2q8"],{add:[{regs:["metro"],alt:false}],src:["IDSA_IAI10"]}));
+    if(c.fx.has("hcx")||c.fx.has("mrsa")) o.push(O("加上（醫療照護相關）",["vanco"],{note:"Enterococcus（含術後）或 MRSA 帶菌",src:["IDSA_IAI10"]}));
+    n.push(N("醫療照護相關、上消化道穿孔反覆手術、免疫低下：考慮 Candida 涵蓋（echinocandin）。",["IDSA_IAI10","IDSA_CAND16"]));
+  }
+  n.push(N("來源控制（引流、清創、手術）是核心；術中培養在醫療照護相關感染尤其重要。",["IDSA_IAI10"],{lvl:"warn"}));
+  return {o,n,dur:{t:"來源控制完成後 4 天（固定療程與依生理指標停藥相同）",days:4,src:["STOPIT"]}};
+}
+function genSSTI(c){
+  const o=[],n=[]; const s=S.sub; const v=c.sev;
+  if(s==="nf"){
+    o.push(O("首選（合併）",c.fx.has("esbl")?["mem"]:["tzp","mem"],{add:[{regs:["vanco","lzd"],alt:true},{regs:["clinda"],alt:false}],src:["IDSA_SSTI14"]}));
+    o.push(O("海水接觸／肝硬化（Vibrio）",["caz","doxy"],{alt:false,src:["CDC_VIB"]}));
+    n.push(N("立即外科清創是唯一關鍵；不要等影像。24–48 小時再探查。",["IDSA_SSTI14"],{lvl:"danger"}));
+    return {o,n,dur:{t:"至不需再清創、臨床改善、退燒 48–72 小時",days:null,src:["IDSA_SSTI14"]}};
+  }
+  if(s==="water"){
+    o.push(O("海水、海鮮（Vibrio）",["caz","doxy"],{alt:false,note:"或 ceftriaxone＋doxycycline",src:["CDC_VIB"]}));
+    o.push(O("淡水（Aeromonas）",["fep2q8","ciproIV"],{note:"避免 carbapenem 單用",src:["MANDELL"]}));
+    n.push(N("出血性水泡、劇痛、快速擴散 → 壞死性筋膜炎，立即手術。",["CDC_VIB"],{lvl:"danger"}));
+    return {o,n,dur:{t:"7–14 天（依清創與臨床）",days:7,src:["CDC_VIB"]}};
+  }
+  if(s==="bite"){
+    if(v==="none") o.push(O("首選",["amcPO"],{note:"預防 3–5 天；手部、深部、免疫低下者建議預防",src:["IDSA_SSTI14"]}));
+    else o.push(O("首選",["samIV"],{src:["IDSA_SSTI14"]}),O("替代",["tzp","etp"],{src:["IDSA_SSTI14"]}));
+    n.push(N("評估破傷風與狂犬病暴露；不要初期縫合（臉部除外）。",["IDSA_SSTI14"]));
+    return {o,n,dur:{t:"預防 3–5 天；治療 5–14 天",days:5,src:["IDSA_SSTI14"]}};
+  }
+  if(s==="dfi"){
+    if(v==="none") o.push(O("首選（輕度）",["lexSSTI","amcPO"],{note:"MRSA 風險：TMP-SMX 或 doxycycline",src:["IWGDF23"]}));
+    else if(v==="sepsis") o.push(O("首選（中度）",["samIV","etp"],{note:"或 ceftriaxone＋metronidazole",src:["IWGDF23"]}));
+    else o.push(O("首選（重度）",["tzp"],{add:c.fx.has("mrsa")?[PLUSV]:[],src:["IWGDF23"]}));
+    if(c.fx.has("mrsa")&&v!=="shock") o.push(O("加上（MRSA 風險）",["vanco","lzd","tmpsmx"],{src:["IWGDF23"]}));
+    n.push(N("IWGDF 2023：溫帶地區不常規涵蓋 PsA；亞洲地區若近期培養出 PsA 可考慮涵蓋。未感染的潰瘍不給抗生素。",["IWGDF23"],{upd:true}));
+    n.push(N("評估骨髓炎（probe-to-bone、X 光／MRI）與周邊動脈疾病。",["IWGDF23"]));
+    return {o,n,dur:{t:"軟組織 1–2 週",days:7,src:["IWGDF23"],upd:true}};
+  }
+  if(s==="abscess"){
+    if(v==="none"){ o.push(O("切開引流後",["tmpsmx","doxy"],{note:"小膿瘍引流後加抗生素可提高治癒率",src:["TALAN16","IDSA_SSTI14"]})); o.push(O("MSSA 確認",["lexSSTI"],{src:["IDSA_SSTI14"]})); }
+    else o.push(O("首選（MRSA 涵蓋）",["vanco","teico","lzd","dap6"],{src:["IDSA_SSTI14"]}));
+    n.push(N("切開引流是主要治療；送膿液培養。",["IDSA_SSTI14"],{lvl:"warn"}));
+    return {o,n,dur:{t:"5–10 天",days:5,src:["IDSA_SSTI14"]}};
+  }
+  // cellulitis / unk
+  if(v==="none") o.push(O("首選（口服）",["lexSSTI"],{src:["IDSA_SSTI14"]}),O("Penicillin 過敏",["clindaPO"],{src:["IDSA_SSTI14"]}));
+  else if(v==="sepsis") o.push(O("首選（IV）",["czTx","cro1","penG"],{src:["IDSA_SSTI14"]}));
+  else { o.push(O("首選（合併）",["vanco"],{add:[{regs:["tzp"],alt:false}],note:"排除壞死性筋膜炎",src:["IDSA_SSTI14"]})); }
+  if(c.fx.has("mrsa")&&v!=="shock") o.push(O("加上（MRSA 風險）",v==="none"?["tmpsmx","doxy"]:["vanco","lzd"],{src:["IDSA_SSTI14"]}));
+  n.push(N("抬高患肢、治療足癬與水腫等誘因。非化膿性蜂窩性組織炎主要為鏈球菌，通常不需涵蓋 MRSA。",["IDSA_SSTI14"]));
+  return {o,n,dur:{t:"5 天（未改善可延長）",days:5,src:["IDSA_SSTI14"]}};
+}
+function genCNS(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="brabs"){
+    o.push(O("首選（社區）",["cro2q12"],{add:[{regs:["metro"],alt:false}],src:["ESCMID_BA24"]}));
+    o.push(O("術後／外傷",["memMen"],{add:[{regs:["vanco"],alt:false}],src:["ESCMID_BA24"]}));
+    o.push(O("免疫低下另加",["tmpHD","vori"],{note:"Nocardia（TMP-SMX）、Aspergillus（voriconazole）；會診感染科",src:["ESCMID_BA24"]}));
+    n.push(N("非重症且 24 小時內可抽吸：可先不給抗生素，取得檢體後再給。抽吸或手術引流取檢體（含 16S PCR）。",["ESCMID_BA24"],{upd:true}));
+    n.push(N("每 2 週追蹤影像至臨床治癒。",["ESCMID_BA24"]));
+    return {o,n,dur:{t:"6–8 週",days:42,src:["ESCMID_BA24"]}};
+  }
+  if(s==="men_hosp"){
+    o.push(O("首選（合併）",["vanco"],{add:[{regs:c.fx.has("esbl")||c.fx.has("cre")?["memMen"]:["fep2q8","caz","memMen"],alt:true}],src:["IDSA_VENT17"]}));
+    n.push(N("移除感染的 shunt／EVD；腦室內給藥需會診感染科與神經外科。",["IDSA_VENT17"],{lvl:"warn"}));
+    return {o,n,dur:{t:"CoNS 10 天；S. aureus 10–14 天；G(−) 10–14 天（以 CSF 轉陰起算）",days:10,src:["IDSA_VENT17"]}};
+  }
+  const old = s==="men_old";
+  o.push(O("首選（合併）",["cro2q12"],{add:[{regs:["vanco"],alt:false}].concat(old?[{regs:["ampMen"],alt:false}]:[]),note:old?"加 ampicillin 涵蓋 Listeria":"",src:["IDSA_MEN04","ESCMID_MEN16"]}));
+  if(c.fx.has("esbl")) o.push(O("ESBL 風險",["memMen"],{add:[{regs:["vanco"],alt:false}],src:["IDSA_VENT17"]}));
+  n.push(N("Dexamethasone 0.15 mg/kg IV q6h ×4 天，於第一劑抗生素前或同時給；確認非肺炎鏈球菌可停。",["ESCMID_MEN16","IDSA_MEN04"],{lvl:"warn"}));
+  n.push(N("需先做 CT 時（意識變差、局部神經症狀、免疫低下、新發癲癇、乳突水腫）：先抽血培養並給 dexamethasone＋抗生素，不要等影像。",["IDSA_MEN04"],{lvl:"danger"}));
+  n.push(N("台灣成人社區型腦膜炎 K. pneumoniae 比例高（尤其糖尿病），ceftriaxone 經驗治療可涵蓋。",["TW_KPMEN"]));
+  if(s==="cns_unk") n.push(N("未區分：依社區型腦膜炎處理；>50 歲、免疫低下、酗酒者加 ampicillin。",["IDSA_MEN04"]));
+  return {o,n,dur:{t:"S. pneumoniae 10–14 天；N. meningitidis、H. influenzae 7 天；Listeria ≥21 天；G(−) 21 天",days:10,src:["IDSA_MEN04"]}};
+}
+function genIE(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="ie_pve"){
+    o.push(O("首選（合併）",["vanco","dap10"],{add:[{regs:["gentIE"],alt:false},{regs:["rifIE"],alt:false}],note:"涵蓋 MR-staphylococci、Enterococcus、非 HACEK G(−)",src:["ESC_IE23"]}));
+  } else {
+    o.push(O("首選（合併）",["ampMen","cro2q12"],{alt:false,src:["ESC_IE23"]}));
+    o.push(O("替代（合併）",["oxa","gentIE"],{alt:false,src:["ESC_IE23"]}));
+    if(c.fx.has("mrsa")) o.push(O("MRSA 風險（合併）",["vanco","dap10"],{add:[{regs:["gentIE"],alt:false}],src:["ESC_IE23"]}));
+  }
+  n.push(N("給藥前至少 3 套血培養；TEE；依 Duke-ISCVID 2023 診斷。",["ESC_IE23"],{lvl:"warn"}));
+  n.push(N("Gentamicin 不再用於葡萄球菌原生瓣膜 IE；rifampin 只用於人工瓣膜或異物。",["ESC_IE23"],{upd:true}));
+  n.push(N("穩定、TEE 無局部惡化者：IV ≥10 天後可改口服完成療程（POET）。",["ESC_IE23","POET19"],{upd:true}));
+  n.push(N("緊急手術：心衰竭、無法控制的感染（膿瘍、瘻管）、≥10 mm 贅生物合併栓塞。會診心臟外科。",["ESC_IE23"]));
+  return {o,n,dur:{t:"原生瓣膜 2–6 週（依菌種）；人工瓣膜 ≥6 週",days:28,src:["ESC_IE23"]}};
+}
+function genBone(c){
+  const o=[],n=[]; const s=S.sub; const gn = c.fx.has("psa")||c.fx.has("hcx");
+  const base = O("經驗性（合併）",["vanco","teico"],{add:[{regs:gn?["fep2q8"]:["cro2","fep2q8"],alt:!gn}],src:["IDSA_VO15"]});
+  if(s==="vo"){
+    o.push(base);
+    n.push(N("血行動力學穩定、無神經學缺損：先做 CT 導引切片（含結核與黴菌培養）再給抗生素。",["IDSA_VO15"],{lvl:"warn"}));
+    n.push(N("台灣需考慮結核性脊椎炎與類鼻疽。",["IDSA_VO15","MELIO"]));
+    return {o,n,dur:{t:"6 週",days:42,src:["IDSA_VO15"]}};
+  }
+  if(s==="pji"){
+    o.push(base);
+    n.push(N("穩定者先停抗生素 ≥2 週以利術中培養（≥3–5 個組織檢體）。DAIR 處理之葡萄球菌感染加 rifampin。",["IDSA_PJI13"],{lvl:"warn"}));
+    n.push(N("DAIR 或一階段置換：12 週優於 6 週。",["DATIPO21"],{upd:true}));
+    return {o,n,dur:{t:"12 週（DAIR、一階段）；兩階段依術式",days:84,src:["DATIPO21","IDSA_PJI13"],upd:true}};
+  }
+  if(s==="joint"){
+    o.push(base);
+    o.push(O("年輕、性活躍（淋病）",["cro1"],{note:"7 天",src:["CDC_STI21"]}));
+    n.push(N("關節引流（抽吸、關節鏡或手術）是核心。",["GJIKA19"],{lvl:"warn"}));
+    n.push(N("手術引流後 2 週療程與 4 週相當。",["GJIKA19"],{upd:true}));
+    return {o,n,dur:{t:"引流後 2–4 週",days:14,src:["GJIKA19"],upd:true}};
+  }
+  if(s==="dfo"){
+    o.push(O("經驗性",["samIV","etp"],{add:c.fx.has("mrsa")?[PLUSV]:[],note:"重度用 piperacillin-tazobactam",src:["IWGDF23"]}));
+    n.push(N("骨切片培養指導用藥。",["IWGDF23"],{lvl:"warn"}));
+    return {o,n,dur:{t:"截肢後 ≤3 週；未截肢 ≤6 週",days:21,src:["IWGDF23"],upd:true}};
+  }
+  o.push(base);
+  n.push(N("清創取骨培養；穩定後可改高生體可用率口服藥（約 1 週 IV 後），效果與 IV 相當。",["OVIVA19"],{upd:true}));
+  return {o,n,dur:{t:"6 週（清創完整可縮短）",days:42,src:["OVIVA19"]}};
+}
+function genFN(c){
+  const o=[],n=[];
+  if(S.sub==="fn_low"){
+    o.push(O("首選（合併）",["ciproPO","amcPO"],{alt:false,note:"已用 FQ 預防者不適用",src:["ASCO18"]}));
+    o.push(O("Penicillin 過敏（合併）",["ciproPO","clindaPO"],{alt:false,src:["ASCO18"]}));
+    n.push(N("條件：MASCC ≥21、可口服、能於 1 小時內返院、有人照顧；首劑於醫院給予並觀察 4 小時。",["ASCO18"],{lvl:"warn"}));
+    return {o,n,dur:{t:"退燒且 ANC 回升；或依高風險原則",days:7,src:["ASCO18"]}};
+  }
+  const bl = c.fx.has("esbl")||c.sev==="shock" ? ["mem"] : ["fep2q8","tzp","mem"];
+  o.push(O("首選（單一 anti-pseudomonal β-lactam）",bl,{src:["IDSA_FN10","ECIL4"]}));
+  o.push(O("加上（符合條件時）",["vanco","teico"],{note:"血行動力學不穩、疑似導管或皮膚感染、肺炎、MRSA 帶菌、嚴重黏膜炎且用 FQ 預防",src:["IDSA_FN10"]}));
+  if(c.sev==="shock") o.push(O("休克另加（抗藥 G(−) 風險）",["amkQ24"],{src:["ECIL4"]}));
+  o.push(O("持續發燒 4–7 天（高風險）",["caspo","mica","lamb","vori"],{note:"經驗性或依 CT、galactomannan 先發治療",src:["IDSA_FN10"]}));
+  n.push(N("給藥前抽血培養（周邊＋每個導管腔各一套），60 分鐘內給第一劑。",["IDSA_FN10"],{lvl:"warn"}));
+  n.push(N("不明原因發燒：退燒 ≥72 小時且臨床穩定即可停藥，不必等 ANC 回升；有確定感染則依部位療程。",["HOWLONG","ECIL4"],{upd:true}));
+  return {o,n,dur:{t:"退燒 ≥72 小時且臨床恢復；確定感染依部位",days:7,src:["HOWLONG"],upd:true}};
+}
+function genCDI(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="cdi_init"){
+    o.push(O("首選",["fidax"],{src:["IDSA_CDI21"],upd:true}));
+    o.push(O("替代",["vpo125"],{src:["IDSA_CDI21"]}));
+    o.push(O("僅在無上述藥時（非重症）",["metroCDI"],{src:["IDSA_CDI21"]}));
+    n.push(N("重症定義：WBC ≥15,000 或 Cr >1.5 mg/dL；治療藥物相同。",["IDSA_CDI21"]));
+  } else if(s==="cdi_fulm"){
+    o.push(O("首選（合併）",["vpo500","metro"],{alt:false,note:"Metronidazole 用 IV；腸阻塞加 vancomycin 灌腸",src:["IDSA_CDI21"]}));
+    n.push(N("猛爆型（低血壓、休克、腸阻塞、巨結腸）：會診外科評估結腸切除或迴腸造口灌洗。",["IDSA_CDI21"],{lvl:"danger"}));
+  } else if(s==="cdi_rec1"){
+    o.push(O("首選",["fidax","fidaxEP"],{src:["IDSA_CDI21"]}));
+    o.push(O("替代",["vpoTaper","vpo125"],{note:"前次用 metronidazole 者可用標準 vancomycin",src:["IDSA_CDI21"]}));
+    n.push(N("Bezlotoxumab 已於 2025 年初全球下市，不再列為輔助選項。",["BEZLO"],{upd:true,lvl:"warn"}));
+  } else {
+    o.push(O("首選",["fidax","fidaxEP","vpoTaper"],{src:["IDSA_CDI21"]}));
+    n.push(N("第二次以上復發：考慮糞便微菌叢移植（FMT）；vancomycin 後接 rifaximin 為另一選項。",["IDSA_CDI21"]));
+    n.push(N("Bezlotoxumab 已於 2025 年初全球下市。",["BEZLO"],{upd:true}));
+  }
+  n.push(N("停用誘發的抗生素，檢討 PPI；接觸隔離，以肥皂洗手；不做治癒檢測。",["IDSA_CDI21"]));
+  return {o,n,dur:{t:s==="cdi_init"?"10 天":"依方案",days:10,src:["IDSA_CDI21"]}};
+}
+function genHAP(c){
+  const o=[],n=[]; const s=S.sub;
+  const hr = s==="hap_hr" || (s==="vap" && (S.mdr.includes("abx90")||c.fx.has("psa")));
+  const mrsa = c.fx.has("mrsa")||S.mdr.includes("abx90")||s==="hap_hr";
+  if(c.fx.has("cre")) o.push(O("CRE／CRAB 史",["cza","samHD"],{note:"依過去菌種選擇並會診感染科",src:["IDSA_AMR24"]}));
+  if(hr){
+    o.push(O("首選（兩種不同類 anti-pseudomonal）",["tzp","fep2q8","mem","caz"],{add:[{regs:["levo750","ciproIV","amkQ24"],alt:true}],note:"避免兩個 β-lactam 合併",src:["IDSA_HAP16"]}));
+  } else {
+    o.push(O("首選（單一）",["tzp","fep2q8","levo750","mem"],{src:["IDSA_HAP16"]}));
+  }
+  if(mrsa) o.push(O("加上（MRSA 涵蓋）",["vanco","lzd"],{note:"送痰培養與 MRSA 鼻腔 PCR，陰性可停",src:["IDSA_HAP16","PARENTE18"]}));
+  else n.push(N("單位 MRSA 比例 >20%（VAP >10–20%）或不明時也要涵蓋 MRSA。",["IDSA_HAP16"]));
+  n.push(N("MDR 風險：90 天內 IV 抗生素、septic shock、ARDS、住院 ≥5 天、急性透析。台灣 ICU 以 CRAB、K. pneumoniae（含 CRKP）、P. aeruginosa 為主，有帶菌史者會診感染科。",["IDSA_HAP16","IDSA_AMR24"]));
+  return {o,n,dur:{t:"7 天",days:7,src:["IDSA_HAP16"]}};
+}
+function genCand(c){
+  const o=[],n=[]; const s=S.sub;
+  if(s==="cand_uti"){
+    o.push(O("膀胱炎",["flu200"],{src:["IDSA_CAND16"]}));
+    o.push(O("腎盂腎炎",["fluco"],{note:"200–400 mg/day ×14 天",src:["IDSA_CAND16"]}));
+    o.push(O("Fluconazole 抗藥（C. glabrata、C. krusei）",["amb"],{note:"0.3–0.6 mg/kg ×1–7 天或膀胱灌洗",src:["IDSA_CAND16"]}));
+    n.push(N("無症狀念珠菌尿不治療（移除導管）；例外：嗜中性球低下、即將泌尿道手術（術前後 fluconazole 400 mg 數天）。Echinocandin 尿中濃度低。",["IDSA_CAND16"],{lvl:"warn"}));
+    return {o,n,dur:{t:"14 天",days:14,src:["IDSA_CAND16"]}};
+  }
+  o.push(O("首選",ECH,{src:["IDSA_CAND16","ECMM_CAND25"]}));
+  o.push(O("替代",["lamb"],{src:["ECMM_CAND25"]}));
+  o.push(O("降階",["fluco"],{cond:"臨床穩定、菌種感受、血培養轉陰後，盡早改口服",src:["ECMM_CAND25"],upd:true}));
+  if(s==="cand_neut"){ n.push(N("嗜中性球低下：需同時涵蓋黴菌時改 voriconazole；導管移除個別評估。",["IDSA_CAND16"])); }
+  if(s==="cand_iai"){ n.push(N("來源控制（引流、清創）；依來源控制情形決定療程。",["IDSA_CAND16"],{lvl:"warn"})); }
+  else n.push(N("移除中心靜脈導管；一週內眼科檢查；每 1–2 天追蹤血培養至轉陰；持續菌血症做心臟超音波。",["IDSA_CAND16"],{lvl:"warn"}));
+  n.push(N("ECMM 2025：echinocandin（含 rezafungin）為首選，liposomal AmB 為第二線，盡早降階口服 fluconazole。",["ECMM_CAND25"],{upd:true}));
+  return {o,n,dur:{t:s==="cand_iai"?"依來源控制":"血培養轉陰且症狀緩解後 14 天"+(s==="cand_neut"?"，並待 ANC 回升":""),days:14,src:["IDSA_CAND16"]}};
+}
+Object.assign(GEN,{bsi_unk:genBSI,crbsi:genBSI,sab:genBSI,gnb_bsi:genBSI,ciai_mild:genIAI,ciai_sev:genIAI,biliary:genIAI,pla:genIAI,sbp:genIAI,iai_unk:genIAI,
+  cell:genSSTI,abscess:genSSTI,nf:genSSTI,dfi:genSSTI,bite:genSSTI,water:genSSTI,ssti_unk:genSSTI,men_comm:genCNS,men_old:genCNS,men_hosp:genCNS,brabs:genCNS,cns_unk:genCNS,
+  ie_nve:genIE,ie_pve:genIE,ie_unk:genIE,joint:genBone,vo:genBone,om:genBone,pji:genBone,dfo:genBone,bone_unk:genBone,fn_low:genFN,fn_high:genFN,
+  cdi_init:genCDI,cdi_fulm:genCDI,cdi_rec1:genCDI,cdi_rec2:genCDI,hap:genHAP,hap_hr:genHAP,vap:genHAP,hap_unk:genHAP,cand_bsi:genCand,cand_neut:genCand,cand_iai:genCand,cand_uti:genCand});
+const ALLERGY2 = {
+  bsi:()=>O("過敏替代（合併）",["azt"],{add:[PLUSV],note:"非 SCAR 者 carbapenem 可監測下使用",src:["ALLERGY22"]}),
+  iai:()=>O("過敏替代（合併）",["azt","ciproIV"],{add:[{regs:["metro"],alt:false}],note:"台灣 E. coli FQ 抗藥率高，優先 aztreonam；ESBL 風險用 aminoglycoside＋metronidazole",src:["IDSA_IAI10","ALLERGY22"]}),
+  ssti:()=>O("過敏替代",["clindaPO","doxy","lzd"],{note:"重症：vancomycin＋aztreonam 或 FQ＋metronidazole",src:["IDSA_SSTI14"]}),
+  cns:()=>O("過敏替代（合併）",["vanco"],{add:[{regs:["moxi","azt"],alt:true},{regs:["tmpHD"],alt:false}],note:"TMP-SMX 涵蓋 Listeria（>50 歲、免疫低下）",src:["IDSA_MEN04"]}),
+  ie:()=>O("過敏替代（合併）",["czTx","vanco"],{add:[{regs:["gentIE"],alt:false}],note:"非嚴重 penicillin 過敏可用 cefazolin",src:["ESC_IE23"]}),
+  bone:()=>O("過敏替代（合併）",["vanco","teico"],{add:[{regs:["ciproIV","levo750"],alt:true}],src:["IDSA_VO15"]}),
+  fn:()=>S.sub==="fn_low"?O("過敏替代（合併）",["ciproPO","clindaPO"],{alt:false,src:["ASCO18"]}):O("過敏替代（合併）",["azt"],{add:[PLUSV],src:["IDSA_FN10"]}),
+  hap:()=>O("過敏替代（合併）",["azt"],{add:[{regs:["levo750","amkQ24"],alt:true},{regs:["vanco","lzd"],alt:true}],src:["IDSA_HAP16"]}),
+  cdi:()=>null, cand:()=>null
+};
+const CTX2 = {
+  bsi:["台灣：海水／海鮮＋肝硬化想到 Vibrio vulnificus；南部颱風、淹水後的糖尿病人想到類鼻疽；野外活動、焦痂想到恙蟲病。ICU 的 CRAB、CRKP 比例高。",["CDC_VIB","MELIO","IDSA_AMR24"]],
+  iai:["台灣：社區化膿性肝膿瘍以高毒力 K. pneumoniae 為主，注意眼內炎等轉移性感染；E. coli 對 ampicillin-sulbactam、FQ 抗藥率高，不宜作 cIAI 經驗用藥。",["SIU12","TSAR"]],
+  ssti:["台灣：海水傷口、生食海鮮＋肝硬化 → Vibrio vulnificus；淡水傷口 → Aeromonas。兩者都可快速進展為壞死性筋膜炎。",["CDC_VIB"]],
+  cns:["台灣：成人社區型腦膜炎 K. pneumoniae 比例高（糖尿病），院內／術後以 A. baumannii、P. aeruginosa、葡萄球菌為主。",["TW_KPMEN","IDSA_VENT17"]],
+  ie:["ESC 2023：經驗治療分社區原生瓣膜與早期人工瓣膜；穩定者 IV ≥10 天後可改口服。",["ESC_IE23"]],
+  bone:["台灣：脊椎骨髓炎需鑑別結核與類鼻疽；穩定者先取得骨或關節檢體再給藥。",["IDSA_VO15","MELIO"]],
+  fn:["台灣 ESBL 比例高：有 ESBL 帶菌或休克時直接用 carbapenem；穩定後依培養降階。",["ECIL4","TSAR"]],
+  cdi:["Fidaxomicin 為首選，但不一定是各院常備品項；bezlotoxumab 已於 2025 年初下市。",["IDSA_CDI21","BEZLO"]],
+  hap:["台灣 ICU：CRAB、K. pneumoniae（含 CRKP）、P. aeruginosa 為主；依單位 antibiogram 與病人過去培養選藥。",["IDSA_HAP16","IDSA_AMR24"]],
+  cand:["ECMM 2025：echinocandin 首選，盡早降階 fluconazole；送菌種鑑定與藥敏（C. glabrata、C. krusei、C. auris 常抗藥）。",["ECMM_CAND25","IDSA_CAND16"]]
+};
+
+/* 交互作用 */
+function renderIx(){
+  return `<div class="step"><h3>常用抗生素重要交互作用</h3><div class="tbl-wrap"><table>
+    <thead><tr><th>抗生素</th><th>併用藥物</th><th>等級</th><th>結果</th><th>處置</th></tr></thead>
+    <tbody>${INTER.map(x=>`<tr><td>${x.d.map(d=>D[d].n).join("、")}</td><td>${x.w}</td><td><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span></td><td>${x.fx}</td><td>${x.m}</td></tr>`).join("")}</tbody>
+  </table></div><div class="hint">各藥物卡片的「交互作用」會自動列出該藥相關項目。</div></div>`;
+}
+function renderRef(){
+  return `<div class="step"><h3>資料來源</h3><ol class="reflist">${Object.values(REF).map(r=>`<li><b>${r.s}</b>　${r.f}</li>`).join("")}</ol></div>
+  <div class="step"><h3>使用說明</h3><div class="notes">
+    <div class="note">資料查證日：${VERIFIED}（${VERSION}）。標示「更新」者為 2024–2026 新指引與舊版不同之處。</div>
+    <div class="note">腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。</div>
+    <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
+    <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
+    <div class="note">收藏只存在這台裝置的瀏覽器，且只存情境（部位、嚴重度、危險因子），不存病人資料。</div>
+  </div></div>`;
+}
+
+const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["px","泌尿手術預防"],["vanco","Vancomycin"],["teico","Teicoplanin"],["ix","交互作用"],["ref","出處"]];
+function renderMain(){
+  R=getRenal();
+  $("tabs").innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${n}</button>`).join("");
+  const f={spec:renderSpec,emp:renderEmp,cur:renderCur,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab];
+  $("main").innerHTML=f()+(S.tab==="spec"&&S.spec.view==="bac"&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"");
+}
+function renderRsum(){
+  const el=$("rsum"); const r=getRenal();
+  $("crclRow").hidden=S.pt.method!=="crcl"; $("egfrRow").hidden=S.pt.method!=="egfr";
+  if(!r){ el.className="rsum empty"; el.innerHTML=`<div class="small">${S.pt.method==="cg"?"輸入年齡、體重、SCr 後自動計算 CrCl":"請輸入數值"}</div><div>目前顯示正常腎功能劑量</div>`; return; }
+  if(r.mode!=="crcl"){ el.className="rsum"; el.innerHTML=`<div class="big">${r.label}</div><div class="small">各藥依透析方式給藥</div>`; return; }
+  el.className="rsum"+(r.val>130?" arc":"");
+  let s=`<div class="big">${r0(r.val)} <span class="small">mL/min</span></div>`;
+  if(r.cg){ const w=r.cg.w; s+=`<div class="small">Cockcroft-Gault・${w.dl} ${r0(w.dw)} kg${w.ibw?`（IBW ${r0(w.ibw)}、BMI ${w.bmi.toFixed(1)}）`:""}</div>`; }
+  else s+=`<div class="small">${r.label}</div>`;
+  if(r.val>130) s+=`<div class="small">可能為 ARC（augmented renal clearance）：β-lactam 考慮延長輸注</div>`;
+  if(S.pt.aki) s+=`<div class="small">腎功能不穩定：計算值不可靠，首劑給足量</div>`;
+  el.innerHTML=s;
+}
+
+function toast(m){ const t=$("toast"); t.textContent=m; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>{t.hidden=true;},1600); }
+function copyText(txt){
+  const done=()=>toast("已複製");
+  const fallback=()=>{ const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){ toast("無法自動複製，請手動選取"); } ta.remove(); };
+  try{ navigator.clipboard.writeText(txt).then(done,fallback); }catch(e){ fallback(); }
+}
+
+function readPt(){
+  const p=S.pt;
+  p.age=num($("age").value); p.wt=num($("wt").value); p.ht=num($("ht").value); p.scr=num($("scr").value);
+  p.sex=document.querySelector('input[name="sex"]:checked').value;
+  p.method=document.querySelector('input[name="method"]:checked').value;
+  p.crcl=num($("crclIn").value); p.egfr=num($("egfrIn").value); p.aki=$("aki").checked;
+  S.allergy=$("allergy").value; S.preg=$("preg").checked;
+}
+
+if(typeof document!=="undefined"){
+  $("ver").textContent=`${VERSION}・查證 ${VERIFIED}`;
+  $("side").addEventListener("input",()=>{ readPt(); renderRsum(); renderMain(); });
+  $("side").addEventListener("change",()=>{ readPt(); renderRsum(); renderMain(); });
+  $("fillDemo").addEventListener("click",()=>{ $("age").value=72; $("wt").value=60; $("ht").value=165; $("scr").value=1.6; $("sexM").checked=true; readPt(); renderRsum(); renderMain(); toast("已填入範例數值，請改為病人資料"); });
+  $("main").addEventListener("change",e=>{
+    const a=e.target.dataset.act; if(!a) return;
+    if(a==="mdr"){ const v=e.target.dataset.v; S.mdr=e.target.checked?[...S.mdr,v]:S.mdr.filter(x=>x!==v); renderMain(); }
+    else if(a==="cur-day"){ S.cur.day=Math.max(0,num(e.target.value)||0); renderMain(); }
+    else if(a==="cur-flag"){ S.cur[e.target.dataset.v]=e.target.checked; renderMain(); }
+    else if(a==="vauc"){ S.vauc=Math.min(600,Math.max(400,num(e.target.value)||500)); renderMain(); }
+    else if(a==="vld"){ S.vld=Math.min(35,Math.max(15,num(e.target.value)||25)); renderMain(); }
+  });
+  document.addEventListener("click",e=>{
+    const b=e.target.closest("button[data-act]"); if(!b) return;
+    const a=b.dataset.act, v=b.dataset.v; let jump=false;
+    if(a==="tab") S.tab=v;
+    else if(a==="sys"){ S.sys=v; S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; }
+    else if(a==="sub"){ S.sub=v; S.path=null; S.ph=null; }
+    else if(a==="sev") S.sev=v;
+    else if(a==="path"){ S.path=S.path===v?null:v; S.ph=null; }
+    else if(a==="ph") S.ph=v;
+    else if(a==="copy"){ copyText(decodeURIComponent(b.dataset.txt)); return; }
+    else if(a==="fav-save"){ const f=favs(); f.push({name:scenarioName(),st:{sys:S.sys,sub:S.sub,sev:S.sev,mdr:S.mdr,path:S.path,ph:S.ph}}); saveFavs(f.slice(-12)); toast("已收藏"); }
+    else if(a==="fav-load"){ const f=favs()[+b.dataset.i]; if(f) Object.assign(S,f.st); }
+    else if(a==="fav-del"){ const f=favs(); f.splice(+b.dataset.i,1); saveFavs(f); }
+    else if(a==="cur-drug"){ const c=S.cur.drugs; S.cur.drugs=c.includes(v)?c.filter(x=>x!==v):[...c,v]; }
+    else if(a==="cur-resp") S.cur.resp=v;
+    else if(a==="cur-org"){ S.cur.org=v; S.cur.ph=""; S.cur.sus={}; }
+    else if(a==="cur-ph") S.cur.ph=v;
+    else if(a==="cur-sus"){ if(v) S.cur.sus[b.dataset.d]=v; else delete S.cur.sus[b.dataset.d]; }
+    else if(a==="proc") S.proc=v;
+    else if(a==="spec-view") S.spec.view=v;
+    else if(a==="spec-col"){ const i=+v, c=S.spec.cols; S.spec.cols=c.includes(i)?c.filter(x=>x!==i):[...c,i]; S.spec.drug=null; }
+    else if(a==="spec-drug"){ S.spec.drug=S.spec.drug===v?null:v; S.spec.cols=[]; jump=true; }
+    else if(a==="spec-clear"){ S.spec.cols=[]; S.spec.drug=null; }
+    else if(a==="f-row"){ S.spec.frow=S.spec.frow===+v?null:+v; S.spec.fdrug=null; jump=true; }
+    else if(a==="f-drug"){ S.spec.fdrug=S.spec.fdrug===v?null:v; S.spec.frow=null; jump=true; }
+    else if(a==="spec-go"){ S.tab="spec"; S.spec.view="bac"; S.spec.cols=[+v]; S.spec.drug=null; jump=true; }
+    else if(a==="spec-jump"){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); return; }
+    else if(a==="tind"){ S.tind=v; S.tln=v==="std"?3:(v==="ie"?5:4); }
+    else if(a==="tln") S.tln=+v;
+    else return;
+    renderMain();
+    if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
+  });
+  readPt(); renderRsum(); renderMain();
+}
+</script>
+
+</body>
+</html>
