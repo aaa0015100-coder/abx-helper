@@ -115,6 +115,9 @@ details summary{cursor:pointer;font-size:.86rem;color:var(--accent)}
 .tier.allergy{background:var(--danger-bg);color:var(--danger);border-color:transparent}
 .pick,.plus{font-size:.76rem;color:var(--muted);letter-spacing:.04em;margin:4px 0}
 .plus{color:var(--warn);font-weight:600}
+.formula{background:var(--accent-weak);border-radius:8px;padding:8px 10px;font-size:.92rem;margin-bottom:6px}
+.fhint{color:var(--muted);font-size:.8rem;margin-left:4px}
+.sep{font-size:.76rem;color:var(--muted);font-weight:600;margin:0}
 .plan{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface2)}
 .plan-h{font-size:.84rem;font-weight:600;color:var(--accent);padding:2px 0 4px}
 .pick{text-align:left}
@@ -276,7 +279,7 @@ table.grid td.hl{background:var(--accent-weak)}
 <script>
 "use strict";
 const VERIFIED = "2026-10-17";
-const VERSION = "v0.4・12 個感染系統＋泌尿手術預防";
+const VERSION = "v0.5・12 個感染系統＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
@@ -389,6 +392,8 @@ const REG = {
   gentGC:{d:"gent",r:"IM",b:[[0,"240 mg IM 單次"]],...DIAL("240 mg IM 單次","240 mg IM 單次","240 mg IM 單次"),note:"淋病・cephalosporin 過敏時，合併 azithromycin 2 g PO",src:["CDC_STI21"]},
   amkQ24:{d:"amikacin",r:"IV",b:[[60,"15 mg/kg IV q24h{AG:15}"],[40,"15 mg/kg IV q36h{AG:15}"],[20,"15 mg/kg IV q48h{AG:15}"],[0,"避免；必要時單次給藥並依血中濃度"]],...DIAL("5–7.5 mg/kg 每次透析後，依濃度{AG:7.5}","依濃度給藥（會診藥師）","首劑 15 mg/kg，之後依濃度{AG:15}"),note:"給藥體重：IBW（肥胖用 AdjBW）；監測濃度",src:["NICOLAU95"]},
   vanco:{d:"vanco",r:"IV",type:"vanco",src:["VANCO20"]},
+  teicoIE:{d:"teico",r:"IV",type:"teico",ind:"ie",note:"仿單核准心內膜炎高劑量；國際指引以 vancomycin、daptomycin 為主，MRSA IE 證據較少",src:["TEICO_SPC","ESC_IE23"]},
+  teicoBone:{d:"teico",r:"IV",type:"teico",ind:"bone",note:"仿單骨關節感染劑量",src:["TEICO_SPC"]},
   teico:{d:"teico",r:"IV/IM",type:"teico",note:"MRSA 肺炎證據不如 vancomycin／linezolid；骨關節、心內膜炎需高劑量（見 Teicoplanin 頁）",src:["TEICO_SPC"]},
   lzd:{d:"linezolid",r:"PO/IV",b:[[0,"600 mg PO/IV q12h"]],...DIAL("600 mg PO/IV q12h","600 mg PO/IV q12h","600 mg PO/IV q12h"),note:"無需腎調整；>14 天注意血小板低下",src:["LABEL"]},
   clinda:{d:"clinda",r:"IV",b:[[0,"900 mg IV q8h"]],...DIAL("900 mg IV q8h","900 mg IV q8h","900 mg IV q8h"),note:"抑制毒素（壞死性感染）；無需腎調整",src:["IDSA_SSTI14"]},
@@ -677,7 +682,7 @@ function bandRange(b,i){
 function doseOf(id){
   const g=REG[id];
   if(g.type==="vanco") return vancoBrief();
-  if(g.type==="teico") return teicoBrief("std");
+  if(g.type==="teico") return teicoBrief(g.ind||"std");
   let t, band, adj=false;
   if(!R){ t=g.b[0][1]; band="未輸入腎功能，顯示正常腎功能劑量"; }
   else if(R.mode==="crcl"){
@@ -941,16 +946,28 @@ function rxRow(id){
     <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copyTxt)}">複製</button>
   </div>`;
 }
+const shortN = id=>D[REG[id].d].n.replace(/（.*?）/,"");
+function groupTxt(regs,alt){ const ns=regs.map(shortN); if(ns.length===1) return ns[0]; return alt?`（${ns.join(" 或 ")}，擇一）`:ns.join(" ＋ "); }
 function optCard(o){
-  const many=o.regs.length>1;
-  let body = many ? `<div class="pick">${o.alt?"選一":"合併使用"}</div>`:"";
-  body += o.regs.map(rxRow).join("");
-  (o.add||[]).forEach(gp=>{ body+=`<div class="plus">＋ ${gp.alt&&gp.regs.length>1?"合併以下其一":"合併"}</div>`+gp.regs.map(rxRow).join(""); });
-  if(o.plus) body+=`<div class="plus">＋ ${o.plus}</div>`;
+  const groups=[{regs:o.regs,alt:o.alt}].concat(o.add||[]);
+  const nDrugs=groups.reduce((s,g)=>s+(g.alt?1:g.regs.length),0)+(o.plus?1:0);
+  const isAdd=/^加上|另加|^升階/.test(o.tier);
+  let formula="";
+  if(nDrugs>1) formula=`<div class="formula"><b>用法：</b>${groups.map(g=>groupTxt(g.regs,g.alt)).join(" ＋ ")}${o.plus?" ＋ "+o.plus:""}<span class="fhint">（${nDrugs} 種藥同時使用${isAdd?"，再加到上方方案":""}）</span></div>`;
+  else if(o.regs.length>1) formula=`<div class="formula"><b>用法：</b>以下 ${o.regs.length} 種${isAdd?"擇一，加到上方的方案":"擇一使用，單用即可"}</div>`;
+  else if(isAdd) formula=`<div class="formula"><b>用法：</b>加到上方的方案</div>`;
+  let body=groups.map((g,gi)=>{
+    let h="";
+    if(gi>0) h+=`<div class="plus">＋ 再加上${g.alt&&g.regs.length>1?"（以下擇一）":""}</div>`;
+    else if(groups.length>1&&g.alt&&g.regs.length>1) h+=`<div class="pick">以下擇一</div>`;
+    h+=g.regs.map((r,ri)=>(ri>0?`<div class="sep">${g.alt?"或":"＋ 同時給"}</div>`:"")+rxRow(r)).join("");
+    return h;
+  }).join("");
+  if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
   const cls=tierCls(o.tier);
   return `<div class="opt${cls==="primary"?" primary":""}">
     <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?UPD:""}</div>
-    ${body}
+    ${formula}${body}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
     ${o.note?`<div class="onote">${o.note}</div>`:""}
     ${srcTags(o.src)}
@@ -1221,7 +1238,8 @@ function teicoCalc(ind){
 }
 function teicoBrief(ind){
   const c=teicoCalc(ind);
-  const t=`負荷 ${c.md} IV q12h ×${c.t.ln[0]} 劑 → 維持 ${c.md} q24h；第 4 天起：${c.renal}`;
+  const lnTxt=c.t.ln.length>1?`${c.t.ln[0]}–${c.t.ln[c.t.ln.length-1]}`:c.t.ln[0];
+  const t=`負荷 ${c.md} IV q12h ×${lnTxt} 劑 → 維持 ${c.md} q24h；第 4 天起：${c.renal}；目標 trough ${c.t.tg}`;
   return {plain:t,html:t+(c.w?` <span class="w">（以實際體重 ${r0(c.w.tbw)} kg、${c.t.mk} mg/kg 計）</span>`:""),band:R?(c.adj?`第 4 天起依 ${R.short} 調整，負荷劑量不減`:"不需調整"):"未輸入腎功能，顯示正常腎功能劑量",adj:c.adj};
 }
 function renderTeico(){
@@ -1668,7 +1686,7 @@ const ECH = ["mica","caspo","anid"];
 Object.assign(TGT,{
   cons:{
     MS:{sys:[O("首選",["czTx","oxa"],{src:["IDSA_CRBSI09"]})],ie:[O("首選",["oxa","czTx"],{note:"人工瓣膜：合併 rifampin ＋ gentamicin（2 週）",src:["ESC_IE23"]})]},
-    MR:{sys:[O("首選",["vanco","teico"],{src:["IDSA_CRBSI09"]}),O("替代",["dap6","lzd"],{src:["IDSA_CRBSI09"]})],ie:[O("首選（人工瓣膜合併）",["vanco","rifIE","gentIE"],{alt:false,note:"Gentamicin 2 週",src:["ESC_IE23"]})]}
+    MR:{sys:[O("首選",["vanco","teico"],{src:["IDSA_CRBSI09"]}),O("替代",["dap6","lzd"],{src:["IDSA_CRBSI09"]})],ie:[O("首選（人工瓣膜合併）",["vanco","teicoIE"],{add:[{regs:["rifIE"],alt:false},{regs:["gentIE"],alt:false}],note:"Gentamicin 2 週",src:["ESC_IE23","TEICO_SPC"]})]}
   },
   strep:{any:{
     sys:[O("首選",["penG","cro2"],{src:["IDSA_SSTI14"]}),O("口服降階",["amxPO"],{src:["LABEL"]})],
@@ -1709,7 +1727,7 @@ TGT.psa.S.cns=[O("首選",["fep2q8","caz","memMen"],{src:["IDSA_VENT17"]})];
 TGT.sa.MSSA.cns=[O("首選",["oxa"],{note:"Cefazolin 中樞滲透差",src:["IDSA_MEN04"]})];
 TGT.sa.MRSA.cns=[O("首選",["vanco"],{note:"Trough 15–20 mg/L；可加 rifampin",src:["IDSA_MRSA11"]}),O("替代",["lzd"],{src:["IDSA_MRSA11"]})];
 TGT.sa.MSSA.ie=[O("首選",["oxa","czTx"],{note:"原生瓣膜 4–6 週，不加 gentamicin；人工瓣膜 6 週＋rifampin＋gentamicin 2 週",src:["ESC_IE23"]})];
-TGT.sa.MRSA.ie=[O("首選",["vanco","dap10"],{note:"原生瓣膜 4–6 週；人工瓣膜加 rifampin＋gentamicin 2 週",src:["ESC_IE23"]})];
+TGT.sa.MRSA.ie=[O("首選",["vanco","dap10"],{note:"原生瓣膜 4–6 週；人工瓣膜加 rifampin＋gentamicin 2 週",src:["ESC_IE23"]}),O("替代",["teicoIE"],{note:"MRSA IE 證據不如 vancomycin／daptomycin",src:["TEICO_SPC"]})];
 TGT.entc.AS.ie=[O("首選（合併）",["ampMen","cro2q12"],{alt:false,note:"6 週；腎毒性低於 ampicillin＋gentamicin",src:["ESC_IE23"]}),O("替代（合併）",["ampMen","gentIE"],{alt:false,note:"Gentamicin 2 週",src:["ESC_IE23"]})];
 TGT.entc.VRE.ie=[O("會診感染科",["dap10","lzd"],{src:["ESC_IE23"]})];
 
@@ -1895,11 +1913,11 @@ function genCNS(c){
 function genIE(c){
   const o=[],n=[]; const s=S.sub;
   if(s==="ie_pve"){
-    o.push(O("首選（合併）",["vanco","dap10"],{add:[{regs:["gentIE"],alt:false},{regs:["rifIE"],alt:false}],note:"涵蓋 MR-staphylococci、Enterococcus、非 HACEK G(−)",src:["ESC_IE23"]}));
+    o.push(O("首選（合併）",["vanco","dap10","teicoIE"],{add:[{regs:["gentIE"],alt:false},{regs:["rifIE"],alt:false}],note:"涵蓋 MR-staphylococci、Enterococcus、非 HACEK G(−)；teicoplanin 為 ESC 以外的選項",src:["ESC_IE23","TEICO_SPC"]}));
   } else {
     o.push(O("首選（合併）",["ampMen","cro2q12"],{alt:false,src:["ESC_IE23"]}));
     o.push(O("替代（合併）",["oxa","gentIE"],{alt:false,src:["ESC_IE23"]}));
-    if(c.fx.has("mrsa")) o.push(O("MRSA 風險（合併）",["vanco","dap10"],{add:[{regs:["gentIE"],alt:false}],src:["ESC_IE23"]}));
+    if(c.fx.has("mrsa")) o.push(O("MRSA 風險（合併）",["vanco","dap10","teicoIE"],{add:[{regs:["gentIE"],alt:false}],src:["ESC_IE23","TEICO_SPC"]}));
   }
   n.push(N("給藥前至少 3 套血培養；TEE；依 Duke-ISCVID 2023 診斷。",["ESC_IE23"],{lvl:"warn"}));
   n.push(N("Gentamicin 不再用於葡萄球菌原生瓣膜 IE；rifampin 只用於人工瓣膜或異物。",["ESC_IE23"],{upd:true}));
@@ -1909,7 +1927,7 @@ function genIE(c){
 }
 function genBone(c){
   const o=[],n=[]; const s=S.sub; const gn = c.fx.has("psa")||c.fx.has("hcx");
-  const base = O("經驗性（合併）",["vanco","teico"],{add:[{regs:gn?["fep2q8"]:["cro2","fep2q8"],alt:!gn}],src:["IDSA_VO15"]});
+  const base = O("經驗性（合併）",["vanco","teicoBone"],{add:[{regs:gn?["fep2q8"]:["cro2","fep2q8"],alt:!gn}],src:["IDSA_VO15"]});
   if(s==="vo"){
     o.push(base);
     n.push(N("血行動力學穩定、無神經學缺損：先做 CT 導引切片（含結核與黴菌培養）再給抗生素。",["IDSA_VO15"],{lvl:"warn"}));
@@ -2026,8 +2044,8 @@ const ALLERGY2 = {
   cns:()=> S.sub==="men_hosp" ? O("過敏替代（合併）",["vanco"],{add:[{regs:["azt","ciproIV"],alt:true}],src:["IDSA_VENT17"]})
     : S.sub==="brabs" ? O("過敏替代（合併）",["vanco"],{add:[{regs:["metro"],alt:false},{regs:["moxi","azt"],alt:true}],src:["ESCMID_BA24"]})
     : O("過敏替代（合併）",["vanco"],{add:[{regs:["moxi","azt"],alt:true}].concat(S.sub==="men_comm"?[]:[{regs:["tmpHD"],alt:false}]),note:S.sub==="men_comm"?"":"TMP-SMX 涵蓋 Listeria（>50 歲、免疫低下）",src:["IDSA_MEN04"]}),
-  ie:()=>O("過敏替代（合併）",["czTx","vanco"],{add:[{regs:["gentIE"],alt:false}],note:"非嚴重 penicillin 過敏可用 cefazolin",src:["ESC_IE23"]}),
-  bone:()=>O("過敏替代（合併）",["vanco","teico"],{add:[{regs:["ciproIV","levo750"],alt:true}],src:["IDSA_VO15"]}),
+  ie:()=>O("過敏替代（合併）",["czTx","vanco","teicoIE"],{add:[{regs:["gentIE"],alt:false}],note:"非嚴重 penicillin 過敏可用 cefazolin",src:["ESC_IE23","TEICO_SPC"]}),
+  bone:()=>O("過敏替代（合併）",["vanco","teicoBone"],{add:[{regs:["ciproIV","levo750"],alt:true}],src:["IDSA_VO15"]}),
   fn:()=>S.sub==="fn_low"?O("過敏替代（合併）",["ciproPO","clindaPO"],{alt:false,src:["ASCO18"]}):O("過敏替代（合併）",["azt"],{add:[PLUSV],src:["IDSA_FN10"]}),
   hap:()=>O("過敏替代（合併）",["azt"],{add:[{regs:["levo750","amkQ24"],alt:true},{regs:["vanco","lzd"],alt:true}],src:["IDSA_HAP16"]}),
   cdi:()=>null, cand:()=>null
