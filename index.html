@@ -232,6 +232,10 @@ button.flag{border:0;cursor:pointer;font:inherit;font-size:.76rem;padding:2px 9p
 details.more{border-top:1px solid var(--line);padding-top:8px}
 details.more>summary{font-size:.86rem}
 details.more>.notes,details.more>.paths,details.more>.ctx{margin-top:8px}
+.dgrp+.dgrp{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+.dg-h{font-size:.74rem;color:var(--muted);letter-spacing:.04em;margin-bottom:5px}
+details.pathsel{border-top:0;padding-top:0;margin:-6px 0 18px}
+details.pathsel>summary{font-size:.92rem}
 .srcs .linkbtn{font-size:.74rem;margin-left:2px}
 button.src,button.upd{font:inherit;cursor:pointer}
 button.src{font-family:var(--f-mono);font-size:.7rem;background:none;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px}
@@ -332,7 +336,7 @@ button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-b
 <script>
 "use strict";
 const VERIFIED = "2026-10-17";
-const VERSION = "v0.7";
+const VERSION = "v0.8";
 const SCOPE = "12 個感染系統＋口服降階＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
@@ -1067,6 +1071,24 @@ function scenarioName(){
   return s;
 }
 
+/* 抗生素清單分組（目前用藥調整、口服降階）：依臨床類別，組內窄譜 → 廣譜 */
+const DGRP = [
+  ["Penicillin",["penG","oxa","ampicillin","amoxicillin","ampsulb","amoxclav","piptazo"]],
+  ["Cephalosporin",["cefazolin","cephalexin","cefuroxime","cefmetazole","flomoxef","ceftriaxone","caz","cps","cefepime","bpr","cza","ctz"]],
+  ["Carbapenem／Monobactam",["ertapenem","imipenem","meropenem","aztreonam"]],
+  ["Glycopeptide／Lipopeptide",["vanco","teico","dapto"]],
+  ["Aminoglycoside",["gent","amikacin"]],
+  ["Fluoroquinolone",["cipro","levo","moxi"]],
+  ["其他蛋白質合成抑制",["azithro","clinda","doxy","mino","tige","linezolid","fusidic"]],
+  ["其他",["tmpsmx","metro","nitrofurantoin","fosfomycin","colistin","rifampin","vancoPO","fidax"]],
+  ["抗黴菌",["amb","lamb","mica","caspo","anid","fluco","itra","vori","posa","isavu"]]
+];
+function drugChips(keys,chip){
+  const set=new Set(keys), seen=new Set();
+  const gs=DGRP.map(([n,ks])=>[n,ks.filter(k=>set.has(k)&&!seen.has(k)&&seen.add(k))]);
+  const left=keys.filter(k=>!seen.has(k)); if(left.length) gs.push(["未分類",left]);
+  return gs.filter(g=>g[1].length).map(([n,ks])=>`<div class="dgrp"><div class="dg-h">${n}</div><div class="chips">${ks.map(chip).join("")}</div></div>`).join("");
+}
 function renderEmp(){
   const sys=SYS[S.sys], sub=SUBDEF[S.sub];
   const fv=favs();
@@ -1091,15 +1113,19 @@ function renderEmp(){
 
   const c={fx:fxSet(),sev:hasSev(S.sub)?S.sev:"none",male:S.pt.sex==="M"};
   const r=GEN[S.sub](c);
-  // 04：方案卡 → 療程 → 需立即處理的提醒；其餘（致病菌、台灣抗藥性、一般提醒）收合
-  h+=`<div class="step"><h3><span class="k">04</span>建議<button class="linkbtn act" type="button" data-act="fav-save">☆ 收藏</button></h3>${renalBar()}<div class="res">`;
-  const al=genAllergy(S.sub,c); if(al) h+=optCard(al);
-  h+=r.o.map(optCard).join("");
+  // 已知菌種（03 與 04 之間）：選了菌種，04 改為先顯示標靶治療，經驗性方案收合
+  const pl=PL[S.sub]||[];
+  if(pl.length) h+=`<details class="more pathsel"${S.path?" open":""}><summary>${S.path?`已知菌種：<i>${PATH[S.path].n}</i>・點選可更換，再點一次取消`:`已知菌種？點選看標靶治療（${pl.length}）`}</summary><div class="paths">${pl.map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div></details>`;
+  // 04：（標靶治療）→ 方案卡 → 療程 → 需立即處理的提醒；其餘（台灣抗藥性、一般提醒）收合
+  h+=`<div class="step"><h3><span class="k">04</span>${S.path?"標靶治療":"建議"}<button class="linkbtn act" type="button" data-act="fav-save">☆ 收藏</button></h3>${renalBar()}<div class="res">`;
+  const al=genAllergy(S.sub,c);
+  const emp=(al?optCard(al):"")+r.o.map(optCard).join("");
+  if(S.path) h+=targetPanel(S.path,S.ph,siteClass(S.sub));
+  else h+=emp;
   h+=`<div class="dur"><span class="k">療程</span><span class="v">${r.dur.t}</span>${r.dur.upd?UPD:""}${srcTags(r.dur.src)}</div>`;
   const key=r.n.filter(n=>n.lvl==="danger"||n.lvl==="warn"), rest=r.n.filter(n=>!(n.lvl==="danger"||n.lvl==="warn"));
   if(key.length) h+=`<div class="notes">${key.map(noteBlock).join("")}</div>`;
-  const pl=PL[S.sub]||[];
-  if(pl.length) h+=`<details class="more"${S.path?" open":""}><summary>常見致病菌（${pl.length}）・點選看標靶治療</summary><div class="paths">${pl.map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div>${S.path?`<div class="mt">${targetPanel(S.path,S.ph,siteClass(S.sub))}</div>`:""}</details>`;
+  if(S.path) h+=`<details class="more"><summary>經驗性治療（未知菌種時）</summary><div class="res mt">${emp}</div></details>`;
   h+=`<details class="more"><summary>其他提醒（${rest.length+2}）</summary>${ctxNote()}<div class="notes">${rest.map(noteBlock).join("")}<div class="note">IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。${srcTags(["IDSA_cUTI25","ATS19"])}</div></div></details>`;
   h+=`</div></div>`;
   return h;
@@ -1137,7 +1163,7 @@ function renderCur(){
   const C=S.cur; const sc=siteClass(S.sub);
   const subN=(SYS[S.sys].subs.find(x=>x.id===S.sub)||{}).n;
   let h=`<div class="note">感染部位：<b>${SYS[S.sys].n} ・ ${subN}</b>（在「經驗性治療」頁更改）</div>`;
-  h+=`<div class="step mt"><h3><span class="k">01</span>目前使用的抗生素</h3><div class="chips">${Object.keys(D).map(k=>`<button class="chip" type="button" data-act="cur-drug" data-v="${k}" aria-pressed="${C.drugs.includes(k)}">${D[k].n}</button>`).join("")}</div></div>`;
+  h+=`<div class="step mt"><h3><span class="k">01</span>目前使用的抗生素</h3>${drugChips(Object.keys(D),k=>`<button class="chip" type="button" data-act="cur-drug" data-v="${k}" aria-pressed="${C.drugs.includes(k)}">${D[k].n}</button>`)}</div>`;
   h+=`<div class="step"><h3><span class="k">02</span>病程</h3><div class="grid2" style="max-width:520px">
     <div class="field"><label for="curDay">已使用天數（第一劑有效抗生素起算）</label><input id="curDay" type="number" min="0" max="60" value="${C.day}" data-act="cur-day"></div>
     <div class="field"><span class="lbl">臨床反應</span><div class="chips">${[["improve","改善"],["none","無改善"],["worse","惡化"]].map(([v,n])=>`<button class="chip" type="button" data-act="cur-resp" data-v="${v}" aria-pressed="${C.resp===v}">${n}</button>`).join("")}</div></div>
@@ -2347,7 +2373,7 @@ function renderOral(){
   const O2=S.oral; const sub=S.sub; const sys=SYS[S.sys]; const site=OSITE[sub]||{elig:"ok"};
   let h=`<div class="step"><h3><span class="k">01</span>感染部位</h3><div class="chips">${Object.keys(SYS).map(k=>`<button class="chip" type="button" data-act="sys" data-v="${k}" aria-pressed="${S.sys===k}">${SYS[k].n}</button>`).join("")}</div>
     <div class="chips mt">${sys.subs.map(s=>`<button class="chip" type="button" data-act="sub" data-v="${s.id}" aria-pressed="${sub===s.id}">${s.n}</button>`).join("")}</div></div>`;
-  h+=`<div class="step"><h3><span class="k">02</span>目前使用的 IV 抗生素</h3><div class="chips">${ivDrugs().map(k=>`<button class="chip" type="button" data-act="o-iv" data-v="${k}" aria-pressed="${O2.ivs.includes(k)}">${D[k].n}</button>`).join("")}</div></div>`;
+  h+=`<div class="step"><h3><span class="k">02</span>目前使用的 IV 抗生素</h3>${drugChips(ivDrugs(),k=>`<button class="chip" type="button" data-act="o-iv" data-v="${k}" aria-pressed="${O2.ivs.includes(k)}">${D[k].n}</button>`)}</div>`;
   h+=`<div class="step"><h3><span class="k">03</span>病程與轉口服條件</h3>
     <div class="field" style="max-width:260px"><label for="oDay">已使用 IV 天數（第一劑有效抗生素起算）</label><input id="oDay" type="number" min="0" max="90" value="${O2.day}" data-act="o-day"></div>
     <div class="mt" style="display:grid;gap:6px">${[["afeb","退燒 ≥24–48 小時"],["stable","血行動力學穩定"],["po","可進食，腸胃吸收正常"],["src","感染來源已控制（引流、清創、移除導管）"]].map(([k,t])=>`<label class="chk"><input type="checkbox" data-act="o-flag" data-v="${k}" ${O2[k]?"checked":""}><span>${t}</span></label>`).join("")}</div></div>`;

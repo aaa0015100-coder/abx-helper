@@ -26,6 +26,9 @@ const scan=h=>{ for(const m of h.matchAll(/data-ref="([^"]*)"/g)){ used.add(m[1]
 for(const [sk,sy] of Object.entries(A.SYS)) for(const sub of sy.subs){ set({tab:"emp",sys:sk,sub:sub.id,sev:"shock",allergy:"pen_ana"}); scan(A.render("emp")); for(const p of (A.PL[sub.id]||[])){ set({tab:"emp",sys:sk,sub:sub.id,path:p}); scan(A.render("emp")); } }
 for(const t of ["spec","cur","oral","px","vanco","teico","ix","ref"]){ set({tab:t}); scan(A.render(t)); }
 missing.forEach(k=>bad.push("出處鍵不存在 "+k));
+// 每個藥恰好屬於一個清單分組（DGRP）
+if(A.DGRP){ const cnt={}; A.DGRP.forEach(([,ks])=>ks.forEach(k=>{cnt[k]=(cnt[k]||0)+1; if(!A.D[k]) bad.push("分組內藥物不存在 "+k);}));
+  Object.keys(A.D).forEach(k=>{ if(cnt[k]!==1) bad.push("藥物分組次數 "+(cnt[k]||0)+"："+k); }); }
 if(/\bsrc\b[^>]*title=/.test(js)&&/class="src" title=/.test(js)) bad.push("出處仍用 hover title");
 if(bad.length){ console.log("STATIC FAIL",bad.length); bad.slice(0,40).forEach(b=>console.log("  "+b)); process.exit(1); }
 console.log("STATIC OK（出處鍵 "+used.size+"）");
