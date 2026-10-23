@@ -12,10 +12,6 @@ img{max-width:100%}
 [hidden]{display:none!important}
 </style>
 <title>抗生素選擇助手</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <style>
 /* Layout: 處方箋式雙欄 — 左欄病人卡（腎功能、過敏、懷孕）固定，右欄分頁決策流程；劑量以等寬字突出，可直接抄寫醫囑 */
 :root{
@@ -209,6 +205,52 @@ table.grid td.hl{background:var(--accent-weak)}
 .muted{color:var(--muted)}
 .mt{margin-top:10px}
 @media (prefers-reduced-motion:no-preference){.chip,.tab,.seg label{transition:background .12s,color .12s,border-color .12s}}
+
+/* v0.7 精簡介面 */
+.disc{display:flex;gap:8px 12px;align-items:flex-start;justify-content:space-between}
+.disc .linkbtn{color:var(--warn);white-space:nowrap;flex:none}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card-h h2{margin-bottom:10px}
+.ptbar{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;cursor:pointer;font-size:.9rem}
+.ptbar .lab{font-size:.78rem;color:var(--muted);flex:none}
+.ptbar .val{flex:1;min-width:0;font-family:var(--f-mono);font-weight:600;overflow-wrap:anywhere}
+.ptbar .act{flex:none;font-size:.82rem;color:var(--accent)}
+.ptbar.empty{background:var(--warn-bg);border-color:transparent}
+.ptbar.empty .val{color:var(--warn);font-family:var(--f-body);font-weight:500}
+.mmore{margin-top:6px}
+.ptbody{display:flex;flex-direction:column;gap:14px}
+.picked{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:12px;font-size:.95rem}
+.picked .k{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
+.picked .q{color:var(--muted);font-size:.86rem}
+.picked b{font-weight:600}
+.rtag{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+button.flag{border:0;cursor:pointer;font:inherit;font-size:.76rem;padding:2px 9px}
+.step>h3 .flag{font-weight:500}
+.step>h3 .act{margin-left:auto;font-weight:400}
+.rx-more{grid-column:1/2;font-size:.8rem;color:var(--muted);display:grid;gap:2px}
+.rx-more .brand{justify-self:start}
+details.more{border-top:1px solid var(--line);padding-top:8px}
+details.more>summary{font-size:.86rem}
+details.more>.notes,details.more>.paths,details.more>.ctx{margin-top:8px}
+.srcs .linkbtn{font-size:.74rem;margin-left:2px}
+button.src,button.upd{font:inherit;cursor:pointer}
+button.src{font-family:var(--f-mono);font-size:.7rem;background:none;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-bg);border:0;border-radius:4px;padding:1px 6px;letter-spacing:.03em}
+.top .brand{background:none;color:inherit;padding:0;border-radius:0;font-size:inherit}
+@media (max-width:920px){.tab{padding:9px 8px}}
+.tab .ts{display:none}
+@media (max-width:420px){.tab .ts{display:inline}.tab .ts~.tl{display:none}}
+@media (max-width:359px){.tab{padding:9px 5px}}
+.tab.xtra{display:none}
+@media (min-width:921px){.tab.xtra{display:inline-block}.tab.morebtn,.tabmenu{display:none!important}}
+.tabmenu{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 14px}
+.foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);display:grid;gap:4px}
+.foot .ver{font-size:.74rem}
+.ov{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center}
+.ov .sheet{background:var(--surface);color:var(--ink);width:100%;max-width:720px;max-height:70vh;overflow:auto;border-radius:14px 14px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));font-size:.9rem}
+.ov .sheet h3{font-size:.95rem;font-family:var(--f-mono);margin-bottom:8px}
+.ov .sheet p{margin:0 0 10px;overflow-wrap:anywhere}
+.ov .sheet .btn{margin-top:4px}
 </style>
 
 </head>
@@ -217,16 +259,18 @@ table.grid td.hl{background:var(--accent-weak)}
   <header class="top">
     <div class="brand">
       <h1>抗生素選擇助手</h1>
-      <div class="sub">依感染部位、台灣抗藥性與腎功能給出抗生素、途徑、劑量與頻次（成人）</div>
+      <div class="sub">成人經驗性與標靶抗生素、劑量依腎功能調整</div>
     </div>
     <div class="ver" id="ver"></div>
   </header>
-  <div class="disc"><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</div>
+  <div class="disc" id="disc"><span><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</span><button class="linkbtn" type="button" data-act="disc-ok">知道了</button></div>
 
   <div class="cols">
     <aside class="side" id="side">
+      <button class="ptbar" type="button" id="ptBar" data-act="pt-open" aria-expanded="false" aria-controls="ptBody" hidden></button>
+      <div id="ptBody" class="ptbody">
       <section class="card" id="ptPanel">
-        <h2>病人與腎功能</h2>
+        <div class="card-h"><h2>病人與腎功能</h2><button class="linkbtn" type="button" data-act="pt-close">收合</button></div>
         <div class="grid2">
           <div class="field"><label for="age">年齡</label><input id="age" type="number" inputmode="numeric" min="18" max="110" placeholder="歲"></div>
           <div class="field"><span class="lbl">性別</span>
@@ -238,11 +282,13 @@ table.grid td.hl{background:var(--accent-weak)}
           <div class="field"><label for="wt">體重 <span class="unit">kg</span></label><input id="wt" type="number" inputmode="decimal" min="20" max="300" placeholder="kg"></div>
           <div class="field"><label for="ht">身高 <span class="unit">cm</span></label><input id="ht" type="number" inputmode="decimal" min="120" max="230" placeholder="cm"></div>
           <div class="field"><label for="scr">SCr <span class="unit">mg/dL</span></label><input id="scr" type="number" inputmode="decimal" step="0.01" min="0.1" max="20" placeholder="mg/dL"></div>
-          <div class="field" style="justify-content:flex-end"><button class="linkbtn" type="button" id="fillDemo">填入範例數值</button></div>
         </div>
         <div class="field mt"><span class="lbl">腎功能評估方式</span>
           <div class="seg" role="radiogroup" aria-label="腎功能評估方式">
             <label><input type="radio" name="method" value="cg" checked><span>CG 自動計算</span></label>
+            <button class="chip" type="button" id="mMoreBtn" data-act="m-more" aria-expanded="false" aria-controls="mMore">其他方式 ▾</button>
+          </div>
+          <div class="seg mmore" id="mMore" role="radiogroup" aria-label="其他腎功能評估方式" hidden>
             <label><input type="radio" name="method" value="crcl"><span>輸入 CrCl</span></label>
             <label><input type="radio" name="method" value="egfr"><span>輸入 eGFR</span></label>
             <label><input type="radio" name="method" value="hd"><span>HD</span></label>
@@ -269,20 +315,25 @@ table.grid td.hl{background:var(--accent-weak)}
         </div>
         <label class="chk mt"><input type="checkbox" id="preg"><span>懷孕（標示孕期禁忌／需謹慎之藥物）</span></label>
       </section>
+      </div>
     </aside>
 
     <main>
       <nav class="tabs" role="tablist" id="tabs"></nav>
+      <div id="tabmenu" class="tabmenu" hidden></div>
       <div id="main"></div>
     </main>
   </div>
+  <footer class="foot" id="foot"><div id="footDisc" hidden><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</div><div class="ver" id="footVer"></div></footer>
 </div>
+<div id="ov" class="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ovT"><h3 id="ovT"></h3><div id="ovB"></div><button class="btn" type="button" data-act="ov-close">關閉</button></div></div>
 <div id="toast" class="toast" hidden></div>
 
 <script>
 "use strict";
 const VERIFIED = "2026-10-17";
-const VERSION = "v0.6・12 個感染系統＋口服降階＋泌尿手術預防";
+const VERSION = "v0.7";
+const SCOPE = "12 個感染系統＋口服降階＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
@@ -635,6 +686,8 @@ const S = {
   proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null}
 };
 let R = null;
+/* 介面狀態（只影響顯示，不影響建議內容） */
+const UI = {edit:"sys", pt:null, mMore:false, more:false};
 
 /* ---------------- 計算 ---------------- */
 const num = v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
@@ -928,13 +981,15 @@ function genAllergy(sub,c){
 
 /* ---------------- 繪製 ---------------- */
 const $ = id=>document.getElementById(id);
-const UPD = '<span class="upd" title="與先前版本相比的新建議（2024–2026 指引）">更新</span>';
-const srcTags = arr=>arr&&arr.length?`<div class="srcs">${[...new Set(arr)].map(k=>REF[k]?`<span class="src" title="${REF[k].f.replace(/"/g,"&quot;")}">${REF[k].s}</span>`:"").join("")}</div>`:"";
+const UPD = '<button type="button" class="upd" data-upd="1">更新</button>';
+const srcBtns = arr=>arr&&arr.length?[...new Set(arr)].map(k=>REF[k]?`<button type="button" class="src" data-ref="${k}">${REF[k].s}</button>`:"").join(""):"";
+const srcTags = arr=>arr&&arr.length?`<div class="srcs">${srcBtns(arr)}</div>`:"";
 function tierCls(t){ if(t.includes("過敏")) return "allergy"; if(t.startsWith("首選")||t.startsWith("IV 首選")) return "primary"; if(t.includes("口服")) return "po"; if(t.startsWith("加上")||t.startsWith("升階")) return "add"; return ""; }
-function nameHTML(drug,label){
+function nameHTML(drug,label,more){
   const d=D[drug]; const n=label||d.n;
-  if(!d.brand) return `<span class="rx-name">${n}</span>`;
-  return `<button type="button" class="rx-name brandbtn" data-act="brand" aria-expanded="false" title="點擊顯示商品名">${n}</button><span class="brand" hidden>商品名：${d.brand}</span>`;
+  if(more===undefined&&d.brand) return `<button type="button" class="rx-name brandbtn" data-act="brand" aria-expanded="false">${n}</button><span class="rx-more" hidden><span class="brand">商品名：${d.brand}</span></span>`;
+  if(!more) return `<span class="rx-name">${n}</span>`;
+  return `<button type="button" class="rx-name brandbtn" data-act="brand" aria-expanded="false">${n}</button>`;
 }
 function rxRow(id){
   const g=REG[id]; if(!g) return "";
@@ -946,10 +1001,15 @@ function rxRow(id){
   if(d.restrict) fl.push(`<span class="flag info">管制抗生素・會診感染科</span>`);
   const ix=INTER.filter(x=>x.d.includes(g.d));
   const copyTxt=`${d.n} ${ds.plain}${R?`（${R.short}）`:""}`;
+  // 註解與商品名收進藥名（點藥名展開）；腎調整只在有調整時顯示
+  let nt=g.note||""; if(/無需腎調整/.test(ds.band)) nt=nt.replace(/^無需腎調整[；;，、]?\s*/,"");
+  const band=R&&ds.adj?`<span class="adj">${ds.band}</span>`:"";
+  const more=[d.brand?`<span class="brand">商品名：${d.brand}</span>`:"",nt?`<span>${nt}</span>`:"",!band&&ds.band&&!/^未輸入腎功能/.test(ds.band)?`<span>${ds.band}</span>`:""].filter(Boolean);
   return `<div class="rx${al&&al.lvl==="danger"?" blocked":""}">
-    <div class="rx-head">${nameHTML(g.d)}<span class="route">${g.r}</span>${S.tab==="oral"&&/PO/.test(g.r)?bioFlag(g.d):""}${fl.join("")}</div>
+    <div class="rx-head">${nameHTML(g.d,null,more.length)}<span class="route">${g.r}</span>${S.tab==="oral"&&/PO/.test(g.r)?bioFlag(g.d):""}${fl.join("")}</div>
     <div class="rx-dose">${ds.html}</div>
-    <div class="rx-meta">${ds.adj?`<span class="adj">${ds.band}</span>`:ds.band}${(()=>{ let nt=g.note||""; if(/無需腎調整/.test(ds.band)) nt=nt.replace(/^無需腎調整[；;，、]?\s*/,""); return nt?` ・ ${nt}`:""; })()}</div>
+    ${band?`<div class="rx-meta">${band}</div>`:""}
+    ${more.length?`<div class="rx-more" hidden>${more.join("")}</div>`:""}
     ${ix.length?`<details class="ix"><summary>交互作用 ${ix.length} 項</summary><ul>${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></details>`:""}
     <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copyTxt)}">複製</button>
   </div>`;
@@ -977,17 +1037,17 @@ function optCard(o){
     <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?UPD:""}</div>
     ${formula}${body}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
-    ${o.note?`<div class="onote">${o.note}</div>`:""}
-    ${srcTags(o.src)}
+    ${o.note||(o.src&&o.src.length)?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}</div>`:""}
+    ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
   </div>`;
 }
 function noteBlock(n){ return `<div class="note ${n.lvl||""}">${n.upd?UPD+" ":""}${n.t}${srcTags(n.src)}</div>`; }
 function renalBar(){
-  if(!R) return `<div class="note warn">尚未輸入腎功能：以下為<b>正常腎功能</b>劑量。請在左側輸入年齡、體重、SCr 或選擇透析方式。</div>`;
-  let s=`<div class="note">劑量依 <b>${R.label}</b> 計算`;
-  if(S.pt.aki) s+=`；腎功能不穩定：首劑給足量（不減量），24–48 小時後再評估`;
-  if(R.mode==="crcl"&&R.val>130) s+=`；CrCl >130 可能為 ARC，β-lactam 考慮延長輸注或較高劑量`;
-  return s+`。</div>`;
+  if(!R) return `<div class="rtag"><button type="button" class="flag warn" data-act="pt-open">正常腎功能劑量・填腎功能 ›</button></div>`;
+  const x=[];
+  if(S.pt.aki) x.push(`腎功能不穩定：首劑給足量（不減量），24–48 小時後再評估`);
+  if(R.mode==="crcl"&&R.val>130) x.push(`CrCl >130 可能為 ARC，β-lactam 考慮延長輸注或較高劑量`);
+  return `<div class="rtag"><button type="button" class="flag info" data-act="pt-open">劑量依 ${R.label}</button></div>${x.length?`<div class="note warn" style="margin-bottom:8px">${x.join("；")}。</div>`:""}`;
 }
 
 function ctxNote(){
@@ -996,8 +1056,9 @@ function ctxNote(){
   return `<div class="ctx"><b>台灣抗藥性：</b>肺炎鏈球菌 macrolide 抗藥率歷年監測超過 80%，macrolide 只作合併用藥；結核盛行，FQ 單用前先排除 TB。台灣 CAP 常見菌依序為 S. pneumoniae、M. pneumoniae、C. pneumoniae、H. influenzae、K. pneumoniae。${srcTags(["TW_SPN","IDST_CAP"])}</div>`;
 }
 
-function favs(){ try{ return JSON.parse(localStorage.getItem("abx_favs")||"[]"); }catch(e){ return []; } }
-function saveFavs(a){ try{ localStorage.setItem("abx_favs",JSON.stringify(a)); }catch(e){} }
+let FAVS = [];   // 收藏只存在記憶體，重新整理即清空
+function favs(){ return FAVS; }
+function saveFavs(a){ FAVS=a; }
 function scenarioName(){
   const sub=SYS[S.sys].subs.find(x=>x.id===S.sub); let s=sub?sub.n:"";
   if(hasSev(S.sub)&&S.sev!=="none") s+=" ・ "+(S.sev==="sepsis"?"sepsis":"shock");
@@ -1007,17 +1068,22 @@ function scenarioName(){
 }
 
 function renderEmp(){
-  const sys=SYS[S.sys];
+  const sys=SYS[S.sys], sub=SUBDEF[S.sub];
   const fv=favs();
-  let h=`<div class="favs"><button class="btn" type="button" data-act="fav-save">☆ 收藏此情境</button>${fv.map((f,i)=>`<span class="fav"><button type="button" data-act="fav-load" data-i="${i}">${f.name}</button><button type="button" data-act="fav-del" data-i="${i}" aria-label="刪除收藏">×</button></span>`).join("")}</div>`;
-  h+=`<div class="step"><h3><span class="k">01</span>感染部位</h3><div class="chips">
+  let h=fv.length?`<div class="favs"><span class="lbl">收藏</span>${fv.map((f,i)=>`<span class="fav"><button type="button" data-act="fav-load" data-i="${i}">${f.name}</button><button type="button" data-act="fav-del" data-i="${i}" aria-label="刪除收藏">×</button></span>`).join("")}</div>`:"";
+  // 01／02：選定後收成一行，點「更改」才展開按鈕
+  if(UI.edit==="sys") h+=`<div class="step"><h3><span class="k">01</span>感染部位</h3><div class="chips">
     ${Object.keys(SYS).map(k=>`<button class="chip" type="button" data-act="sys" data-v="${k}" aria-pressed="${S.sys===k}">${SYS[k].n}</button>`).join("")}
   </div></div>`;
-  h+=`<div class="step"><h3><span class="k">02</span>細分診斷</h3><div class="chips">
-    ${sys.subs.map(s=>`<button class="chip" type="button" data-act="sub" data-v="${s.id}" aria-pressed="${S.sub===s.id}">${s.n}</button>`).join("")}
-  </div>${isCAP(S.sub)?`<div class="hint">重症：需呼吸器或升壓劑，或符合 ≥3 項次要條件（RR ≥30、P/F ≤250、多葉浸潤、意識混亂、BUN ≥20、WBC <4000、Plt <100k、體溫 <36°C、需大量輸液之低血壓）。</div>`:""}</div>`;
+  else h+=`<div class="picked"><span class="k">01</span><span class="q">感染部位</span><b>${sys.n}</b><button class="linkbtn" type="button" data-act="edit" data-v="sys">更改</button></div>`;
+  if(UI.edit==="sub") h+=`<div class="step"><h3><span class="k">02</span>細分診斷</h3><div class="chips">
+    ${sys.subs.map(x=>`<button class="chip" type="button" data-act="sub" data-v="${x.id}" aria-pressed="${S.sub===x.id}">${x.n}</button>`).join("")}
+  </div></div>`;
+  else if(UI.edit!=="sys") h+=`<div class="picked"><span class="k">02</span><span class="q">細分診斷</span><b>${sub.n}</b><button class="linkbtn" type="button" data-act="edit" data-v="sub">更改</button></div>`;
+  if(UI.edit) return h;   // 尚在選擇部位／診斷時，不顯示後續步驟
   h+=`<div class="step"><h3><span class="k">03</span>臨床情境</h3>`;
-  if(hasSev(S.sub)) h+=`<div class="lbl">嚴重度</div><div class="chips">${["none","sepsis","shock"].map((v,i)=>[v,(SUBDEF[S.sub].sevL||["無 sepsis","Sepsis","Septic shock"])[i]]).map(([v,n])=>`<button class="chip" type="button" data-act="sev" data-v="${v}" aria-pressed="${S.sev===v}">${n}</button>`).join("")}</div>`;
+  if(hasSev(S.sub)) h+=`<div class="chips">${["none","sepsis","shock"].map((v,i)=>[v,(sub.sevL||["無 sepsis","Sepsis","Septic shock"])[i]]).map(([v,n])=>`<button class="chip" type="button" data-act="sev" data-v="${v}" aria-pressed="${S.sev===v}">${n}</button>`).join("")}</div>`;
+  if(isCAP(S.sub)) h+=`<div class="hint">重症：需呼吸器或升壓劑，或符合 ≥3 項次要條件（RR ≥30、P/F ≤250、多葉浸潤、意識混亂、BUN ≥20、WBC <4000、Plt <100k、體溫 <36°C、需大量輸液之低血壓）。</div>`;
   h+=`<details class="mdr" ${S.mdr.length?"open":""}><summary>MDR（多重抗藥菌）危險因子 ${S.mdr.length?`・已勾 ${S.mdr.length} 項`:"・勾選符合項目"}</summary>
     <div class="hint">這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。${isCAP(S.sub)?"CAP 只依「過去呼吸道培養出 MRSA／PsA」及「90 天內住院且用過 IV 抗生素」判斷（ATS/IDSA 2019）。":""}</div>
     <div class="mdrlist">${MDR.map(m=>`<label class="chk"><input type="checkbox" data-act="mdr" data-v="${m.id}" ${S.mdr.includes(m.id)?"checked":""}><span>${m.t}</span></label>`).join("")}</div>
@@ -1025,14 +1091,16 @@ function renderEmp(){
 
   const c={fx:fxSet(),sev:hasSev(S.sub)?S.sev:"none",male:S.pt.sex==="M"};
   const r=GEN[S.sub](c);
-  h+=`<div class="step"><h3><span class="k">04</span>建議</h3>${renalBar()}<div class="mt"></div>${ctxNote()}`;
-  h+=`<div class="sec-title">常見致病菌（依常見順序，點選看標靶治療）</div><div class="paths">${(PL[S.sub]||[]).map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div>`;
-  if(S.path) h+=`<div class="mt">${targetPanel(S.path,S.ph,siteClass(S.sub))}</div>`;
-  h+=`<div class="sec-title mt">經驗性治療</div><div class="res">`;
+  // 04：方案卡 → 療程 → 需立即處理的提醒；其餘（致病菌、台灣抗藥性、一般提醒）收合
+  h+=`<div class="step"><h3><span class="k">04</span>建議<button class="linkbtn act" type="button" data-act="fav-save">☆ 收藏</button></h3>${renalBar()}<div class="res">`;
   const al=genAllergy(S.sub,c); if(al) h+=optCard(al);
   h+=r.o.map(optCard).join("");
   h+=`<div class="dur"><span class="k">療程</span><span class="v">${r.dur.t}</span>${r.dur.upd?UPD:""}${srcTags(r.dur.src)}</div>`;
-  h+=`<div class="notes">${r.n.map(noteBlock).join("")}<div class="note">IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。${srcTags(["IDSA_cUTI25","ATS19"])}</div></div>`;
+  const key=r.n.filter(n=>n.lvl==="danger"||n.lvl==="warn"), rest=r.n.filter(n=>!(n.lvl==="danger"||n.lvl==="warn"));
+  if(key.length) h+=`<div class="notes">${key.map(noteBlock).join("")}</div>`;
+  const pl=PL[S.sub]||[];
+  if(pl.length) h+=`<details class="more"${S.path?" open":""}><summary>常見致病菌（${pl.length}）・點選看標靶治療</summary><div class="paths">${pl.map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div>${S.path?`<div class="mt">${targetPanel(S.path,S.ph,siteClass(S.sub))}</div>`:""}</details>`;
+  h+=`<details class="more"><summary>其他提醒（${rest.length+2}）</summary>${ctxNote()}<div class="notes">${rest.map(noteBlock).join("")}<div class="note">IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。${srcTags(["IDSA_cUTI25","ATS19"])}</div></div></details>`;
   h+=`</div></div>`;
   return h;
 }
@@ -2351,21 +2419,50 @@ function renderIx(){
 function renderRef(){
   return `<div class="step"><h3>資料來源</h3><ol class="reflist">${Object.values(REF).map(r=>`<li><b>${r.s}</b>　${r.f}</li>`).join("")}</ol></div>
   <div class="step"><h3>使用說明</h3><div class="notes">
-    <div class="note">資料查證日：${VERIFIED}（${VERSION}）。標示「更新」者為 2024–2026 新指引與舊版不同之處。</div>
+    <div class="note">資料查證日：${VERIFIED}（${VERSION}・${SCOPE}）。標示「更新」者為 2024–2026 新指引與舊版不同之處。</div>
     <div class="note">腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。</div>
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
-    <div class="note">收藏只存在這台裝置的瀏覽器，且只存情境（部位、嚴重度、危險因子），不存病人資料。</div>
+    <div class="note">收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。</div>
+    <div class="note">示範：<button class="linkbtn" type="button" data-act="demo">填入範例病人數值</button>（72 歲男性、60 kg、165 cm、SCr 1.6）</div>
   </div></div>`;
 }
 
 const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["oral","口服降階"],["px","泌尿手術預防"],["vanco","Vancomycin"],["teico","Teicoplanin"],["ix","交互作用"],["ref","出處"]];
+const TAB_S={cur:"用藥調整"};   // 窄螢幕（≤420px）短名稱
+const TAB_MAIN=["emp","cur","oral"];   // 手機主列；其餘收進「更多」（寬螢幕全部顯示）
 function renderMain(){
   R=getRenal();
-  $("tabs").innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${n}</button>`).join("");
+  const xt=TABS.filter(([k])=>!TAB_MAIN.includes(k)), cx=xt.find(([k])=>k===S.tab);
+  $("tabs").innerHTML=TABS.map(([k,n])=>`<button class="tab${TAB_MAIN.includes(k)?"":" xtra"}" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${TAB_S[k]?`<span class="ts">${TAB_S[k]}</span>`:""}<span class="tl">${n}</span></button>`).join("")
+    +`<button class="tab morebtn" type="button" data-act="more" aria-expanded="${UI.more}" aria-controls="tabmenu" aria-selected="${!!cx}">${cx?cx[1]:"更多"} ▾</button>`;
+  const tm=$("tabmenu"); tm.hidden=!UI.more;
+  tm.innerHTML=xt.map(([k,n])=>`<button class="chip" type="button" data-act="tab" data-v="${k}" aria-pressed="${S.tab===k}">${n}</button>`).join("");
   const f={spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab];
   $("main").innerHTML=f()+(S.tab==="spec"&&S.spec.view==="bac"&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"");
+}
+const narrow=()=>typeof matchMedia!=="undefined"&&matchMedia("(max-width:920px)").matches;
+const ALG_S={none:"",pen_low:"PCN 過敏（非嚴重）",pen_ana:"PCN 過敏性休克",ceph:"Ceph 過敏",bl_scar:"β-lactam SCAR"};
+function ptSummary(){
+  const p=S.pt, r=getRenal(), a=[];
+  if(p.age) a.push(`${p.age} 歲`);
+  if(p.age||p.wt||p.scr) a.push(p.sex==="M"?"男":"女");
+  if(p.wt) a.push(`${p.wt} kg`);
+  a.push(r?r.short:"腎功能未填");
+  const b=[a.join("・")];
+  if(S.allergy!=="none") b.push(ALG_S[S.allergy]);
+  if(S.preg) b.push("懷孕");
+  return {txt:b.join("｜"),empty:!r};
+}
+function renderPt(){
+  const open=narrow()?!!UI.pt:true, bar=$("ptBar");
+  $("ptBody").hidden=!open; bar.hidden=open;
+  bar.setAttribute("aria-expanded",String(open));
+  document.querySelector('[data-act="pt-close"]').hidden=!narrow();
+  if(!open){ const s=ptSummary(); bar.className="ptbar"+(s.empty?" empty":"");
+    bar.innerHTML=`<span class="lab">病人</span><span class="val">${s.empty&&!S.pt.age&&!S.pt.wt&&S.allergy==="none"&&!S.preg?"未填：劑量依正常腎功能":s.txt}</span><span class="act">編輯 ▾</span>`; }
+  const mm=UI.mMore||S.pt.method!=="cg"; $("mMore").hidden=!mm; $("mMoreBtn").setAttribute("aria-expanded",String(mm)); $("mMoreBtn").hidden=S.pt.method!=="cg"&&mm;
 }
 function renderRsum(){
   const el=$("rsum"); const r=getRenal();
@@ -2399,9 +2496,24 @@ function readPt(){
 
 if(typeof document!=="undefined"){
   $("ver").textContent=`${VERSION}・查證 ${VERIFIED}`;
-  $("side").addEventListener("input",()=>{ readPt(); renderRsum(); renderMain(); });
-  $("side").addEventListener("change",()=>{ readPt(); renderRsum(); renderMain(); });
-  $("fillDemo").addEventListener("click",()=>{ $("age").value=72; $("wt").value=60; $("ht").value=165; $("scr").value=1.6; $("sexM").checked=true; readPt(); renderRsum(); renderMain(); toast("已填入範例數值，請改為病人資料"); });
+  $("footVer").textContent=`抗生素選擇助手 ${VERSION}・查證 ${VERIFIED}・${SCOPE}`;
+  // 病人資料：值沒變就不重繪（避免 blur 時把正要點的按鈕換掉）
+  const ptKey=()=>JSON.stringify([S.pt,S.allergy,S.preg]);
+  const onPt=()=>{ const k=ptKey(); readPt(); if(ptKey()===k) return; renderRsum(); renderMain(); renderPt(); };
+  $("side").addEventListener("input",onPt);
+  $("side").addEventListener("change",onPt);
+  const showOv=(t,b)=>{ $("ovT").textContent=t; $("ovB").innerHTML=b; $("ov").hidden=false; $("ov").querySelector(".btn").focus(); };
+  const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("ov").hidden) $("ov").hidden=true; });
+  $("ov").addEventListener("click",e=>{ if(e.target===$("ov")) $("ov").hidden=true; });
+  // 出處、更新：點擊開底部彈出層
+  document.addEventListener("click",e=>{
+    const sb=e.target.closest("button.src[data-ref]");
+    if(sb){ const r=REF[sb.dataset.ref]; if(r) showOv(r.s,`<p>${esc(r.f)}</p>`); return; }
+    if(e.target.closest("button.upd[data-upd]")) showOv("更新","<p>與先前版本相比的新建議（2024–2026 指引）。改了什麼請見同一列的說明與出處。</p>");
+  });
+  let wasNarrow=narrow();
+  addEventListener("resize",()=>{ const n=narrow(); if(n!==wasNarrow){ wasNarrow=n; renderPt(); } });
   $("main").addEventListener("change",e=>{
     const a=e.target.dataset.act; if(!a) return;
     if(a==="mdr"){ const v=e.target.dataset.v; S.mdr=e.target.checked?[...S.mdr,v]:S.mdr.filter(x=>x!==v); renderMain(); }
@@ -2415,9 +2527,18 @@ if(typeof document!=="undefined"){
   document.addEventListener("click",e=>{
     const b=e.target.closest("button[data-act]"); if(!b) return;
     const a=b.dataset.act, v=b.dataset.v; let jump=false;
-    if(a==="tab") S.tab=v;
-    else if(a==="sys"){ S.sys=v; S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; }
-    else if(a==="sub"){ S.sub=v; S.path=null; S.ph=null; }
+    if(a==="tab"){ S.tab=v; UI.more=false; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } scrollTo(0,0); }
+    else if(a==="more") UI.more=!UI.more;
+    else if(a==="pt-open"){ UI.pt=true; renderPt(); if(narrow()){ const el=$("ptBody"); el.scrollIntoView({block:"start"}); const f=$("age"); if(!S.pt.age) f.focus({preventScroll:true}); } return; }
+    else if(a==="pt-close"){ UI.pt=false; renderPt(); $("ptBar").focus(); return; }
+    else if(a==="m-more"){ UI.mMore=!UI.mMore; renderPt(); return; }
+    else if(a==="disc-ok"){ $("disc").hidden=true; $("footDisc").hidden=false; return; }
+    else if(a==="ov-close"){ $("ov").hidden=true; return; }
+    else if(a==="demo"){ $("age").value=72; $("wt").value=60; $("ht").value=165; $("scr").value=1.6; $("sexM").checked=true; document.querySelector('input[name="method"][value="cg"]').checked=true; readPt(); renderRsum(); renderPt(); toast("已填入範例數值，請改為病人資料"); }
+    else if(a==="edit"){ UI.edit=UI.edit===v?null:v; }
+    else if(a==="onote"){ const n=b.parentElement.nextElementSibling; if(n&&n.classList.contains("onote")){ n.hidden=!n.hidden; b.setAttribute("aria-expanded",String(!n.hidden)); } return; }
+    else if(a==="sys"){ const ch=S.sys!==v; S.sys=v; if(ch){ S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; } UI.edit=SYS[v].subs.length>1?"sub":null; }
+    else if(a==="sub"){ if(S.sub!==v){ S.sub=v; S.path=null; S.ph=null; } UI.edit=null; }
     else if(a==="sev") S.sev=v;
     else if(a==="path"){ S.path=S.path===v?null:v; S.ph=null; }
     else if(a==="ph") S.ph=v;
@@ -2431,7 +2552,7 @@ if(typeof document!=="undefined"){
     else if(a==="cur-ph") S.cur.ph=v;
     else if(a==="cur-sus"){ if(v) S.cur.sus[b.dataset.d]=v; else delete S.cur.sus[b.dataset.d]; }
     else if(a==="proc") S.proc=v;
-    else if(a==="brand"){ const sp=b.nextElementSibling; if(sp){ sp.hidden=!sp.hidden; b.setAttribute("aria-expanded",String(!sp.hidden)); } return; }
+    else if(a==="brand"){ const sp=b.closest(".rx").querySelector(".rx-more"); if(sp){ sp.hidden=!sp.hidden; b.setAttribute("aria-expanded",String(!sp.hidden)); } return; }
     else if(a==="o-iv"){ const c=S.oral.ivs; S.oral.ivs=c.includes(v)?c.filter(x=>x!==v):[...c,v]; }
     else if(a==="o-org"){ S.oral.org=v; S.oral.ph=""; S.oral.sus={}; }
     else if(a==="o-ph") S.oral.ph=v;
@@ -2450,7 +2571,7 @@ if(typeof document!=="undefined"){
     renderMain();
     if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
   });
-  readPt(); renderRsum(); renderMain();
+  readPt(); renderRsum(); renderMain(); renderPt();
 }
 </script>
 
