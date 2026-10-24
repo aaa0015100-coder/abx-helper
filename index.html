@@ -296,7 +296,7 @@ details.pf>summary{font-size:.86rem}
       <button class="ptbar" type="button" id="ptBar" data-act="pt-open" aria-expanded="false" aria-controls="ptBody" hidden></button>
       <div id="ptBody" class="ptbody">
       <section class="card" id="ptPanel">
-        <div class="card-h"><h2>病人與腎功能</h2><button class="linkbtn" type="button" data-act="pt-close">收合</button></div>
+        <div class="card-h"><h2>病人與腎功能</h2><span><button class="linkbtn" type="button" data-act="clear-all">清除全部</button>　<button class="linkbtn" type="button" data-act="pt-close">收合</button></span></div>
         <div class="grid2">
           <div class="field"><label for="age">年齡</label><input id="age" type="number" inputmode="numeric" min="18" max="110" placeholder="歲"></div>
           <div class="field"><span class="lbl">性別</span>
@@ -351,6 +351,25 @@ details.pf>summary{font-size:.86rem}
         </details>
         <label class="chk mt"><input type="checkbox" id="preg"><span>懷孕（標示孕期禁忌／需謹慎之藥物）</span></label>
       </section>
+
+      <section class="card">
+        <h2>肝功能（選填）</h2>
+        <div class="seg" role="radiogroup" aria-label="Child-Pugh 輸入方式">
+          <label><input type="radio" name="cpmode" value="calc" checked><span>計算 Child-Pugh</span></label>
+          <label><input type="radio" name="cpmode" value="direct"><span>直接選分級</span></label>
+        </div>
+        <div id="cpCalc" class="mt">
+          <div class="grid2">
+            <div class="field"><label for="cpBili">Bilirubin <span class="unit">mg/dL</span></label><input id="cpBili" type="number" inputmode="decimal" step="0.1" min="0" max="50"></div>
+            <div class="field"><label for="cpAlb">Albumin <span class="unit">g/dL</span></label><input id="cpAlb" type="number" inputmode="decimal" step="0.1" min="0" max="7"></div>
+            <div class="field"><label for="cpInr">INR</label><input id="cpInr" type="number" inputmode="decimal" step="0.1" min="0.5" max="15"></div>
+            <div class="field"><label for="cpAsc">腹水</label><select id="cpAsc"><option value="1">無</option><option value="2">輕度</option><option value="3">中重度</option></select></div>
+            <div class="field"><label for="cpEnc">肝腦病變</label><select id="cpEnc"><option value="1">無</option><option value="2">1–2 級</option><option value="3">3–4 級</option></select></div>
+          </div>
+        </div>
+        <div id="cpDirect" class="field mt" hidden><label for="cpCls">Child-Pugh 分級</label><select id="cpCls"><option value="">未評估</option><option value="A">A（5–6 分）</option><option value="B">B（7–9 分）</option><option value="C">C（10–15 分）</option></select></div>
+        <div id="cpRes" class="rsum empty"></div>
+      </section>
       </div>
     </aside>
 
@@ -368,19 +387,20 @@ details.pf>summary{font-size:.86rem}
 
 <script>
 "use strict";
-const VERIFIED = "2026-10-17";
-const VERSION = "v0.12";
-const SCOPE = "12 個感染系統＋口服降階＋藥物查詢＋TDM＋PEN-FAST＋泌尿手術預防";
+const VERIFIED = "2026-10-25";
+const VERSION = "v0.13";
+const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
   IDSA_cUTI25:{s:"IDSA cUTI 2025",f:"Infectious Diseases Society of America. 2025 Guideline on Management and Treatment of Complicated Urinary Tract Infections. Clin Infect Dis, published July 17, 2025."},
-  IDSA_AMR24:{s:"IDSA AMR 2024",f:"Tamma PD, et al. Infectious Diseases Society of America 2024 Guidance on the Treatment of Antimicrobial-Resistant Gram-Negative Infections. Clin Infect Dis 2024."},
+  IDSA_AMR24:{s:"IDSA AMR 2026",f:"Tamma PD, Bonomo RA, Heil EL, Justo JA, Satlin MJ, Mathers AJ. IDSA 2026 Guidance on the Treatment of Antimicrobial Resistant Gram-Negative Infections. Clin Infect Dis 2026（2026-07-30 上線；doi 10.1093/cid/ciag481），取代 2024 版。ESBL、AmpC、CRE 泌尿道感染依原文核對；DTR P. aeruginosa、CRAB、S. maltophilia 因網頁全文截斷，依 IDSA 與 Guideline Central 更新摘要核對，請以原文確認。"},
+  IDSA_AMR24V:{s:"IDSA AMR 2024",f:"Tamma PD, et al. Infectious Diseases Society of America 2024 Guidance on the Treatment of Antimicrobial-Resistant Gram-Negative Infections. Clin Infect Dis 2024（已由 2026 版取代，僅用於標示舊版說法）。"},
   IDSA_cys10:{s:"IDSA/ESCMID 2010",f:"Gupta K, et al. International Clinical Practice Guidelines for the Treatment of Acute Uncomplicated Cystitis and Pyelonephritis in Women. Clin Infect Dis 2011;52:e103-20."},
   IDSA_CAUTI09:{s:"IDSA CAUTI 2009",f:"Hooton TM, et al. Diagnosis, Prevention, and Treatment of Catheter-Associated UTI in Adults. Clin Infect Dis 2010;50:625-63."},
-  EAU_UI25:{s:"EAU 2025",f:"EAU Guidelines on Urological Infections, 2025 edition (uroweb.org)."},
+
   AUA_PX19:{s:"AUA BPS 2019",f:"American Urological Association. Best Practice Statement: Urologic Procedures and Antimicrobial Prophylaxis (2019 update), Table V（Recommended antimicrobial prophylaxis for urologic procedures）。"},
-  EAU_UI26:{s:"EAU 2026",f:"EAU Guidelines on Urological Infections, 2026 edition（2025 版的有限更新；攝護腺切片預防 3.18.3 改版）。本版依 EAU Pocket Guidelines on Urological Infections 2026（Table 13、Figure 4）及線上版 3.3 無症狀菌尿核對（uroweb.org）。"},
+  EAU_UI26:{s:"EAU 2026",f:"EAU Guidelines on Urological Infections, 2026 edition（2025 版的有限更新：膀胱炎診斷與治療、新增真菌 UTI 章節、攝護腺切片預防、劑量檢視）。本版依 EAU Pocket Guidelines 2026 與 Summary of Changes 核對（uroweb.org）；前列腺炎、副睪炎、阻塞處理章節 2026 未列為修改。Urosepsis 章節更新預計 2027。"},
   SIR18:{s:"SIR 2018",f:"Chehab MA, et al. Adult and Pediatric Antibiotic Prophylaxis during Vascular and IR Procedures: A Society of Interventional Radiology Practice Parameter Update Endorsed by CIRSE and CAIR. J Vasc Interv Radiol 2018;29(11):1483-1501（網站最後更新 2024-01）。泌尿：經皮腎造廔置放與更換（IIb，C-LD／C-EO）。"},
   AUA_VAS26:{s:"AUA 輸精管結紮 2026",f:"American Urological Association. Vasectomy: AUA Guideline (2026). Statement 7: Clinicians may forego peri-procedural antibiotics for patients undergoing vasectomy unless the patient is at high risk of infection（Expert Opinion）。"},
   PENFAST20:{s:"PEN-FAST 2020",f:"Trubiano JA, et al. Development and Validation of a Penicillin Allergy Clinical Decision Rule. JAMA Intern Med 2020（PMID 32176248）。F：≤5 年 2 分；A/S：過敏性休克／血管性水腫或 SCAR 2 分；T：需要治療 1 分。<3 分：皮膚測試陽性 3.7%，NPV 96.3%（95% CI 94.1–97.8%）。"},
@@ -388,6 +408,15 @@ const REF = {
   STAN_AG:{s:"Stanford AG 2021",f:"Stanford Health Care Aminoglycoside Dosing Guideline（rev. 06/2021）。院內規範，請以原文確認：Hartford 7 mg/kg、Urban-Craig 5 mg/kg（amikacin 15 mg/kg）；兩點濃度藥動公式；協同劑量；HD／CRRT 劑量。"},
   HHS_AG:{s:"Hamilton HHS",f:"Hamilton Health Sciences ID Handbook: Aminoglycoside Dosing（© 2020）。院內規範，請以原文確認：每日一次 5–7 mg/kg（amikacin 15 mg/kg，濃度先 ÷2 再標 Hartford nomogram）；傳統分次劑量與 peak／trough 目標；透析劑量與透析前濃度目標。"},
   UCSF_AG:{s:"UCSF IDMP",f:"UCSF Infectious Diseases Management Program: Adult Antimicrobial Dosing（aminoglycoside）。院內規範，請以原文確認：傳統分次 1.6 mg/kg q8h（CrCl >60）、peak 5–8、trough <2；HD 2 mg/kg → 每次透析後 1 mg/kg。"},
+  PUGH73:{s:"Pugh 1973",f:"Pugh RN, et al. Transection of the oesophagus for bleeding oesophageal varices. Br J Surg 1973;60:646-9（Child-Pugh 分級：bilirubin、albumin、INR／PT、腹水、肝腦病變各 1–3 分；5–6 A、7–9 B、10–15 C）。"},
+  TIGE_LABEL:{s:"Tigecycline 仿單",f:"Tigecycline US prescribing information：Child-Pugh A、B 不需調整；Child-Pugh C 首劑 100 mg，之後 25 mg q12h，謹慎使用並監測療效。"},
+  CASPO_SPC:{s:"Caspofungin 仿單",f:"Cancidas（caspofungin）SmPC 4.2（UK eMC）：Child-Pugh 5–6 不需調整；7–9 首日 70 mg，之後 35 mg/day；>9 無臨床經驗。"},
+  VORI_SPC:{s:"Voriconazole 仿單",f:"VFEND（voriconazole）SmPC：Child-Pugh A、B 負荷劑量不變、維持劑量減半；Child-Pugh C 未研究，效益大於風險才用並監測毒性。"},
+  METRO_LABEL:{s:"Metronidazole 仿單",f:"Metronidazole Tablets USP US label（2021，FDA）：Child-Pugh A、B 不需調整但監測不良反應；Child-Pugh C 劑量減 50%。IV 劑型仿單未另行核對。"},
+  CRO_LABEL:{s:"Ceftriaxone 仿單",f:"Ceftriaxone US prescribing information 5.7：單純肝功能不全不需調整；合併肝與明顯腎功能不全時每日不超過 2 g 並密切監測。"},
+  ISAVU_SPC:{s:"Isavuconazole 仿單",f:"Cresemba（isavuconazole）SmPC 4.2（2025-07）：Child-Pugh A、B 不需調整；Child-Pugh C 未研究，除非效益大於風險否則不建議。"},
+  POSA_LABEL:{s:"Posaconazole 仿單",f:"Posaconazole delayed-release tablets US label：Child-Pugh A、B、C 不需調整（未專門研究）；口服懸液劑無肝功能劑量建議。"},
+  MICA_LABEL:{s:"Micafungin 仿單",f:"Micafungin for injection US label 8.6：中度（Child-Pugh 7–9）、重度（10–12）肝功能不全不需調整。"},
   CLSI23:{s:"CLSI M100 2023",f:"CLSI AST News Update（June 2023）: M100-Ed33 updated aminoglycoside breakpoints for Enterobacterales and P. aeruginosa。Gentamicin 不再列為 P. aeruginosa 的建議治療選項，建議實驗室不報告或報 R。"},
   AWMF25:{s:"AWMF S3 2025",f:"Perioperative and Peri-Interventional Antibiotic Prophylaxis in Urology: Key Recommendations from the German AWMF S3 Guideline, compared with EAU 2025. Urol Int 2025 (doi:10.1159/000550029)."},
   ASHP13:{s:"ASHP 2013",f:"Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283."},
@@ -519,7 +548,7 @@ const PATH = {
   ecoli:{n:"Escherichia coli",g:"ent",note:"台灣 UTI 最常見。社區株對 FQ、TMP-SMX 不感受比例高，ESBL（CTX-M 型）逐年增加。"},
   kpn:{n:"Klebsiella pneumoniae",g:"ent",note:"天生對 ampicillin／amoxicillin 抗藥。台灣 CAP 重要致病菌（糖尿病、酗酒）；高毒力株可致肝膿瘍、眼內炎。"},
   pmir:{n:"Proteus mirabilis",g:"ent",note:"天生對 nitrofurantoin、tetracycline 抗藥；產 urease，與 struvite 結石相關。"},
-  ampc:{n:"Enterobacter／C. freundii／K. aerogenes／Serratia",g:"ampc",note:"染色體 AmpC：用 3rd-gen ceph 治療中可能去抑制而失敗，侵襲性感染改用 cefepime。"},
+  ampc:{n:"Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）",g:"ampc",note:"染色體 AmpC：用 3rd-gen ceph 治療中可能去抑制而失敗，侵襲性感染改用 cefepime。Hafnia alvei 也屬中風險（IDSA 2026 新增）；Serratia、Morganella、Providencia 風險低，依藥敏選藥。"},
   psa:{n:"Pseudomonas aeruginosa",g:"psa",note:"對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。"},
   efae:{n:"Enterococcus faecalis",g:"entc",note:"Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。"},
   ssap:{n:"Staphylococcus saprophyticus",g:"ssap",note:"年輕女性膀胱炎第二常見；尿液 nitrite 常為陰性。"},
@@ -556,36 +585,36 @@ const TGT = {
       resp:[O("IV 首選",["cro1"],{src:["ATS19"]}),O("口服降階",["amcPO","levo750"],{cond:"感受時",src:["ATS19"]})]
     },
     ESBL:{
-      cys:[O("首選",["nitro","tmpsmx"],{cond:"TMP-SMX 需感受",src:["IDSA_AMR24"]}),O("替代",["fos","gentSingle","amcPO"],{note:"Fosfomycin 僅限 E. coli；amoxicillin-clavulanate 需感受",src:["IDSA_AMR24"]})],
-      sys:[O("首選（感受時）",["tmpsmx","ciproPO","levo750"],{note:"Pyelo／cUTI：若感受，優先 TMP-SMX 或 FQ",src:["IDSA_AMR24"]}),O("IV",["etp","mem"],{note:"重症或上列抗藥；穩定後可改 ertapenem 或口服",src:["IDSA_AMR24"]}),O("台灣常用替代",["flomoxef","cmz"],{note:"Carbapenem-sparing，觀察性與 PK/PD 資料，限非重症 UTI；IDSA AMR 2024 因證據不足不建議 cephamycin",src:["HAMADA22","IDSA_AMR24"]}),O("替代",["gentQ24"],{note:"cUTI 可用，宜短期",src:["IDSA_cUTI25"]})],
-      resp:[O("首選",["mem","etp"],{note:"泌尿道外 ESBL 感染以 carbapenem 為首選；穩定且感受時可改口服 FQ／TMP-SMX",src:["IDSA_AMR24"]})]
+      cys:[O("首選",["nitro","tmpsmx","gentSingle"],{cond:"TMP-SMX 需感受",note:"IDSA 2026 另列 gepotidacin、pivmecillinam、sulopenem（台灣上市狀況請確認）",upd:"ESBLC26",src:["IDSA_AMR24"]}),O("替代",["fos"],{note:"僅限 E. coli",src:["IDSA_AMR24"]})],
+      sys:[O("首選（感受時）",["tmpsmx","ciproPO","levo750"],{note:"Pyelo／cUTI：若感受，優先 TMP-SMX 或 FQ",src:["IDSA_AMR24"]}),O("IV",["etp","mem"],{note:"重症或上列抗藥；穩定後可改 ertapenem 或口服",src:["IDSA_AMR24"]}),O("替代（cUTI、非重症、無菌血症）",["tzp"],{note:"泌尿道外感染不建議",upd:"PTZ26",src:["IDSA_AMR24"]}),O("台灣常用替代",["flomoxef","cmz"],{note:"Carbapenem-sparing，觀察性與 PK/PD 資料，限非重症 UTI；IDSA AMR 2026 仍不建議 cephamycin（待 cefoxitin／cefotetan 臨床資料；cefmetazole 美國未上市）",src:["HAMADA22","IDSA_AMR24"]}),O("替代",["gentQ24"],{note:"cUTI 可用，宜短期",src:["IDSA_cUTI25"]})],
+      resp:[O("首選",["mem","etp"],{note:"泌尿道外 ESBL 感染以 carbapenem 為首選；重症或低白蛋白血症以 meropenem（或 imipenem）起始，不用 ertapenem；IDSA 2026 替代為 cefepime-enmetazobactam（台灣上市狀況請確認，app 未收錄）；穩定且感受時可改口服 FQ／TMP-SMX",upd:"ESBLO26",src:["IDSA_AMR24"]})]
     },
     CRE:{
-      cys:[O("首選（感受時）",["ciproPO","levo750","tmpsmx","nitro","fos"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
-      sys:[O("首選",["cza"],{note:"先確認 carbapenemase 型別並會診感染科。NDM 等 MBL：ceftazidime-avibactam ＋ aztreonam 或 cefiderocol",src:["IDSA_AMR24"]}),O("口服（感受時）",["tmpsmx","ciproPO"],{cond:"Pyelo／cUTI 且感受",src:["IDSA_AMR24"]})],
+      cys:[O("首選（感受時）",["ciproPO","levo750","tmpsmx","nitro","gentSingle"],{upd:"CREC26",src:["IDSA_AMR24"]}),O("替代",["fos","col"],{note:"Fosfomycin 限 E. coli",src:["IDSA_AMR24"]})],
+      sys:[O("首選",["cza"],{note:"先確認 carbapenemase 型別並會診感染科。NDM 等 MBL：aztreonam-avibactam（IDSA 2026 略優先，台灣上市狀況請確認）或 ceftazidime-avibactam ＋ aztreonam；cefiderocol 為另一選項",upd:"CRE26",src:["IDSA_AMR24"]}),O("口服（感受時）",["tmpsmx","ciproPO"],{cond:"Pyelo／cUTI 且感受",src:["IDSA_AMR24"]})],
       resp:[O("首選",["cza"],{note:"會診感染科",src:["IDSA_AMR24"]})]
     }
   },
   ampc:{
     S:{
       cys:[O("首選",["nitro","tmpsmx","ciproPO"],{src:["IDSA_AMR24"]}),O("替代",["cro1"],{note:"單純膀胱炎可用 ceftriaxone",src:["IDSA_AMR24"]})],
-      sys:[O("首選",["fep2q12"],{note:"Cefepime MIC ≤2；侵襲性感染避免 ceftriaxone",src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO","levo750"],{cond:"感受時",src:["IDSA_AMR24"]}),O("若 cefepime MIC ≥4 或合併 ESBL",["mem","etp"],{src:["IDSA_AMR24"]})],
+      sys:[O("首選",["fep2q12","fep2q8"],{note:"Cefepime MIC ≤8（S 或 SDD）且未檢出 ESBL：MIC ≤2 可用第一個（正常腎功能 2 g q12h），MIC 4–8（SDD）用第二個高劑量（正常腎功能 2 g q8h）。侵襲性感染避免 ceftriaxone；非重症、已用 ceftriaxone 且改善、來源已控制者可完成療程",upd:"AMPC26",src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO","levo750"],{cond:"感受時",src:["IDSA_AMR24"]}),O("若 cefepime 抗藥（MIC ≥16）或合併 ESBL",["mem","etp"],{src:["IDSA_AMR24"]})],
       resp:[O("首選",["fep2q8"],{src:["IDSA_AMR24"]}),O("替代",["mem","levo750"],{src:["IDSA_AMR24"]})]
     },
     R:{
       cys:[O("首選",["nitro","tmpsmx","ciproPO"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
-      sys:[O("首選",["fep2q8"],{cond:"Cefepime MIC ≤2",src:["IDSA_AMR24"]}),O("替代",["mem","etp"],{src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO"],{cond:"感受時",src:["IDSA_AMR24"]})]
+      sys:[O("首選",["fep2q8"],{cond:"Cefepime MIC ≤8（S 或 SDD）且未檢出 ESBL",upd:"AMPC26",src:["IDSA_AMR24"]}),O("替代",["mem","etp"],{src:["IDSA_AMR24"]}),O("口服降階",["tmpsmx","ciproPO"],{cond:"感受時",src:["IDSA_AMR24"]})]
     }
   },
   psa:{
     S:{
-      cys:[O("首選",["ciproPO","levo750"],{src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"膀胱炎給單次即可（IDSA AMR 2024：單劑 aminoglycoside）。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
+      cys:[O("首選",["ciproPO","levo750"],{src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"膀胱炎給單次即可（IDSA AMR：單劑 aminoglycoside）。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
       sys:[O("IV 首選",["fep2q8","tzp"],{src:["IDSA_AMR24"]}),O("口服降階",["ciproPO750","levo750"],{src:["IDSA_AMR24"]}),O("保留",["mem"],{note:"上列抗藥時",src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"UTI 可單用；泌尿道外需合併。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
       resp:[O("IV 首選",["fep2q8","tzp"],{src:["ATS19"]}),O("替代",["mem","levo750"],{src:["ATS19"]})]
     },
     DTR:{
       cys:[O("首選",["ctz","cza"],{src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"膀胱炎給單次即可。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
-      sys:[O("首選",["ctz","cza"],{note:"會診感染科；肺炎 ceftolozane-tazobactam 3 g q8h",src:["IDSA_AMR24"]})]
+      sys:[O("首選",["ctz","cza"],{note:"會診感染科；肺炎優先 ceftolozane-tazobactam（3 g q8h）",upd:"DTR26",src:["IDSA_AMR24"]})]
     }
   },
   entc:{
@@ -760,7 +789,7 @@ const S = {
   allergy:"none", preg:false, tab:"emp",
   sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
   cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,org:"",ph:"",sus:{}},
-  drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false},
+  drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false}, cp:{mode:"calc",bili:null,alb:null,inr:null,asc:"1",enc:"1",cls:""},
   proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null}
 };
 let R = null;
@@ -920,14 +949,15 @@ function fxSet(){
 function genCys(c){
   const o=[], n=[];
   if(c.fx.has("esbl")||c.fx.has("cre")){
-    o.push(O("首選",["nitro","tmpsmx"],{note:"ESBL 風險：TMP-SMX 需確認感受",src:["IDSA_AMR24"]}));
-    o.push(O("替代",["fos","gentSingle","amcPO"],{note:"Fosfomycin 用於 ESBL 僅限 E. coli；amoxicillin-clavulanate 需感受",src:["IDSA_AMR24"]}));
+    o.push(O("首選",["nitro","tmpsmx","gentSingle"],{note:"ESBL 風險：TMP-SMX 需確認感受；aminoglycoside 單劑",upd:"ESBLC26",src:["IDSA_AMR24"]}));
+    o.push(O("替代",["fos"],{note:"Fosfomycin 用於 ESBL 僅限 E. coli",src:["IDSA_AMR24"]}));
   } else {
     o.push(O("首選",["nitro","fos"],{note:"Nitrofurantoin ×5 天；fosfomycin 3 g 單次",src:["IDSA_cys10"]}));
     o.push(O("首選（條件）",["tmpsmx"],{cond:"院內 E. coli TMP-SMX 抗藥率 <20% 或先前培養感受時；×3 天",src:["IDSA_cys10","TSAR"]}));
     o.push(O("替代",["lexPO","cxmPO","amcPO"],{note:"口服 β-lactam ×5–7 天，療效略遜",src:["IDSA_cys10"]}));
   }
   n.push(N("FQ 不作單純膀胱炎首選：保留給其他選擇不可行時（FDA 安全性警示、台灣 E. coli FQ 抗藥率高）。",["IDSA_cys10","TSAR"]));
+  if(!(c.fx.has("esbl")||c.fx.has("cre"))) n.push(N("指引差異：EAU 2026 首選 fosfomycin、pivmecillinam、nitrofurantoin（Strong），TMP-SMX 為替代，cephalosporin 限當地 E. coli 抗藥 <20%，不用 aminopenicillin 與 FQ（Strong）；IDSA 2011 在抗藥率 <20% 時以 TMP-SMX 為首選，amoxicillin-clavulanate 列 β-lactam 替代。Pivmecillinam 台灣上市狀況請確認。",["EAU_UI26","IDSA_cys10"],{upd:"EAU 2026 膀胱炎章節改版：首選 fosfomycin、pivmecillinam、nitrofurantoin；TMP-SMX 降為替代；不用 aminopenicillin 與 FQ。"}));
   if(c.male) n.push(N("男性：IDSA 2025 將侷限於膀胱、無發燒的男性 UTI 歸為單純性；療程 7 天與 14 天效果相當。若發燒、會陰痛或尿滯留，改選前列腺炎或複雜性 UTI。",["IDSA_cUTI25","DREKONJA21"],{upd:true}));
   n.push(N("Nitrofurantoin、fosfomycin 腎組織濃度不足，懷疑上泌尿道感染時不可使用。",["IDSA_cys10"]));
   return {o,n,dur:{t:c.male?"7 天":"Nitrofurantoin 5 天｜TMP-SMX 3 天｜Fosfomycin 單次｜口服 β-lactam 5–7 天",days:c.male?7:5,src:c.male?["DREKONJA21"]:["IDSA_cys10"]}};
@@ -946,7 +976,7 @@ function genUp(c){
   } else {
     if(c.fx.has("esbl")){
       o.push(O("首選",["etp"],{note:"ESBL 風險、非重症",src:["IDSA_AMR24"]}));
-      o.push(O("替代（台灣常用）",["flomoxef","cmz"],{note:"Carbapenem-sparing；觀察性與 PK/PD 資料，限非重症 UTI。IDSA AMR 2024 因證據不足不建議 cephamycin。",src:["HAMADA22","IDSA_AMR24"]}));
+      o.push(O("替代（台灣常用）",["flomoxef","cmz"],{note:"Carbapenem-sparing；觀察性與 PK/PD 資料，限非重症 UTI。IDSA AMR 2026 仍不建議 cephamycin（待 cefoxitin／cefotetan 臨床資料；cefmetazole 美國未上市）。",src:["HAMADA22","IDSA_AMR24"]}));
       o.push(O("替代",["gentQ24","amkQ24"],{note:"腎毒性，宜短期",src:["IDSA_cUTI25"]}));
     } else if(c.fx.has("psa")){
       o.push(O("首選",["fep2q8","tzp"],{note:"P. aeruginosa 風險（導管、器械、免疫抑制、過去 PsA）",src:["IDSA_cUTI25"]}));
@@ -956,10 +986,11 @@ function genUp(c){
     }
   }
   if(c.fx.has("ent")&&sev!=="shock") n.push(N("導管或器械相關：Enterococcus 機會增加，cephalosporin 與 ertapenem 無效。尿液 Gram stain 見 GPC 時改 piperacillin-tazobactam 或加 ampicillin。",["IDSA_CAUTI09"]));
-  n.push(N("發燒性 UTI 合併水腎或結石阻塞是泌尿科急症：需立即引流（DJ stent 或 PCN），抗生素無法單獨控制。",["EAU_UI25"],{lvl:"warn"}));
-  n.push(N("48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。",["EAU_UI25"]));
+  n.push(N("發燒性 UTI 合併水腎或結石阻塞是泌尿科急症：需立即引流（DJ stent 或 PCN），抗生素無法單獨控制。",["EAU_UI26"],{lvl:"warn"}));
+  n.push(N("48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。",["EAU_UI26"]));
   n.push(N("依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。",["IDSA_cUTI25"],{upd:true}));
-  n.push(N("Piperacillin-tazobactam 不作 ESBL pyelo／cUTI 首選；若已使用且臨床改善可續用，但微生物學失敗風險可能略高。",["IDSA_AMR24"],{upd:true}));
+  n.push(N("ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。",["IDSA_AMR24"],{upd:"PTZ26"}));
+  n.push(N("EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。",["EAU_UI26","NICOLAU95"]));
   if(S.sub==="cauti") n.push(N("CAUTI：導管留置 >2 週者，先更換導管再採檢與治療。念珠菌尿多為移生。",["IDSA_CAUTI09"]));
   if(S.sub==="uti_unk") n.push(N("部位未區分：依 cUTI（含 pyelonephritis）處理；確定為單純膀胱炎後可改窄效藥。",["IDSA_cUTI25"]));
   const dur = S.sub==="cauti"
@@ -969,30 +1000,30 @@ function genUp(c){
 }
 function genABP(c){
   const o=[], n=[];
-  if(c.fx.has("esbl")||c.sev==="shock") o.push(O("首選（IV）",["mem","etp"],{note:"ESBL 風險或 septic shock。切片後感染多為 FQ 抗藥、ESBL E. coli",src:["EAU_UI25","IDSA_AMR24"]}));
-  else if(c.fx.has("psa")) o.push(O("首選（IV）",["tzp","fep2q8"],{src:["EAU_UI25"]}));
-  else o.push(O("首選（IV）",["cro1","tzp"],{note:"需住院或有全身症狀時",src:["EAU_UI25"]}));
-  o.push(O("口服（降階或輕症）",["levo500","ciproPO"],{cond:"依感受性；FQ 前列腺組織濃度最佳",src:["EAU_UI25"]}));
-  o.push(O("口服替代",["tmpsmx"],{cond:"依感受性",src:["EAU_UI25"]}));
-  n.push(N("避免前列腺按摩。尿滯留時導尿或恥骨上膀胱造廔皆可。",["EAU_UI25"]));
-  n.push(N("48–72 小時無改善：經直腸超音波或 MRI 排除前列腺膿瘍（≥1 cm 考慮引流）。",["EAU_UI25"],{lvl:"warn"}));
-  return {o,n,dur:{t:"2–4 週",days:14,src:["EAU_UI25"]}};
+  if(c.fx.has("esbl")||c.sev==="shock") o.push(O("首選（IV）",["mem","etp"],{note:"ESBL 風險或 septic shock。切片後感染多為 FQ 抗藥、ESBL E. coli",src:["EAU_UI26","IDSA_AMR24"]}));
+  else if(c.fx.has("psa")) o.push(O("首選（IV）",["tzp","fep2q8"],{src:["EAU_UI26"]}));
+  else o.push(O("首選（IV）",["cro1","tzp"],{note:"需住院或有全身症狀時",src:["EAU_UI26"]}));
+  o.push(O("口服（降階或輕症）",["levo500","ciproPO"],{cond:"依感受性；FQ 前列腺組織濃度最佳",src:["EAU_UI26"]}));
+  o.push(O("口服替代",["tmpsmx"],{cond:"依感受性",src:["EAU_UI26"]}));
+  n.push(N("避免前列腺按摩。尿滯留時導尿或恥骨上膀胱造廔皆可。",["EAU_UI26"]));
+  n.push(N("48–72 小時無改善：經直腸超音波或 MRI 排除前列腺膿瘍（≥1 cm 考慮引流）。",["EAU_UI26"],{lvl:"warn"}));
+  return {o,n,dur:{t:"2–4 週",days:14,src:["EAU_UI26"]}};
 }
 function genCBP(c){
   const o=[], n=[];
-  o.push(O("首選",["levo500","ciproPO"],{note:"依感受性",src:["EAU_UI25"]}));
-  o.push(O("替代",["tmpsmx"],{note:"FQ 不可用時",src:["EAU_UI25"]}));
-  o.push(O("Chlamydia／非典型菌",["doxy"],{src:["EAU_UI25"]}));
-  n.push(N("β-lactam 前列腺滲透差，不建議用於慢性細菌性前列腺炎。治療前做 Meares-Stamey 2 或 4 杯試驗確認。",["EAU_UI25"]));
-  return {o,n,dur:{t:"FQ 4–6 週",days:28,src:["EAU_UI25"]}};
+  o.push(O("首選",["levo500","ciproPO"],{note:"依感受性",src:["EAU_UI26"]}));
+  o.push(O("替代",["tmpsmx"],{note:"FQ 不可用時",src:["EAU_UI26"]}));
+  o.push(O("Chlamydia／非典型菌",["doxy"],{src:["EAU_UI26"]}));
+  n.push(N("β-lactam 前列腺滲透差，不建議用於慢性細菌性前列腺炎。治療前做 Meares-Stamey 2 或 4 杯試驗確認。",["EAU_UI26"]));
+  return {o,n,dur:{t:"FQ 4–6 週",days:28,src:["EAU_UI26"]}};
 }
 function genEpi(c){
   const o=[], n=[];
   if(c.sev!=="none"){ const up=genUp(c); up.o.forEach(x=>o.push(x)); }
   o.push(O("STI 可能（性活躍、通常 <35 歲）",["croIM","doxy"],{alt:false,note:"Doxycycline ×10 天",src:["CDC_STI21"]}));
   o.push(O("STI ＋ 腸道菌（肛交插入方）",["croIM","levo500"],{alt:false,note:"Levofloxacin ×10 天",src:["CDC_STI21"]}));
-  o.push(O("腸道菌為主（年長、器械後、BOO）",["levo500"],{note:"×10 天。台灣 FQ 抗藥率高，依尿液培養，可改感受的 β-lactam",src:["CDC_STI21","EAU_UI25"]}));
-  n.push(N("先以 Doppler 超音波排除睪丸扭轉。",["EAU_UI25"],{lvl:"warn"}));
+  o.push(O("腸道菌為主（年長、器械後、BOO）",["levo500"],{note:"×10 天。台灣 FQ 抗藥率高，依尿液培養，可改感受的 β-lactam",src:["CDC_STI21","EAU_UI26"]}));
+  n.push(N("先以 Doppler 超音波排除睪丸扭轉。",["EAU_UI26"],{lvl:"warn"}));
   n.push(N("無改善或疑膿瘍：影像追蹤。STI 病因者，性伴侶需一併治療。",["CDC_STI21"]));
   return {o,n,dur:{t:"10 天",days:10,src:["CDC_STI21"]}};
 }
@@ -1000,7 +1031,7 @@ function genFG(c){
   const o=[], n=[];
   const bl = c.fx.has("esbl")||c.sev==="shock" ? ["mem"] : ["tzp","mem"];
   o.push(O("首選（合併）",bl,{add:[{regs:["vanco","teico","lzd"],alt:true},{regs:["clinda"],alt:false}],note:"廣效 G(−)／厭氧菌 ＋ MRSA ＋ clindamycin（抑制毒素）",src:["IDSA_SSTI14"]}));
-  n.push(N("緊急外科清創是治療關鍵，應於數小時內進行，並安排 24–48 小時後再次探查。",["IDSA_SSTI14","EAU_UI25"],{lvl:"danger"}));
+  n.push(N("緊急外科清創是治療關鍵，應於數小時內進行，並安排 24–48 小時後再次探查。",["IDSA_SSTI14","EAU_UI26"],{lvl:"danger"}));
   n.push(N("術中組織培養後降階；clindamycin 於臨床穩定、毒素症狀緩解後停用。",["IDSA_SSTI14"]));
   return {o,n,dur:{t:"持續至不需再清創、臨床改善且退燒 48–72 小時",days:null,src:["IDSA_SSTI14"]}};
 }
@@ -1050,7 +1081,7 @@ function genAllergy(sub,c){
   if(ALLERGY2[sy]) return ALLERGY2[sy]();
   const sc=siteClass(sub);
   if(sub==="cys") return O("過敏替代（非 β-lactam）",["nitro","fos","tmpsmx"],{src:["IDSA_cys10"]});
-  if(sub==="abp"||sub==="cbp") return O("過敏替代",["levo500","ciproPO","tmpsmx"],{src:["EAU_UI25"]});
+  if(sub==="abp"||sub==="cbp") return O("過敏替代",["levo500","ciproPO","tmpsmx"],{src:["EAU_UI26"]});
   if(sub==="epi") return O("過敏替代",["gentGC","levo500"],{note:"淋病：gentamicin 240 mg IM ＋ azithromycin 2 g PO；腸道菌：levofloxacin",src:["CDC_STI21"]});
   if(sub==="fg") return O("過敏替代（合併）",["azt","ciproIV"],{add:[{regs:["metro"]},{regs:["vanco","teico","lzd"],alt:true},{regs:["clinda"]}],src:["IDSA_SSTI14"]});
   if(sc==="resp") return O("過敏替代",["levo750","moxi"],{note:"PsA 風險另加 aztreonam；MRSA 風險加 vancomycin 或 linezolid",src:["ATS19"]});
@@ -1112,15 +1143,26 @@ function optCard(o){
   if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
   const cls=tierCls(o.tier);
   return `<div class="opt${cls==="primary"?" primary":""}">
-    <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?(typeof o.upd==="string"?updB(UPDN[o.upd]||o.upd):UPD):""}</div>
+    <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${updOf(o.upd)}</div>
     ${formula}${body}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
     ${o.note||(o.src&&o.src.length)?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}</div>`:""}
     ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
   </div>`;
 }
-const UPDN = {PSA_AG:"CLSI M100-Ed33（2023）：P. aeruginosa 的 gentamicin 判讀標準移除，amikacin 標準只適用尿液檢體。原本 gentamicin、amikacin 擇一 → 現在只列 amikacin（膀胱炎單次）。"};
-function noteBlock(n){ return `<div class="note ${n.lvl||""}">${n.upd?UPD+" ":""}${n.t}${srcTags(n.src)}</div>`; }
+const UPDN = {
+  ESBLC26:"IDSA AMR 2026：ESBL 膀胱炎單劑 aminoglycoside 由替代改為首選；amoxicillin-clavulanate 不再建議；新增 gepotidacin、pivmecillinam、sulopenem。",
+  PTZ26:"IDSA AMR 2026：piperacillin-tazobactam 由「不作 ESBL cUTI 首選」改為 cUTI 替代（非重症、無菌血症）；泌尿道外仍不建議。",
+  ESBLO26:"IDSA AMR 2026：泌尿道外 ESBL 感染，重症或低白蛋白血症以 meropenem 或 imipenem 起始，不用 ertapenem。",
+  CREC26:"IDSA AMR 2026：CRE 膀胱炎單劑 aminoglycoside 改列首選；fosfomycin（限 E. coli）、colistin 列替代。",
+  CRE26:"IDSA AMR 2026：NDM 新增 aztreonam-avibactam，略優先於 ceftazidime-avibactam＋aztreonam。",
+  AMPC26:"IDSA AMR 2026：AmpC 菌 cefepime 適用範圍由 MIC ≤2 放寬到 ≤8（S 或 SDD，未檢出 ESBL）；非重症已用 ceftriaxone 且改善、來源已控制者可完成療程；Hafnia alvei 列為中風險。",
+  DTR26:"IDSA AMR 2026：DTR P. aeruginosa 肺炎依比較性資料優先 ceftolozane-tazobactam。",
+  CRAB26:"IDSA AMR 2026：CRAB 侵襲性感染以 sulbactam-durlobactam＋carbapenem 為優先，其他方案改為取得前的過渡。",
+  SMALT26:"IDSA AMR 2026：S. maltophilia 侵襲性感染改以 cefiderocol 單用為首選（主要依動物資料），aztreonam-avibactam＋第二藥為替代。",
+  PSA_AG:"CLSI M100-Ed33（2023）：P. aeruginosa 的 gentamicin 判讀標準移除，amikacin 標準只適用尿液檢體。原本 gentamicin、amikacin 擇一 → 現在只列 amikacin（膀胱炎單次）。"};
+const updOf = u=>u?(typeof u==="string"?updB(UPDN[u]||u):UPD):"";
+function noteBlock(n){ return `<div class="note ${n.lvl||""}">${n.upd?updOf(n.upd)+" ":""}${n.t}${srcTags(n.src)}</div>`; }
 function renalBar(){
   if(!R) return `<div class="rtag"><button type="button" class="flag warn" data-act="pt-open">正常腎功能劑量・填腎功能 ›</button></div>`;
   const x=[];
@@ -1215,7 +1257,7 @@ function targetPanel(pid,ph,sc){
   if(PHL[g]) h+=`<div class="lbl">藥敏表現型</div><div class="chips" style="margin-bottom:10px">${phs.map(k=>`<button class="chip" type="button" data-act="ph" data-v="${k}" aria-pressed="${cur===k}">${PHL[g][k]}</button>`).join("")}</div>`;
   if(list.length) h+=`<div class="res">${list.map(optCard).join("")}</div>`;
   else h+=`<div class="note">${g==="cand"?"抗黴菌將在下一批加入。":g==="flu"?"抗病毒不在本 app 範圍；請依院內流感治療規範。":"此部位無對應標靶建議。"}</div>`;
-  if(g==="ent"&&cur==="ESBL") h+=`<div class="note mt">${UPD} Piperacillin-tazobactam：膀胱炎已用且改善可不換；pyelo／cUTI 非首選；泌尿道外感染即使感受也不建議。Cefepime 不建議。${srcTags(["IDSA_AMR24"])}</div>`;
+  if(g==="ent"&&cur==="ESBL") h+=`<div class="note mt">${UPD} Piperacillin-tazobactam：膀胱炎已用且改善可不換；cUTI 可作替代（非重症、無菌血症）；泌尿道外感染即使感受也不建議。Cefepime 不建議（膀胱炎已用且改善可不換）。${srcTags(["IDSA_AMR24"])}</div>`;
   return h+`</div>`;
 }
 
@@ -1309,7 +1351,7 @@ function curEval(tlist){
       const chk = siteClass(S.sub)==="resp"
         ? "重新評估診斷（肺栓塞、心衰竭、結核、黴菌）；找併發症（膿胸、肺膿瘍）；送痰與血液培養、肺炎鏈球菌與 Legionella 尿液抗原；確認劑量依腎功能是否偏低"
         : "影像排除阻塞或膿瘍（需引流）；更換導尿管後重新採檢；送尿液與血液培養；確認劑量依腎功能是否偏低；考慮非感染原因";
-      out.push(`<div class="opt"><div class="opt-head"><span class="tier esc">48–72 小時${C.resp==="worse"?"惡化":"無改善"}</span></div><div class="onote"><b>先找原因再升階：</b>${chk}。</div>${lines?`<div class="onote"><b>升階方向：</b><ul>${lines}</ul></div>`:""}${srcTags(["EAU_UI25","ATS19"])}</div>`);
+      out.push(`<div class="opt"><div class="opt-head"><span class="tier esc">48–72 小時${C.resp==="worse"?"惡化":"無改善"}</span></div><div class="onote"><b>先找原因再升階：</b>${chk}。</div>${lines?`<div class="onote"><b>升階方向：</b><ul>${lines}</ul></div>`:""}${srcTags(["EAU_UI26","ATS19"])}</div>`);
     } else if(C.drugs.length&&C.resp==="improve"){
       out.push(`<div class="note">${C.org==="neg"?"培養陰性但臨床改善：續用目前治療，依療程停藥；":"等待培養期間臨床改善："}${poReady?"已符合 IV 轉口服條件。"+(siteClass(S.sub)==="resp"?"CAP 可改 amoxicillin-clavulanate 或 cefuroxime ＋ doxycycline／azithromycin，或呼吸道 FQ（排除 TB 後）。":"UTI 無培養時，口服藥選擇需參考先前培養或院內 antibiogram。"):"尚未符合 IV 轉口服條件。"}</div>`);
     }
@@ -1466,10 +1508,13 @@ Object.assign(REF,{
   CPS_LABEL:{s:"Sulbactam/cefoperazone 仿單",f:"Sulbactam/cefoperazone（Pfizer）仿單：成人劑量、sulbactam 每日上限 4 g、腎功能調整。"},
   BPR_LABEL:{s:"Ceftobiprole 仿單",f:"Zevtera (ceftobiprole medocaril) SmPC, UK eMC."},
   IPM_LABEL:{s:"Imipenem 仿單",f:"Imipenem and Cilastatin for Injection, US prescribing information, Table 3（依 CrCl 劑量）。"},
+  SAB26:{s:"IDSA/ESCMID SAB 2026",f:"IDSA/ESCMID 2026 Guidance: Staphylococcus aureus Bacteremia — Risk Stratification, Diagnostic Evaluation, and Management of Adults and Children。依 Guideline Central 摘要核對：48 小時抽 ≥2 套追蹤血培養、之後每 24–48 小時至轉陰；所有成人 TTE；有增加風險特徵者 TEE；增加風險且病灶不明做全身影像；評估後無深部病灶 14 天。口服降階、用藥選擇部分未核對。"},
   IDSA_MRSA11:{s:"IDSA MRSA 2011",f:"Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55."},
   IDSA_CAND16:{s:"IDSA Candida 2016",f:"Pappas PG, et al. Clinical Practice Guideline for the Management of Candidiasis: 2016 Update by IDSA. Clin Infect Dis 2016;62:e1-50."},
   IDSA_ASP16:{s:"IDSA Aspergillus 2016",f:"Patterson TF, et al. Practice Guidelines for the Diagnosis and Management of Aspergillosis: 2016 Update by IDSA. Clin Infect Dis 2016;63:e1-60."},
+  CRYPTO24:{s:"ECMM/ISHAM 隱球菌 2024",f:"Chang CC, et al. Global guideline for the diagnosis and management of cryptococcosis: an initiative of ECMM and ISHAM in cooperation with ASM. Lancet Infect Dis 2024（2024-02）。高所得地區腦膜炎誘導：liposomal AmB 3–4 mg/kg/day ＋ flucytosine 25 mg/kg q6h。"},
   IDSA_CRYPTO10:{s:"IDSA Cryptococcus 2010",f:"Perfect JR, et al. Clinical Practice Guidelines for the Management of Cryptococcal Disease: 2010 Update by IDSA. Clin Infect Dis 2010;50:291-322."},
+  HISTO25:{s:"IDSA Histoplasma 2025",f:"IDSA 2025 Clinical Practice Guideline Update on Histoplasmosis（Part 1：histoplasmoma、輕中度急性肺部感染）。Clin Infect Dis 2025。免疫正常的輕度急性肺部感染不常規治療；中度可治療或觀察；需治療時 itraconazole 首選並監測濃度。重症劑量仍依 2007 版。"},
   IDSA_HISTO07:{s:"IDSA Histoplasma 2007",f:"Wheat LJ, et al. Clinical Practice Guidelines for the Management of Patients with Histoplasmosis: 2007 Update by IDSA. Clin Infect Dis 2007;45:807-25."},
   MUCOR19:{s:"ECMM Mucor 2019",f:"Cornely OA, et al. Global guideline for the diagnosis and management of mucormycosis. Lancet Infect Dis 2019;19:e405-21."}
 });
@@ -1624,13 +1669,13 @@ const FROWS = [
   ["C. parapsilosis","32222223","Echinocandin MIC 較高，感受時以 fluconazole 為首選；與導管、TPN 相關。",["IDSA_CAND16"]],
   ["C. krusei","33332200","Fluconazole 天生抗藥；echinocandin 首選，降階用 voriconazole。",["IDSA_CAND16"]],
   ["C. glabrata","33331111","Echinocandin 首選；fluconazole 需高劑量（800 mg）且確認感受。",["IDSA_CAND16"]],
-  ["Cryptococcus neoformans","31112223","腦膜炎：liposomal AmB ＋ flucytosine 誘導，之後 fluconazole 鞏固與維持；echinocandin 無效。",["IDSA_CRYPTO10"]],
+  ["Cryptococcus neoformans","31112223","腦膜炎：liposomal AmB 3–4 mg/kg/day ＋ flucytosine 25 mg/kg q6h 誘導，之後 fluconazole 鞏固與維持；echinocandin 無效。",["CRYPTO24","IDSA_CRYPTO10"]],
   ["Aspergillus fumigatus","21112310","侵襲性麴菌症：voriconazole 首選（isavuconazole 為替代），liposomal AmB 替代。",["IDSA_ASP16"]],
   ["Aspergillus terreus","01112310","Amphotericin B 天生抗藥，用 voriconazole。",["IDSA_ASP16"]],
   ["Aspergillus flavus","21112310","Voriconazole 首選。",["IDSA_ASP16"]],
   ["Mucormycosis","30002000","Liposomal AmB 5–10 mg/kg ＋ 緊急清創；posaconazole 或 isavuconazole 降階；voriconazole 無效。",["MUCOR19"]],
   ["Fusarium","10001110","Voriconazole 或 liposomal AmB（常合併）；多重抗藥，會診感染科。",["MANDELL"]],
-  ["Histoplasma","30002231","重症 liposomal AmB 誘導後改 itraconazole；輕中度 itraconazole。",["IDSA_HISTO07"]],
+  ["Histoplasma","30002231","重症 liposomal AmB 誘導後改 itraconazole。免疫正常的輕度急性肺部感染不常規治療，中度可治療或觀察；需治療時 itraconazole 首選並監測濃度（IDSA 2025）。",["HISTO25","IDSA_HISTO07"]],
   ["Blastomyces","30002231","重症 liposomal AmB 誘導後改 itraconazole；輕中度 itraconazole。",["MANDELL"]],
   ["Coccidioides","30002233","Fluconazole 或 itraconazole；重症 liposomal AmB。",["MANDELL"]]
 ];
@@ -1771,10 +1816,13 @@ function renderSpec(){
 
 /* ================= 第二批：其餘系統 ================= */
 Object.assign(REF,{
+  SSC26:{s:"SSC 2026",f:"Prescott HC, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2026. Crit Care Med 2026（2026-03-23；doi 10.1097/CCM.0000000000007089）。依 Executive Summary 摘要核對：休克 1 小時內給藥；可能 sepsis 無休克在 3 小時內（與 2021 相同）；負荷劑量後延長輸注 β-lactam 升為 Strong；有微生物結果後降階升為 Strong；無危險因子不常規涵蓋厭氧菌；不建議常規經驗性抗黴菌。"},
   SSC21:{s:"SSC 2021",f:"Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49:e1063-143."},
   IDSA_CRBSI09:{s:"IDSA CRBSI 2009",f:"Mermel LA, et al. Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by IDSA. Clin Infect Dis 2009;49:1-45."},
   BALANCE:{s:"BALANCE 2024",f:"BALANCE Investigators. Antibiotic Treatment for 7 versus 14 Days in Patients with Bloodstream Infections. N Engl J Med 2024 (doi:10.1056/NEJMoa2404991)."},
   SABATO:{s:"SABATO 2024",f:"Kaasch AJ, et al. Efficacy and safety of an early oral switch in low-risk Staphylococcus aureus bloodstream infection (SABATO). Lancet Infect Dis 2024 (PMID 38244557)."},
+  IDSA_IAI24:{s:"IDSA cIAI 2024（Part 1）",f:"IDSA 2024 Clinical Practice Guideline Update on Complicated Intra-abdominal Infections: Part 1（風險評估、影像、微生物檢查）。Clin Infect Dis 2024;79(Suppl 3)。抗生素選擇部分尚未發布。"},
+  SIS24:{s:"SIS 2024",f:"The Surgical Infection Society Guidelines on the Management of Intra-Abdominal Infection: 2024 Update. Surg Infect 2024（doi 10.1089/sur.2024.137）。全文未能取得，抗生素建議內容請確認。"},
   IDSA_IAI10:{s:"SIS/IDSA cIAI 2010",f:"Solomkin JS, et al. Diagnosis and Management of Complicated Intra-abdominal Infection in Adults and Children: Guidelines by SIS and IDSA. Clin Infect Dis 2010;50:133-64."},
   STOPIT:{s:"STOP-IT 2015",f:"Sawyer RG, et al. Trial of Short-Course Antimicrobial Therapy for Intraabdominal Infection. N Engl J Med 2015;372:1996-2005."},
   TG18:{s:"Tokyo Guidelines 2018",f:"Gomi H, et al. Tokyo Guidelines 2018: antimicrobial therapy for acute cholangitis and cholecystitis. J Hepatobiliary Pancreat Sci 2018;25:3-16."},
@@ -1801,6 +1849,7 @@ Object.assign(REF,{
   ASCO18:{s:"ASCO/IDSA 2018",f:"Taplitz RA, et al. Outpatient Management of Fever and Neutropenia in Adults Treated for Malignancy: ASCO and IDSA Clinical Practice Guideline Update. J Clin Oncol 2018;36:1443-53."},
   ECIL4:{s:"ECIL-4",f:"Averbuch D, et al. European guidelines for empirical antibacterial therapy for febrile neutropenic patients in the era of growing resistance (ECIL-4). Haematologica 2013;98:1826-35."},
   HOWLONG:{s:"How Long 2017",f:"Aguilar-Guisado M, et al. Optimisation of empirical antimicrobial therapy in patients with haematological malignancies and febrile neutropenia (How Long study). Lancet Haematol 2017;4:e573-83."},
+  AGA_CDI26:{s:"AGA CDI 2026",f:"American Gastroenterological Association. Management of Clostridioides difficile Infection in Adults（2026-06-30）。依 Guideline Central 摘要核對：首次非猛爆型 fidaxomicin 優先、vancomycin 可接受；metronidazole 不用於非猛爆型；第一次復發 vancomycin 遞減或 fidaxomicin；第二次復發後糞便微菌叢治療。"},
   IDSA_CDI21:{s:"IDSA/SHEA CDI 2021",f:"Johnson S, et al. Clinical Practice Guideline by IDSA and SHEA: 2021 Focused Update Guidelines on Management of Clostridioides difficile Infection in Adults. Clin Infect Dis 2021;73:e1029-44."},
   BEZLO:{s:"Bezlotoxumab 下市",f:"Merck 於 2025 年初將 bezlotoxumab（ZINPLAVA）自全球市場撤出。"},
   IDSA_HAP16:{s:"IDSA/ATS HAP/VAP 2016",f:"Kalil AC, et al. Management of Adults With Hospital-acquired and Ventilator-associated Pneumonia: 2016 Clinical Practice Guidelines by IDSA and ATS. Clin Infect Dis 2016;63:e61-111."},
@@ -1882,9 +1931,9 @@ Object.assign(TGT,{
   hacek:{any:{ie:[O("首選",["cro2"],{note:"原生瓣膜 4 週、人工瓣膜 6 週",src:["ESC_IE23"]}),O("替代",["ciproIV"],{src:["ESC_IE23"]})],sys:[O("首選",["cro2"],{src:["ESC_IE23"]})]}},
   ab:{
     S:{sys:[O("首選",["mem","ipm"],{src:["IDSA_AMR24"]}),O("替代",["samIV","cps"],{note:"Sulbactam 感受時",src:["IDSA_AMR24"]})]},
-    CR:{sys:[O("首選（合併）",["samHD"],{add:[{regs:["col","tgc","mino"],alt:true}],note:"高劑量 sulbactam ＋ 第二個有效藥；會診感染科。Sulbactam-durlobactam 台灣尚未普及",src:["IDSA_AMR24","POLY19"]}),O("替代",["cps"],{note:"台灣常用 cefoperazone-sulbactam 提供 sulbactam，但劑量常不足以達高劑量方案",src:["CPS_LABEL"]})]}
+    CR:{sys:[O("首選（合併）",["samHD"],{add:[{regs:["col","tgc","mino"],alt:true}],note:"高劑量 sulbactam ＋ 第二個有效藥；會診感染科。IDSA 2026：侵襲性感染以 sulbactam-durlobactam ＋ carbapenem 為優先，其他方案只作取得前的過渡（台灣上市狀況請確認）",upd:"CRAB26",src:["IDSA_AMR24","IDSA_AMR24V","POLY19"]}),O("替代",["cps"],{note:"台灣常用 cefoperazone-sulbactam 提供 sulbactam，但劑量常不足以達高劑量方案",src:["CPS_LABEL"]})]}
   },
-  smalt:{any:{sys:[O("首選（中重度合併其一）",["tmpHD"],{add:[{regs:["mino","levo750","tgc"],alt:true}],note:"IDSA AMR 2024 建議中重度感染兩藥合併，臨床改善後可單用",src:["IDSA_AMR24"]})]}},
+  smalt:{any:{sys:[O("TMP-SMX 合併（IDSA 2024 首選）",["tmpHD"],{add:[{regs:["mino","levo750","tgc"],alt:true}],note:"IDSA 2024：中重度感染兩藥合併，臨床改善後可單用。IDSA 2026 改以 cefiderocol 單用為侵襲性感染首選（主要依動物資料）、aztreonam-avibactam＋第二藥為替代；TMP-SMX 在 2026 版的定位全文未能核對，請確認。app 未收錄 cefiderocol 劑量",upd:"SMALT26",src:["IDSA_AMR24V","IDSA_AMR24"]})]}},
   cdi:{any:{sys:[O("首選",["fidax","vpo125"],{src:["IDSA_CDI21"]})]}},
   vib:{any:{sys:[O("首選（合併）",["caz","doxy"],{alt:false,note:"立即給藥、不等培養；積極清創或截肢",src:["CDC_VIB"]}),O("替代（合併）",["cro2","ciproIV"],{alt:false,src:["CDC_VIB"]})]}},
   aero:{any:{sys:[O("首選",["fep2q8","ciproIV","tmpsmx"],{note:"依藥敏；避免 carbapenem 單用",src:["MANDELL"]})]}},
@@ -1951,14 +2000,14 @@ function genBSI(c){
     o.push(O("經驗性（藥敏前）",["vanco"],{note:"確認 MSSA 後立即改 cefazolin 或 oxacillin",src:["IDSA_MRSA11"]}));
     o.push(O("MSSA",["czTx","oxa"],{src:["IDSA_MRSA11"]}));
     o.push(O("MRSA",["vanco","dap6"],{note:"持續菌血症可用 daptomycin 8–10 mg/kg",src:["IDSA_MRSA11"]}));
-    n.push(N("會診感染科（可降低死亡率）；每 24–48 小時追蹤血培養至轉陰；心臟超音波（TTE，高風險做 TEE）；移除導管或引流病灶。",["IDSA_MRSA11"],{lvl:"warn"}));
+    n.push(N("會診感染科（可降低死亡率）；48 小時抽 ≥2 套追蹤血培養，之後每 24–48 小時至轉陰；所有成人做 TTE；有心內裝置、易感瓣膜（含曾患心內膜炎）、48 小時後血培養仍陽性、栓塞或多處非相鄰病灶時做 TEE（社區型、注射藥物者考慮）；增加風險且找不到病灶時做全身影像（如 FDG-PET/CT）；移除導管或引流病灶。",["SAB26","IDSA_MRSA11"],{lvl:"warn",upd:"IDSA/ESCMID 2026 SAB 共識：所有成人 TTE、明列 TEE 適應症、增加風險且無病灶時做全身影像、評估後無深部病灶 14 天。"}));
     n.push(N("低風險 SAB（無併發症、無不可移除異物、無嚴重共病）：IV 5–7 天後改口服與繼續 IV 效果相當。",["SABATO"],{upd:true}));
-    return {o,n,dur:{t:"單純型：自首次血培養轉陰起 ≥14 天；複雜型（持續菌血症、心內膜炎、轉移性感染）：4–6 週",days:14,src:["IDSA_MRSA11"]}};
+    return {o,n,dur:{t:"評估後無深部或轉移性病灶：14 天（IDSA/ESCMID 2026）；複雜型（持續菌血症、心內膜炎、轉移性感染）：4–6 週（IDSA 2011）",days:14,src:["SAB26","IDSA_MRSA11"],upd:true}};
   }
   const needV = c.fx.has("mrsa")||c.fx.has("hcx")||c.sev==="shock";
   if(c.fx.has("cre")){
     o.push(O("首選（CRE 史）",["cza"],{add:(needV||s==="crbsi")?[PLUSV]:[],note:"會診感染科；依過去菌株型別與藥敏",src:["IDSA_AMR24"]}));
-    n.push(N("Septic shock：1 小時內給抗生素；給藥前抽 2 套血培養。",["SSC21"],{lvl:"warn"}));
+    n.push(N("Septic shock：1 小時內給抗生素；給藥前抽 2 套血培養。",["SSC26"],{lvl:"warn"}));
     return {o,n,dur:{t:"依菌種與來源",days:7,src:["BALANCE"]}};
   }
   let bl;
@@ -1980,7 +2029,8 @@ function genBSI(c){
   }
   o.push(O("首選",bl,{add:needV?[PLUSV]:[],note:bl[0]==="cro2"?"社區、無抗藥風險":c.sev==="shock"&&!c.fx.has("esbl")&&!c.fx.has("hcx")?"Septic shock：台灣 ESBL 比例高，經驗性以 carbapenem 為宜；院內 antibiogram 支持時可用 cefepime 或 piperacillin-tazobactam":"醫療照護暴露、PsA 或 ESBL 風險",src:["SSC21","TSAR"]}));
   if(!needV) n.push(N("MRSA 風險（MRSA 帶菌、導管、皮膚感染、近期住院）時加 vancomycin。",["SSC21"]));
-  n.push(N("Septic shock：1 小時內給抗生素；疑似 sepsis 無休克：3 小時內完成評估後給藥。給藥前抽 2 套血培養。",["SSC21"],{lvl:"warn"}));
+  n.push(N("Septic shock：1 小時內給抗生素；疑似 sepsis 無休克：3 小時內完成評估後給藥。給藥前抽 2 套血培養。",["SSC26"],{lvl:"warn"}));
+  n.push(N("β-lactam 給負荷劑量後以延長輸注維持；有培養與藥敏後降階。無腹腔、婦產、壞死性軟組織、頭頸、CNS 膿瘍等危險因子時不常規涵蓋厭氧菌；不常規經驗性抗黴菌。",["SSC26"],{upd:"SSC 2026：延長輸注與降階由 conditional 升為 Strong；新增不常規涵蓋厭氧菌、不常規經驗性抗黴菌。"}));
   n.push(N("台灣特殊病原：海水／海鮮接觸＋肝硬化 → Vibrio vulnificus（ceftazidime＋doxycycline）；南部颱風後、糖尿病 → 類鼻疽（ceftazidime 或 meropenem）；野外、焦痂 → 恙蟲病（doxycycline）。",["CDC_VIB","MELIO"]));
   return {o,n,dur:{t:"依來源；G(−) 菌血症改善中 7 天",days:7,src:["BALANCE"],upd:true}};
 }
@@ -2024,6 +2074,7 @@ function genIAI(c){
     n.push(N("醫療照護相關、上消化道穿孔反覆手術、免疫低下：考慮 Candida 涵蓋（echinocandin）。",["IDSA_IAI10","IDSA_CAND16"]));
   }
   n.push(N("來源控制（引流、清創、手術）是核心；術中培養在醫療照護相關感染尤其重要。",["IDSA_IAI10"],{lvl:"warn"}));
+  n.push(N("出處狀態：IDSA 2024 cIAI 指引 Part 1 只更新風險評估、影像與微生物檢查，抗生素選擇部分尚未發布，本頁經驗性方案仍依 2010 版；SIS 2024 更新含抗生素選擇與療程，但全文未能核對，請確認。",["IDSA_IAI24","SIS24","IDSA_IAI10"]));
   return {o,n,dur:{t:"來源控制完成後 4 天（固定療程與依生理指標停藥相同）",days:4,src:["STOPIT"]}};
 }
 function genSSTI(c){
@@ -2159,20 +2210,20 @@ function genFN(c){
 function genCDI(c){
   const o=[],n=[]; const s=S.sub;
   if(s==="cdi_init"){
-    o.push(O("首選",["fidax"],{src:["IDSA_CDI21"],upd:true}));
-    o.push(O("替代",["vpo125"],{src:["IDSA_CDI21"]}));
-    o.push(O("僅在無上述藥時（非重症）",["metroCDI"],{src:["IDSA_CDI21"]}));
+    o.push(O("首選",["fidax"],{src:["IDSA_CDI21","AGA_CDI26"],upd:true}));
+    o.push(O("替代",["vpo125"],{src:["IDSA_CDI21","AGA_CDI26"]}));
+    o.push(O("僅在無上述藥時（非重症）",["metroCDI"],{note:"指引不一致：IDSA/SHEA 2021 允許；AGA 2026 不用於非猛爆型",src:["IDSA_CDI21","AGA_CDI26"]}));
     n.push(N("重症定義：WBC ≥15,000 或 Cr >1.5 mg/dL；治療藥物相同。",["IDSA_CDI21"]));
   } else if(s==="cdi_fulm"){
     o.push(O("首選（合併）",["vpo500","metro"],{alt:false,note:"Metronidazole 用 IV；腸阻塞加 vancomycin 灌腸",src:["IDSA_CDI21"]}));
     n.push(N("猛爆型（低血壓、休克、腸阻塞、巨結腸）：會診外科評估結腸切除或迴腸造口灌洗。",["IDSA_CDI21"],{lvl:"danger"}));
   } else if(s==="cdi_rec1"){
     o.push(O("首選",["fidax","fidaxEP"],{src:["IDSA_CDI21"]}));
-    o.push(O("替代",["vpoTaper","vpo125"],{note:"前次用 metronidazole 者可用標準 vancomycin",src:["IDSA_CDI21"]}));
+    o.push(O("替代",["vpoTaper","vpo125"],{note:"前次用 metronidazole 者可用標準 vancomycin。AGA 2026：vancomycin 遞減或 fidaxomicin 皆可，並評估微菌叢治療",src:["IDSA_CDI21","AGA_CDI26"]}));
     n.push(N("Bezlotoxumab 已於 2025 年初全球下市，不再列為輔助選項。",["BEZLO"],{upd:true,lvl:"warn"}));
   } else {
     o.push(O("首選",["fidax","fidaxEP","vpoTaper"],{src:["IDSA_CDI21"]}));
-    n.push(N("第二次以上復發：考慮糞便微菌叢移植（FMT）；vancomycin 後接 rifaximin 為另一選項。",["IDSA_CDI21"]));
+    n.push(N("第二次以上復發：考慮糞便微菌叢移植（FMT）；vancomycin 後接 rifaximin 為另一選項。AGA 2026：第二次復發後建議糞便微菌叢治療；不適合者可長期低劑量 vancomycin 抑制。",["IDSA_CDI21","AGA_CDI26"]));
     n.push(N("Bezlotoxumab 已於 2025 年初全球下市。",["BEZLO"],{upd:true}));
   }
   n.push(N("停用誘發的抗生素，檢討 PPI；接觸隔離，以肥皂洗手；不做治癒檢測。",["IDSA_CDI21"]));
@@ -2200,6 +2251,7 @@ function genCand(c){
     o.push(O("腎盂腎炎",["flu400"],{src:["IDSA_CAND16"]}));
     o.push(O("Fluconazole 抗藥（C. glabrata、C. krusei）",["ambLow"],{src:["IDSA_CAND16"]}));
     n.push(N("無症狀念珠菌尿不治療（移除導管）；例外：嗜中性球低下、即將泌尿道手術（術前後 fluconazole 400 mg 數天）。Echinocandin 尿中濃度低。",["IDSA_CAND16"],{lvl:"warn"}));
+    n.push(N("EAU 2026 新增真菌 UTI 章節：做菌種與藥敏（Strong）；更換導管或支架（Weak）；局部感染 fluconazole 200 mg/day ×2 週（Strong），無風險因子的膀胱炎可縮短（Weak）；C. glabrata 感受時 800 mg/day；fluconazole 抗藥用 amphotericin B（膀胱灌注或 IV）、flucytosine 或 caspofungin。",["EAU_UI26"],{upd:"EAU 2026 新增真菌 UTI 章節（3.17）。"}));
     return {o,n,dur:{t:"14 天",days:14,src:["IDSA_CAND16"]}};
   }
   o.push(O("首選",ECH,{src:["IDSA_CAND16","ECMM_CAND25"]}));
@@ -2358,7 +2410,7 @@ const CAP_EMP = ()=>[
 ];
 const ORAL_EMP = {
   pyelo:UTI_EMP, cuti:UTI_EMP, cauti:UTI_EMP, uti_unk:UTI_EMP,
-  abp:()=>[O("經驗性口服",["levo500","ciproPO","tmpsmx"],{note:"FQ、TMP-SMX 前列腺滲透佳；β-lactam 滲透差。台灣 FQ 抗藥率高，優先依培養",src:["EAU_UI25"]})],
+  abp:()=>[O("經驗性口服",["levo500","ciproPO","tmpsmx"],{note:"FQ、TMP-SMX 前列腺滲透佳；β-lactam 滲透差。台灣 FQ 抗藥率高，優先依培養",src:["EAU_UI26"]})],
   cap_in:CAP_EMP, cap_sev:CAP_EMP, cap_unk:CAP_EMP,
   cap_asp:()=>[O("首選",["amcPO"],{src:["ATS19"]}),O("替代",["moxi"],{note:"使用 FQ 前先排除結核",src:["ATS19"]})],
   ciai_mild:IAI_EMP, ciai_sev:IAI_EMP, iai_unk:IAI_EMP, biliary:IAI_EMP,
@@ -2409,7 +2461,7 @@ const ORALMAP = {
   ct:{any:[OM("首選",["doxy"],{src:["CDC_STI21"]}),OM("替代",["azi1g"],{src:["CDC_STI21"]})]},
   hacek:{any:[OM("依藥敏",["ciproPO","amcPO"],{src:["ESC_IE23"]})]},
   ab:{S:[OM("依藥敏（會診感染科）",["tmpsmx","ciproPO","levo750","mino"],{src:["IDSA_AMR24"]})],CR:[OM("依藥敏（會診感染科）",["mino","tmpsmx"],{src:["IDSA_AMR24"]})]},
-  smalt:{any:[OM("首選",["tmpDS2"],{src:["IDSA_AMR24"]}),OM("替代",["mino","levo750"],{src:["IDSA_AMR24"]})]},
+  smalt:{any:[OM("首選",["tmpDS2"],{src:["IDSA_AMR24V"]}),OM("替代",["mino","levo750"],{src:["IDSA_AMR24V"]})]},
   vib:{any:[OM("首選（合併）",["doxy","ciproPO"],{alt:false,src:["CDC_VIB"]})]},
   aero:{any:[OM("首選（依藥敏）",["ciproPO","tmpsmx"],{src:["MANDELL"]})]},
   past:{any:[OM("首選",["amcPO"],{src:["IDSA_SSTI14"]}),OM("Penicillin 過敏",["doxy"],{src:["IDSA_SSTI14"]})]},
@@ -2533,8 +2585,11 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
+    <div class="note">2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。</div>
     <div class="note">2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。</div>
     <div class="note">畫底線的縮寫可點開看全稱；每張卡片只標第一次出現的位置。</div>
+    <div class="note">肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。</div>
+    <div class="note">「清除全部」清空病人卡、PEN-FAST、肝功能、TDM 濃度與用藥調整的輸入，不改目前分頁與經驗性治療情境。</div>
     <div class="note">收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。</div>
     <div class="note">示範：<button class="linkbtn" type="button" data-act="demo">填入範例病人數值</button>（72 歲男性、60 kg、165 cm、SCr 1.6）</div>
   </div></div>`;
@@ -2781,11 +2836,12 @@ function renderDrug(){
   const ix=INTER.filter(x=>x.d.includes(k));
   h+=`<div class="step"><h3><span class="k">03</span>其他</h3><div class="notes">`;
   h+=`<div class="note"><b>懷孕：</b>${d.preg||"app 未標示特別禁忌；請依仿單"}</div>`;
+  h+=hepHTML(k);
   if(ix.length) h+=`<div class="note"><b>交互作用（${ix.length}）</b><ul class="ixl">${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></div>`;
   const sp=spectrumOf(k);
   if(sp.length) h+=`<div class="note"><b>主要涵蓋（抗菌譜 ++／+）</b><div class="chips mt">${sp.map(([n,v])=>`<span class="chip static">${n}<span class="n" style="margin:0 0 0 6px">${SYM[v]}</span></span>`).join("")}</div></div>`;
   const use=[...((drugUse()[k])||[])];
-  if(use.length) h+=`<div class="note"><b>app 內出現的經驗性情境（${use.length}）</b><div class="chips mt">${use.map(id=>`<button class="chip" type="button" data-act="go-sub" data-v="${id}">${/^不確定/.test(SUBDEF[id].n)?SYS[subSys(id)].n+"・":""}${SUBDEF[id].n}</button>`).join("")}</div></div>`;
+  if(use.length) h+=`<div class="note"><b>app 內出現的經驗性情境（${use.length}）</b><div class="chips mt">${use.map(id=>`<button class="chip" type="button" data-act="go-sub" data-v="${id}">${SUBDEF[id].n.includes(SYS[subSys(id)].n)?"":SYS[subSys(id)].n+"・"}${SUBDEF[id].n}</button>`).join("")}</div></div>`;
   h+=`</div></div>`;
   return h;
 }
@@ -2947,6 +3003,41 @@ function pfHTML(){
 }
 function renderPf(){ const el=$("pfRes"); if(el){ el.innerHTML=pfHTML(); markGloss(el); } }
 
+/* ================= v0.13 肝功能：Child-Pugh 與藥物頁劑量表 ================= */
+// Pugh 1973：bilirubin（mg/dL）、albumin（g/dL）、INR、腹水、肝腦病變各 1–3 分；5–6 A、7–9 B、10–15 C
+function cpScore(cp){
+  if(cp.mode==="direct") return cp.cls?{cls:cp.cls,direct:true}:null;
+  const {bili,alb,inr,asc,enc}=cp;
+  if(bili==null||alb==null||inr==null) return null;
+  const p=(bili<2?1:bili<=3?2:3)+(alb>3.5?1:alb>=2.8?2:3)+(inr<1.7?1:inr<=2.3?2:3)+(+asc||1)+(+enc||1);
+  return {score:p,cls:p<=6?"A":p<=9?"B":"C"};
+}
+// 只收仿單有明確說明的藥；其他藥顯示「app 未收錄」
+const HEP = {
+  tige:{A:"標準劑量",B:"標準劑量",C:"首劑 100 mg，之後 25 mg IV q12h；謹慎使用並監測療效",src:["TIGE_LABEL"]},
+  caspo:{A:"標準劑量",B:"首劑 70 mg，之後 35 mg IV q24h",C:"無臨床經驗，仿單無劑量建議；暴露量預期高於中度，審慎使用",src:["CASPO_SPC"]},
+  vori:{A:"負荷劑量不變，維持劑量減半",B:"負荷劑量不變，維持劑量減半",C:"未研究；效益大於風險才用，監測毒性（建議 TDM）",src:["VORI_SPC"]},
+  metro:{A:"不需調整，監測不良反應",B:"不需調整，監測不良反應",C:"劑量減 50%",src:["METRO_LABEL"]},
+  ceftriaxone:{A:"不需調整",B:"不需調整",C:"不需調整",x:"合併明顯腎功能不全時，每日 ≤2 g 並密切監測",src:["CRO_LABEL"]},
+  isavu:{A:"不需調整",B:"不需調整",C:"未研究；效益大於風險才用，監測毒性",src:["ISAVU_SPC"]},
+  posa:{A:"不需調整（錠劑）",B:"不需調整（錠劑）",C:"不需調整（錠劑；未專門研究）",x:"口服懸液劑仿單無肝功能劑量建議",src:["POSA_LABEL"]},
+  mica:{A:"仿單未特別說明",B:"不需調整",C:"不需調整",src:["MICA_LABEL"]}
+};
+function hepHTML(k){
+  const h=HEP[k], cp=cpScore(S.cp);
+  if(!h) return `<div class="note"><b>肝功能：</b>app 未收錄這個藥的肝功能劑量資料，請依仿單。</div>`;
+  const rows=["A","B","C"].map(c=>`<tr${cp&&cp.cls===c?' class="cur"':""}><td>Child-Pugh ${c}</td><td>${h[c]}</td></tr>`).join("");
+  const now=cp?`<div class="rtag"><span class="flag ${/^(不需調整|標準劑量)/.test(h[cp.cls])?"ok":"warn"}">目前 Child-Pugh ${cp.cls}：${h[cp.cls]}</span></div>`:`<div class="hint">在病人卡輸入 Child-Pugh 後，會反白目前分級。</div>`;
+  return `<div class="note"><b>肝功能（Child-Pugh）</b>${now}<div class="tbl-wrap mt"><table><thead><tr><th>分級</th><th>劑量</th></tr></thead><tbody>${rows}</tbody></table></div>${h.x?`<div class="hint">${h.x}</div>`:""}${srcTags(h.src)}</div>`;
+}
+function renderCp(){
+  const el=$("cpRes"); if(!el) return;
+  const cp=cpScore(S.cp);
+  $("cpCalc").hidden=S.cp.mode==="direct"; $("cpDirect").hidden=S.cp.mode!=="direct";
+  el.className="rsum"+(cp?"":" empty");
+  el.innerHTML=cp?`<div class="big">Child-Pugh ${cp.cls}${cp.score?` <span class="small">${cp.score} 分</span>`:""}</div><div class="small">${cp.cls==="A"?"5–6 分":cp.cls==="B"?"7–9 分":"10–15 分"}；藥物頁顯示肝功能劑量</div>${srcTags(["PUGH73"])}`:`<div class="small">輸入 bilirubin、albumin、INR 後自動計算（未填時不評估肝功能）</div>`;
+}
+
 const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["oral","口服降階"],["drug","藥物"],["tdm","TDM"],["px","泌尿手術預防"],["ix","交互作用"],["ref","出處"]];
 const TAB_S={cur:"用藥調整"};
 const TAB_MS={px:"手術預防",ix:"交互作用"};   // 「更多」按鈕顯示目前分頁時用短名   // 窄螢幕（≤420px）短名稱
@@ -2973,6 +3064,7 @@ function ptSummary(){
   const b=[a.join("・")];
   if(S.allergy!=="none") b.push(ALG_S[S.allergy]);
   if(S.preg) b.push("懷孕");
+  const cp=cpScore(S.cp); if(cp) b.push(`Child-Pugh ${cp.cls}`);
   return {txt:b.join("｜"),empty:!r};
 }
 function renderPt(){
@@ -2981,7 +3073,7 @@ function renderPt(){
   bar.setAttribute("aria-expanded",String(open));
   document.querySelector('[data-act="pt-close"]').hidden=!narrow();
   if(!open){ const s=ptSummary(); bar.className="ptbar"+(s.empty?" empty":"");
-    bar.innerHTML=`<span class="lab">病人</span><span class="val">${s.empty&&!S.pt.age&&!S.pt.wt&&S.allergy==="none"&&!S.preg?"未填：劑量依正常腎功能":s.txt}</span><span class="act">編輯 ▾</span>`; }
+    bar.innerHTML=`<span class="lab">病人</span><span class="val">${s.empty&&!S.pt.age&&!S.pt.wt&&S.allergy==="none"&&!S.preg&&!cpScore(S.cp)?"未填：劑量依正常腎功能":s.txt}</span><span class="act">編輯 ▾</span>`; }
   const mm=UI.mMore||S.pt.method!=="cg"; $("mMore").hidden=!mm; $("mMoreBtn").setAttribute("aria-expanded",String(mm)); $("mMoreBtn").hidden=S.pt.method!=="cg"&&mm;
 }
 function renderRsum(){
@@ -3013,14 +3105,26 @@ function readPt(){
   p.crcl=num($("crclIn").value); p.egfr=num($("egfrIn").value); p.aki=$("aki").checked;
   S.allergy=$("allergy").value; S.preg=$("preg").checked;
   S.pf={f5:$("pf5").checked,ana:$("pfA").checked,scar:$("pfS").checked,tx:$("pfT").checked};
+  S.cp={mode:document.querySelector('input[name="cpmode"]:checked').value,bili:num($("cpBili").value),alb:num($("cpAlb").value),inr:num($("cpInr").value),asc:$("cpAsc").value,enc:$("cpEnc").value,cls:$("cpCls").value};
 }
 
 if(typeof document!=="undefined"){
   $("ver").textContent=`${VERSION}・查證 ${VERIFIED}`;
   $("footVer").textContent=`抗生素選擇助手 ${VERSION}・查證 ${VERIFIED}・${SCOPE}`;
   // 病人資料：值沒變就不重繪（避免 blur 時把正要點的按鈕換掉）
-  const ptKey=()=>JSON.stringify([S.pt,S.allergy,S.preg,S.pf]);
-  const onPt=()=>{ const k=ptKey(); readPt(); if(ptKey()===k) return; renderRsum(); renderMain(); renderPt(); renderPf(); };
+  const ptKey=()=>JSON.stringify([S.pt,S.allergy,S.preg,S.pf,S.cp]);
+  const onPt=()=>{ const k=ptKey(); readPt(); if(ptKey()===k) return; renderRsum(); renderMain(); renderPt(); renderPf(); renderCp(); };
+  const S_INIT=JSON.parse(JSON.stringify(S));
+  // 清除全部：病人卡、PEN-FAST、肝功能、TDM 濃度、用藥調整與口服降階的輸入；保留目前分頁與經驗性治療情境
+  function clearAll(){
+    ["age","wt","ht","scr","crclIn","egfrIn","cpBili","cpAlb","cpInr"].forEach(id=>{ $(id).value=""; });
+    $("sexM").checked=true; document.querySelector('input[name="method"][value="cg"]').checked=true; document.querySelector('input[name="cpmode"][value="calc"]').checked=true;
+    ["aki","preg","pf5","pfA","pfS","pfT"].forEach(id=>{ $(id).checked=false; });
+    $("allergy").value="none"; $("cpAsc").value="1"; $("cpEnc").value="1"; $("cpCls").value="";
+    S.ag=JSON.parse(JSON.stringify(S_INIT.ag)); S.cur=JSON.parse(JSON.stringify(S_INIT.cur)); S.oral=JSON.parse(JSON.stringify(S_INIT.oral));
+    UI.mMore=false; readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); renderCp();
+    toast("已清除病人資料");
+  }
   $("side").addEventListener("input",onPt);
   $("side").addEventListener("change",onPt);
   const showOv=(t,b)=>{ $("ovT").textContent=t; $("ovB").innerHTML=b; $("ov").hidden=false; $("ov").querySelector(".btn").focus(); };
@@ -3068,6 +3172,7 @@ if(typeof document!=="undefined"){
     if(a==="tab"){ S.tab=v; UI.more=false; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } scrollTo(0,0); }
     else if(a==="more") UI.more=!UI.more;
     else if(a==="pt-open"){ UI.pt=true; renderPt(); if(narrow()){ const el=$("ptBody"); el.scrollIntoView({block:"start"}); const f=$("age"); if(!S.pt.age) f.focus({preventScroll:true}); } return; }
+    else if(a==="clear-all"){ clearAll(); return; }
     else if(a==="pt-close"){ UI.pt=false; renderPt(); $("ptBar").focus(); return; }
     else if(a==="m-more"){ UI.mMore=!UI.mMore; renderPt(); return; }
     else if(a==="disc-ok"){ $("disc").hidden=true; $("footDisc").hidden=false; return; }
@@ -3119,7 +3224,7 @@ if(typeof document!=="undefined"){
     renderMain();
     if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
   });
-  readPt(); renderRsum(); renderMain(); renderPt(); renderPf();
+  readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); renderCp();
 }
 </script>
 

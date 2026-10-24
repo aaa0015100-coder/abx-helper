@@ -95,6 +95,22 @@ with sync_playwright() as p:
             pg.locator("#pf5").uncheck(); pg.select_option("#allergy","none"); pg.wait_for_timeout(30)
             if W <= 920: pg.locator("[data-act=pt-close]").click()
             check(pg, W, "PEN-FAST 後")
+            # v0.13：Child-Pugh → 藥物頁反白；清除全部
+            if W <= 920: pg.locator("#ptBar").click()
+            pg.fill("#cpBili","2.5"); pg.fill("#cpAlb","3"); pg.fill("#cpInr","2"); pg.select_option("#cpAsc","2"); pg.wait_for_timeout(50)
+            if "Child-Pugh B" not in pg.inner_text("#cpRes"): issues.append(f"{W}: Child-Pugh 未算出 B")
+            pg.evaluate("document.querySelector('[data-act=tab][data-v=drug]').click()"); pg.wait_for_timeout(30)
+            if pg.locator("[data-act=dpick]").count(): pg.locator("[data-act=dpick]").click()
+            pg.locator("[data-act=drug][data-v=caspo]").click(); pg.wait_for_timeout(30)
+            if "目前 Child-Pugh B" not in pg.inner_text("#main"): issues.append(f"{W}: 藥物頁未顯示目前 Child-Pugh")
+            check(pg, W, "藥物頁肝功能")
+            if W <= 920 and pg.locator("#ptBody").is_hidden(): pg.locator("#ptBar").click()
+            pg.fill("#age","50"); pg.locator("#pf5").check(force=True) if pg.locator("#pf5").is_visible() else None
+            pg.locator("[data-act=clear-all]").click(); pg.wait_for_timeout(50)
+            if pg.eval_on_selector("#age","e=>e.value") or pg.eval_on_selector("#cpBili","e=>e.value") or "Child-Pugh" in pg.inner_text("#cpRes").split("輸入")[0][:0]: issues.append(f"{W}: 清除全部後仍有資料")
+            if "Child-Pugh B" in pg.inner_text("#cpRes"): issues.append(f"{W}: 清除後 Child-Pugh 未清空")
+            if W <= 920: pg.locator("[data-act=pt-close]").click()
+            go_tab(pg, "emp")
             # 出處／更新彈出層
             go_tab(pg, "emp"); pg.wait_for_timeout(30)
             pg.evaluate("document.querySelectorAll('#main details').forEach(d=>d.open=true)")

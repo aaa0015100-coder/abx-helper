@@ -98,6 +98,21 @@ if(on("pf")) for(let m=0;m<16;m++) for(const al of ["none","pen_low","pen_ana"])
   });
 }
 
+if(on("hep")){
+  // Child-Pugh 邊界（Pugh 1973）
+  const C=[[{bili:1.9,alb:3.6,inr:1.6,asc:"1",enc:"1"},5,"A"],[{bili:2,alb:3.5,inr:1.7,asc:"1",enc:"1"},8,"B"],[{bili:3,alb:2.8,inr:2.3,asc:"2",enc:"2"},10,"C"],[{bili:3.1,alb:2.7,inr:2.4,asc:"3",enc:"3"},15,"C"],[{bili:1,alb:4,inr:1,asc:"2",enc:"1"},6,"A"],[{bili:1,alb:4,inr:1,asc:"2",enc:"2"},7,"B"],[{bili:2.5,alb:3,inr:2,asc:"2",enc:"1"},9,"B"]];
+  C.forEach(([cp,sc,cl])=>{ n++; const r=A.cpScore(Object.assign({mode:"calc"},cp)); if(!r||r.score!==sc||r.cls!==cl) fails.push(["cp",cp,`預期 ${sc}/${cl}，得到 ${r&&r.score}/${r&&r.cls}`]); });
+  n++; if(A.cpScore({mode:"calc",bili:null,alb:3,inr:1})!==null) fails.push(["cp",{},"缺資料仍給分級"]);
+  n++; if(A.cpScore({mode:"direct",cls:"B"}).cls!=="B") fails.push(["cp",{},"直接選分級錯"]);
+  for(const k of Object.keys(A.D)) for(const cls of ["","A","B","C"])
+    run("hep "+k,{tab:"drug",drug:k,cp:{mode:"direct",cls}},()=>A.render("drug"),(t,h)=>{
+      if(!/肝功能/.test(t)) return "藥物頁缺肝功能區";
+      if(A.HEP[k]&&cls&&!new RegExp('class="cur"><td>Child-Pugh '+cls).test(h)) return "未反白目前分級";
+      if(!A.HEP[k]&&!/app 未收錄這個藥的肝功能/.test(t)) return "未收錄藥未標示";
+      return "";
+    });
+}
+
 if(on("search")){
   const S=[["cefe","藥物","Cefepime"],["腎盂","診斷","腎盂腎炎"],["turp","手術預防","TURP"],["mrsa","菌種","MRSA"],["amikacin","TDM","Amikacin"],["xyzxyz",null,null]];
   for(const [q,cat,name] of S){
