@@ -27,6 +27,8 @@ for(const [sk,sy] of Object.entries(A.SYS)) for(const sub of sy.subs){
 }
 snap("emp arc preg mdr",Object.assign({tab:"emp",preg:true,mdr:["prevESBL","prevPSA"]},PT.arc),"emp");
 for(const tab of ["spec","cur","oral","vanco","teico","ix","ref"]) for(const pk of ["none","c35","hd"]) snap(`${tab} ${pk}`,Object.assign({tab},JSON.parse(JSON.stringify(PT[pk]))),tab);
+for(const k of Object.keys(A.D)) snap(`drug ${k}`,Object.assign({tab:"drug",drug:k},JSON.parse(JSON.stringify(PT.c35))),"drug");
+for(const td of ["vanco","teico","gent","amk"]) for(const mode of ["ei","conv","syn"]) for(const pk of ["none","c35","hd"]) snap(`tdm ${td} ${mode} ${pk}`,Object.assign({tab:"tdm",tdm:td,ag:{mode,ti:0.5,c1:12,t1:1.5,c2:2,t2:12}},JSON.parse(JSON.stringify(PT[pk]))),"tdm");
 for(const pr of A.PROC) snap(`px ${pr.id||pr[0]}`,Object.assign({tab:"px",proc:pr.id||pr[0]},PT.c35),"px");
 const s=out.join("\n")+"\n";
 const f=path.join(__dirname,'snap.txt');

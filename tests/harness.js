@@ -5,10 +5,10 @@ function load(file){
   const js=html.match(/<script>([\s\S]*)<\/script>/)[1];
   const ctx={console,setTimeout,clearTimeout}; vm.createContext(ctx);
   vm.runInContext(js+`
-;this.__api={S,UI,REF,DGRP,SYS,SUBDEF,REG,D,PL,PATH,PROC,TABS,
+;this.__api={S,UI,REF,DGRP,GLOSS,AGX,SYS,SUBDEF,REG,D,PL,PATH,PROC,TABS,pfScore,pfHTML,searchHits,agCalc,drugUse,
   getRenal,hasSev,
   setR(){R=getRenal();},
-  render(tab){R=getRenal(); return ({spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef})[tab]();}
+  render(tab){R=getRenal(); return ({spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef})[tab]();}
 };`,ctx);
   return {A:ctx.__api,html};
 }

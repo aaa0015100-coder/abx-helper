@@ -244,7 +244,8 @@ button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-b
 @media (max-width:920px){.tab{padding:9px 8px}}
 .tab .ts{display:none}
 @media (max-width:420px){.tab .ts{display:inline}.tab .ts~.tl{display:none}}
-@media (max-width:359px){.tab{padding:9px 5px}}
+@media (max-width:359px){.tab{padding:9px 5px}.morebtn .mcur{display:none}.morebtn .mgen{display:inline}}
+.morebtn .mgen{display:none}
 .tab.xtra{display:none}
 @media (min-width:921px){.tab.xtra{display:inline-block}.tab.morebtn,.tabmenu{display:none!important}}
 .tabmenu{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 14px}
@@ -255,6 +256,27 @@ button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-b
 .ov .sheet h3{font-size:.95rem;font-family:var(--f-mono);margin-bottom:8px}
 .ov .sheet p{margin:0 0 10px;overflow-wrap:anywhere}
 .ov .sheet .btn{margin-top:4px}
+/* v0.9–v0.12 */
+.srch{position:relative;margin-bottom:8px}
+.srch input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:.92rem}
+.qres{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:25;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.16);max-height:60vh;overflow:auto;padding:6px}
+.qcat{font-size:.72rem;color:var(--muted);letter-spacing:.06em;padding:6px 8px 2px}
+.qitem{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:7px 8px;cursor:pointer;font-size:.92rem}
+.qitem:hover,.qitem:focus-visible{background:var(--accent-weak)}
+.qsub{font-size:.76rem;color:var(--muted)}
+.qnone{font-size:.86rem;color:var(--muted);padding:8px}
+button.gl{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted var(--muted);text-underline-offset:3px}
+.chip.static{cursor:default}
+tr.cur td{background:var(--accent-weak);font-weight:600}
+td.mono{font-family:var(--f-mono)}
+ul.ixl{margin:6px 0 0;padding-left:18px;font-size:.86rem}
+.tdmsel{margin-bottom:16px}
+.note.ok-n{background:var(--ok-bg);border-color:transparent}
+details.pf>summary{font-size:.86rem}
+.pfq{display:grid;gap:6px;margin-top:8px}
+.pfres{margin-top:8px}
+.pfres .note{font-size:.84rem}
+.kv dd{overflow-wrap:anywhere}
 </style>
 
 </head>
@@ -317,12 +339,23 @@ button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-b
             <option value="bl_scar">任何 β-lactam 嚴重皮膚反應（SJS/TEN/DRESS）</option>
           </select>
         </div>
+        <details class="pf mt" id="pfDet"><summary>PEN-FAST 評估（自述 penicillin 過敏）</summary>
+          <div class="pfq">
+            <label class="chk"><input type="checkbox" id="pf5"><span>反應距今 ≤5 年（2 分）</span></label>
+            <label class="chk"><input type="checkbox" id="pfA"><span>過敏性休克或血管性水腫（2 分）</span></label>
+            <label class="chk"><input type="checkbox" id="pfS"><span>嚴重皮膚不良反應 SCAR（SJS／TEN、DRESS、AGEP）</span></label>
+            <label class="chk"><input type="checkbox" id="pfT"><span>當時需要治療（1 分）</span></label>
+            <div class="hint">過敏性休克／血管性水腫與 SCAR 同一項，最多 2 分。</div>
+          </div>
+          <div id="pfRes" class="pfres"></div>
+        </details>
         <label class="chk mt"><input type="checkbox" id="preg"><span>懷孕（標示孕期禁忌／需謹慎之藥物）</span></label>
       </section>
       </div>
     </aside>
 
     <main>
+      <div class="srch"><input id="q" type="search" placeholder="搜尋：藥名、商品名、診斷、菌種、手術" autocomplete="off" aria-label="搜尋" aria-controls="qres"><div id="qres" class="qres" hidden></div></div>
       <nav class="tabs" role="tablist" id="tabs"></nav>
       <div id="tabmenu" class="tabmenu" hidden></div>
       <div id="main"></div>
@@ -336,8 +369,8 @@ button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-b
 <script>
 "use strict";
 const VERIFIED = "2026-10-17";
-const VERSION = "v0.8";
-const SCOPE = "12 個感染系統＋口服降階＋泌尿手術預防";
+const VERSION = "v0.12";
+const SCOPE = "12 個感染系統＋口服降階＋藥物查詢＋TDM＋PEN-FAST＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
@@ -346,7 +379,16 @@ const REF = {
   IDSA_cys10:{s:"IDSA/ESCMID 2010",f:"Gupta K, et al. International Clinical Practice Guidelines for the Treatment of Acute Uncomplicated Cystitis and Pyelonephritis in Women. Clin Infect Dis 2011;52:e103-20."},
   IDSA_CAUTI09:{s:"IDSA CAUTI 2009",f:"Hooton TM, et al. Diagnosis, Prevention, and Treatment of Catheter-Associated UTI in Adults. Clin Infect Dis 2010;50:625-63."},
   EAU_UI25:{s:"EAU 2025",f:"EAU Guidelines on Urological Infections, 2025 edition (uroweb.org)."},
-  AUA_PX19:{s:"AUA BPS 2019",f:"American Urological Association. Best Practice Statement: Urologic Procedures and Antimicrobial Prophylaxis (2019 update), Table V."},
+  AUA_PX19:{s:"AUA BPS 2019",f:"American Urological Association. Best Practice Statement: Urologic Procedures and Antimicrobial Prophylaxis (2019 update), Table V（Recommended antimicrobial prophylaxis for urologic procedures）。"},
+  EAU_UI26:{s:"EAU 2026",f:"EAU Guidelines on Urological Infections, 2026 edition（2025 版的有限更新；攝護腺切片預防 3.18.3 改版）。本版依 EAU Pocket Guidelines on Urological Infections 2026（Table 13、Figure 4）及線上版 3.3 無症狀菌尿核對（uroweb.org）。"},
+  SIR18:{s:"SIR 2018",f:"Chehab MA, et al. Adult and Pediatric Antibiotic Prophylaxis during Vascular and IR Procedures: A Society of Interventional Radiology Practice Parameter Update Endorsed by CIRSE and CAIR. J Vasc Interv Radiol 2018;29(11):1483-1501（網站最後更新 2024-01）。泌尿：經皮腎造廔置放與更換（IIb，C-LD／C-EO）。"},
+  AUA_VAS26:{s:"AUA 輸精管結紮 2026",f:"American Urological Association. Vasectomy: AUA Guideline (2026). Statement 7: Clinicians may forego peri-procedural antibiotics for patients undergoing vasectomy unless the patient is at high risk of infection（Expert Opinion）。"},
+  PENFAST20:{s:"PEN-FAST 2020",f:"Trubiano JA, et al. Development and Validation of a Penicillin Allergy Clinical Decision Rule. JAMA Intern Med 2020（PMID 32176248）。F：≤5 年 2 分；A/S：過敏性休克／血管性水腫或 SCAR 2 分；T：需要治療 1 分。<3 分：皮膚測試陽性 3.7%，NPV 96.3%（95% CI 94.1–97.8%）。"},
+  PALACE23:{s:"PALACE 2023",f:"Copaescu AM, et al. Efficacy of a Clinical Decision Rule to Enable Direct Oral Challenge in Patients With Low-Risk Penicillin Allergy: The PALACE Randomized Clinical Trial. JAMA Intern Med 2023（PMID 37459086）。門診過敏科成人、PEN-FAST <3；直接口服挑戰（多為 amoxicillin 250 mg、觀察 1 小時）不劣於皮膚測試後再挑戰（陽性各 0.5%）。排除：過敏性休克、SCAR、血清病、間質性腎炎等嚴重反應史，懷孕。"},
+  STAN_AG:{s:"Stanford AG 2021",f:"Stanford Health Care Aminoglycoside Dosing Guideline（rev. 06/2021）。院內規範，請以原文確認：Hartford 7 mg/kg、Urban-Craig 5 mg/kg（amikacin 15 mg/kg）；兩點濃度藥動公式；協同劑量；HD／CRRT 劑量。"},
+  HHS_AG:{s:"Hamilton HHS",f:"Hamilton Health Sciences ID Handbook: Aminoglycoside Dosing（© 2020）。院內規範，請以原文確認：每日一次 5–7 mg/kg（amikacin 15 mg/kg，濃度先 ÷2 再標 Hartford nomogram）；傳統分次劑量與 peak／trough 目標；透析劑量與透析前濃度目標。"},
+  UCSF_AG:{s:"UCSF IDMP",f:"UCSF Infectious Diseases Management Program: Adult Antimicrobial Dosing（aminoglycoside）。院內規範，請以原文確認：傳統分次 1.6 mg/kg q8h（CrCl >60）、peak 5–8、trough <2；HD 2 mg/kg → 每次透析後 1 mg/kg。"},
+  CLSI23:{s:"CLSI M100 2023",f:"CLSI AST News Update（June 2023）: M100-Ed33 updated aminoglycoside breakpoints for Enterobacterales and P. aeruginosa。Gentamicin 不再列為 P. aeruginosa 的建議治療選項，建議實驗室不報告或報 R。"},
   AWMF25:{s:"AWMF S3 2025",f:"Perioperative and Peri-Interventional Antibiotic Prophylaxis in Urology: Key Recommendations from the German AWMF S3 Guideline, compared with EAU 2025. Urol Int 2025 (doi:10.1159/000550029)."},
   ASHP13:{s:"ASHP 2013",f:"Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283."},
   CDC_STI21:{s:"CDC STI 2021",f:"Workowski KA, et al. Sexually Transmitted Infections Treatment Guidelines, 2021. MMWR Recomm Rep 2021;70(4)."},
@@ -537,12 +579,12 @@ const TGT = {
   },
   psa:{
     S:{
-      cys:[O("首選",["ciproPO","levo750"],{src:["IDSA_AMR24"]}),O("替代",["gentSingle"],{src:["IDSA_AMR24"]})],
-      sys:[O("IV 首選",["fep2q8","tzp"],{src:["IDSA_AMR24"]}),O("口服降階",["ciproPO750","levo750"],{src:["IDSA_AMR24"]}),O("保留",["mem"],{note:"上列抗藥時",src:["IDSA_AMR24"]}),O("替代",["gentQ24","amkQ24"],{note:"UTI 可單用；泌尿道外需合併",src:["IDSA_AMR24"]})],
+      cys:[O("首選",["ciproPO","levo750"],{src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"膀胱炎給單次即可（IDSA AMR 2024：單劑 aminoglycoside）。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
+      sys:[O("IV 首選",["fep2q8","tzp"],{src:["IDSA_AMR24"]}),O("口服降階",["ciproPO750","levo750"],{src:["IDSA_AMR24"]}),O("保留",["mem"],{note:"上列抗藥時",src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"UTI 可單用；泌尿道外需合併。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
       resp:[O("IV 首選",["fep2q8","tzp"],{src:["ATS19"]}),O("替代",["mem","levo750"],{src:["ATS19"]})]
     },
     DTR:{
-      cys:[O("首選",["ctz","cza","gentSingle"],{src:["IDSA_AMR24"]})],
+      cys:[O("首選",["ctz","cza"],{src:["IDSA_AMR24"]}),O("替代",["amkQ24"],{note:"膀胱炎給單次即可。CLSI 2023：P. aeruginosa 已移除 gentamicin 判讀標準，amikacin 標準只適用尿液檢體；泌尿道外的感染 aminoglycoside 只作合併用藥",upd:"PSA_AG",src:["IDSA_AMR24","CLSI23"]})],
       sys:[O("首選",["ctz","cza"],{note:"會診感染科；肺炎 ceftolozane-tazobactam 3 g q8h",src:["IDSA_AMR24"]})]
     }
   },
@@ -633,51 +675,82 @@ const PXR = {
   tmp:{n:"TMP-SMX",t:"1 DS 錠 PO 單次"},
   gent:{n:"Gentamicin",t:"5 mg/kg IV 單次{AG:5}"},
   cro:{n:"Ceftriaxone",t:"1 g IV 單次"},
-  fos:{n:"Fosfomycin trometamol",t:"3 g PO（術前，方案依院內）"},
+  fos:{n:"Fosfomycin trometamol",t:"3 g PO 術前，24–48 小時後再 3 g"},
   metro:{n:"Metronidazole",t:"500 mg IV"},
   vanco:{n:"Vancomycin",t:"15 mg/kg IV{TBW:15}（術前 120 分鐘內開始，輸注 ≥60 分鐘）"},
   clinda:{n:"Clindamycin",t:"900 mg IV",re:"q6h"},
-  azt:{n:"Aztreonam",t:"2 g IV",re:"q4h"}
+  azt:{n:"Aztreonam",t:"2 g IV",re:"q4h"},
+  sam:{n:"Ampicillin-sulbactam",t:"3 g IV",re:"q2h"},
+  etp:{n:"Ertapenem",t:"1 g IV 單次"}
 };
+/* 術式依部位排列：診斷／內視鏡 → 攝護腺 → 尿道 → 上泌尿道 → 開放／腹腔鏡 → 植入物、陰道、陰囊、陰莖 */
 const PROC = [
   {id:"cysto",n:"膀胱鏡（診斷）／尿動力學／單純支架拔除",need:"通常不需要",lvl:"ok",
    pri:[],alt:[["tmp"],["cz"]],altLabel:"有宿主風險因子時（免疫抑制、尿路異常、長期導管）單次",
-   notes:["前提：術前尿液無菌。AUA 認為效益不確定、依宿主風險；EAU 不建議常規給予"],src:["AUA_PX19","EAU_UI25"]},
+   notes:["前提：術前尿液無菌。AUA 認為效益不確定、依宿主風險（術前尿液培養無菌則不需預防）；EAU 不建議常規給予（Strong）"],src:["AUA_PX19","EAU_UI26"]},
+  {id:"dju",n:"輸尿管支架置放／更換（膀胱鏡下）",need:"依風險",lvl:"ok",
+   pri:[],alt:[["tmp"],["cz"]],altLabel:"有宿主風險因子或術前菌尿時單次",
+   notes:["AUA Table V：膀胱鏡合併操作（切片、電燒等）列為「效益不確定、依宿主風險」，首選 TMP-SMX 或 amoxicillin-clavulanate，替代 1st／2nd 代 cephalosporin；app 比照列出","EAU、AWMF 沒有支架置放或更換的專屬建議（請依院內規範）","長期留置支架常有細菌移生：術前做尿液培養，有菌尿依藥敏先治療（EAU，Strong）"],
+   src:["AUA_PX19","EAU_UI26"]},
   {id:"trbx",n:"經直腸攝護腺切片（TR biopsy）",need:"需要",lvl:"warn",
-   pri:[["cro"],["gent"],["fos"]],priLabel:"首選（或依直腸拭子培養做標靶預防、或兩類合併的加強預防）",alt:[],
-   notes:["EAU：優先改採經會陰路徑（感染併發症較低）","切片前以 povidone-iodine 清潔直腸","台灣 E. coli FQ 抗藥率高；EAU 因歐洲法規強烈建議避免 FQ，AUA 仍列 FQ 為選項，建議以直腸拭子培養做標靶預防"],
-   src:["EAU_UI25","AUA_PX19"],upd:true},
+   pri:[["cro"],["gent"],["fos"]],priLabel:"無法做標靶預防時的選項",alt:[],
+   notes:["EAU 2026（Strong）：優先改採經會陰路徑（感染併發症較低）","EAU 2026（Strong）：經直腸切片首選依直腸拭子或糞便培養做標靶預防；其次為兩類以上抗生素的加強預防（與抗生素管理原則衝突）","切片前以 povidone-iodine 清潔直腸（EAU，Strong）","FQ：EAU 依歐盟執委會決定不用於切片（Strong）；AUA Table V 仍列 FQ。台灣 E. coli FQ 抗藥率高","EAU 列出的其他選項：ceftriaxone 1 g IM、cefixime 400 mg PO 3 天（切片前 24 小時開始）、aminoglycoside 每日一次；德國已撤銷 fosfomycin 用於切片的適應症"],
+   src:["EAU_UI26","AUA_PX19"],upd:"EAU 2026 攝護腺切片預防改版：經直腸切片的首選改為依直腸拭子／糞便培養做標靶預防，其次為加強預防；FQ 不用於切片。"},
   {id:"tpbx",n:"經會陰攝護腺切片（TP biopsy）",need:"低風險可不給",lvl:"ok",
-   pri:[],alt:[["cz"],["cxmPO"]],altLabel:"若給予：單次",
-   notes:["低風險、尿液無菌、會陰皮膚消毒確實者可不給預防性抗生素（多個 RCT；德國 AWMF S3 明文建議，EAU 2025 方向一致）","高風險（導管、近期 UTI、免疫抑制）仍給單次"],
-   src:["AWMF25","EAU_UI25"],upd:true},
+   pri:[],alt:[["cz"],["cxm"],["sam"]],altLabel:"高風險（導管、近期 UTI、免疫抑制）：單次 IV",
+   notes:["EAU 2026（Weak）：沒有感染風險因子者不給預防性抗生素","AWMF：低風險不給；高風險術前 30 分鐘單次 IV cefuroxime、cefazolin 或 ampicillin-sulbactam","會陰皮膚消毒確實"],
+   src:["EAU_UI26","AWMF25"],upd:"EAU 2026 新增：經會陰切片無風險因子者不給預防（Weak）；舊版只寫方向一致。"},
+  {id:"brachy",n:"攝護腺近接治療／冷凍治療",need:"需要",lvl:"warn",
+   pri:[["cz"]],priLabel:"術前單次",alt:[["clinda"]],altLabel:"替代",
+   notes:["AUA Table V：所有病例，單次","EAU、AWMF 沒有專屬建議"],src:["AUA_PX19"]},
   {id:"turp",n:"TURP／雷射攝護腺手術（HoLEP、PVP）",need:"需要",lvl:"warn",
    pri:[["cz"],["cxm"]],priLabel:"首選（術前單次）",alt:[["tmp"]],altLabel:"AUA 列為替代",
-   notes:["≤24 小時","術前留置導尿管或有菌尿：依尿液培養給予治療劑量（屬治療，非預防）"],src:["AUA_PX19","EAU_UI25"]},
-  {id:"turbt",n:"TURBT",need:"依風險",lvl:"ok",
+   notes:["≤24 小時","術前留置導尿管或有菌尿：依尿液培養給予治療劑量（屬治療，非預防）","EAU（Strong）、AWMF（Grade A：切皮前 30–60 分鐘單次 IV）一致建議給予"],src:["AUA_PX19","EAU_UI26","AWMF25"]},
+  {id:"mist",n:"攝護腺微創（UroLift、Rezum、Aquablation）",need:"比照經尿道手術",lvl:"warn",
+   pri:[["cz"],["tmp"]],priLabel:"術前單次",alt:[["gent"]],altLabel:"替代",
+   notes:["沒有專屬指引：AUA Table V「經尿道手術」涵蓋雷射剜除與消融類術式，app 比照列出（請依院內規範確認）","EAU、AWMF 沒有針對這些術式的建議"],src:["AUA_PX19"]},
+  {id:"turbt",n:"TURBT",need:"依風險（指引不一致）",lvl:"ok",
    pri:[],alt:[["cz"],["tmp"]],altLabel:"大型或壞死腫瘤、有宿主風險因子：單次",
-   notes:["EAU：低風險者不建議常規給予","AUA：依宿主風險因子決定，手術範圍越大感染風險越高"],src:["EAU_UI25","AUA_PX19"]},
+   notes:["EAU 2026（Weak）：只對術後敗血症高風險者給予","AWMF（Grade B）：只對高風險者（菌尿、免疫抑制）給予","AUA Table V：經尿道手術（含 TURBT）列為所有病例，cefazolin 或 TMP-SMX 單次"],src:["EAU_UI26","AWMF25","AUA_PX19"]},
+  {id:"dviu",n:"內視鏡尿道切開（DVIU）",need:"需要（AUA）",lvl:"warn",
+   pri:[["cz"],["tmp"]],priLabel:"術前單次",alt:[["gent"]],altLabel:"替代",
+   notes:["AUA Table V 經尿道手術：所有病例，單次","EAU、AWMF 沒有專屬建議"],src:["AUA_PX19"]},
+  {id:"uplasty",n:"尿道成形（尿道狹窄重建）",need:"需要",lvl:"warn",
+   pri:[["cz"]],priLabel:"術前單次",alt:[["sam"]],altLabel:"替代",
+   notes:["AUA Table V：可能需要（likely required）；cefazolin，替代 cefoxitin、cefotetan 或 ampicillin-sulbactam；單次","AWMF（Should，Grade B）：cefazolin 2 g IV 切皮前；超過兩個半衰期才追加；≤24 小時"],src:["AUA_PX19","AWMF25"]},
   {id:"urs",n:"輸尿管鏡（URS／RIRS）",need:"需要",lvl:"warn",
    pri:[["cz"],["tmp"]],priLabel:"首選（術前單次）",alt:[["gent"]],altLabel:"替代",
-   notes:["≤24 小時；術後延長抗生素未減少感染","支架留置時間長為術後敗血症風險"],src:["AUA_PX19","EAU_UI25"]},
+   notes:["≤24 小時；術後延長抗生素未減少感染","支架留置時間長為術後敗血症風險","EAU 2026（Weak）：建議給予，可用 TMP、TMP-SMX、2／3 代 cephalosporin、aminopenicillin＋β-lactamase 抑制劑；AWMF（Grade B）：依風險單次"],src:["AUA_PX19","EAU_UI26","AWMF25"]},
   {id:"pcnl",n:"經皮腎造廔取石（PCNL）",need:"需要",lvl:"warn",
    pri:[["cz"],["cro"]],priLabel:"首選（術前單次）",alt:[["gent","metro"]],altLabel:"替代",
-   notes:["≤24 小時","高風險（大結石、水腎、感染性結石、有導管）：部分研究支持術前依培養口服 1 週","術前尿液培養陽性：先治療"],src:["AUA_PX19","EAU_UI25"]},
+   notes:["EAU（Strong）、AWMF（Grade A）：單次；AUA：≤24 小時","高風險（大結石、水腎、感染性結石、有導管）：部分研究支持術前依培養口服 1 週","術前尿液培養陽性：先治療"],src:["AUA_PX19","EAU_UI26","AWMF25"]},
+  {id:"pcn",n:"經皮腎造廔（PCN）置放／更換",need:"依情況",lvl:"warn",
+   pri:[["cro"]],priLabel:"首選（單次；SIR：1–2 g）",alt:[["sam","gent"]],altLabel:"替代",
+   notes:["感染或阻塞合併感染（pyonephrosis、已知 UTI）：一律給予，除非已在使用 IV 抗生素","未感染：依風險因子（年長、糖尿病、膀胱功能異常、曾有輸尿管操作或支架、ureterointestinal 吻合）","例行更換、低風險：可不給；有輸尿管支架、ureteroileal 吻合、管路移位或阻塞時給予","腎功能不全避免 aminoglycoside；β-lactam 過敏可用 vancomycin、clindamycin 或 carbapenem（SIR 通則）","證據等級：SIR 2018 IIb，C-LD／C-EO"],src:["SIR18"]},
   {id:"swl",n:"體外震波碎石（ESWL）",need:"通常不需要",lvl:"ok",
    pri:[],alt:[["cz"],["tmp"]],altLabel:"有支架、腎造廔或感染性結石時",
-   notes:["前提：術前尿液無菌"],src:["EAU_UI25","AUA_PX19"]},
+   notes:["前提：術前尿液無菌","EAU（Strong）：尿液無菌不給；只在懷疑或確診感染性結石、或有菌尿時給予"],src:["EAU_UI26","AUA_PX19"]},
   {id:"rp",n:"根除性攝護腺切除／腎臟手術（進入泌尿道）",need:"需要",lvl:"warn",
    pri:[["cz"]],priLabel:"術前單次",alt:[["cxm"]],altLabel:"替代",
-   notes:["≤24 小時；手術超過 4 小時追加"],src:["AUA_PX19","ASHP13"]},
+   notes:["ASHP：≤24 小時；cefazolin 手術超過 4 小時追加","AWMF（攝護腺切除，Grade A）：cefuroxime 1.5 g IV（替代 cefazolin 2 g）；手術 >3 小時或失血 >1,500 mL 追加，關傷口即停","EAU：證據不足，未提出建議"],src:["AUA_PX19","ASHP13","AWMF25"]},
   {id:"rc",n:"根除性膀胱切除＋尿路改道（使用腸道）",need:"需要",lvl:"warn",
-   pri:[["cz","metro"],["cxm","metro"]],priLabel:"首選",alt:[["gent","metro"]],altLabel:"替代",
-   notes:["≤24 小時","乾淨-污染手術，需涵蓋腸道 G(−) 與厭氧菌"],src:["AUA_PX19","ASHP13"]},
-  {id:"pros",n:"陰莖人工植入物／人工尿道括約肌",need:"需要",lvl:"warn",
-   pri:[["vanco","gent"],["cz","gent"]],priLabel:"首選",alt:[],
-   notes:["≤24 小時","MRSA 帶菌者以 vancomycin 為主"],src:["AUA_PX19"]},
+   pri:[["cz","metro"],["cxm","metro"]],priLabel:"首選",alt:[["gent","metro"],["etp"]],altLabel:"替代",
+   notes:["≤24 小時","乾淨-污染手術，需涵蓋腸道 G(−) 與厭氧菌","AUA Table V：小腸 cefazolin；大腸 cephalosporin＋metronidazole 或 ertapenem","AWMF（Grade A）：廣效 cephalosporin＋metronidazole（例：cefotaxime 2 g＋metronidazole 500 mg IV）；>3 小時或大量失血追加"],src:["AUA_PX19","ASHP13","AWMF25"]},
+  {id:"pros",n:"陰莖人工植入物／人工尿道括約肌／薦神經調節器",need:"需要",lvl:"warn",
+   pri:[["cz","gent"],["cz","azt"],["vanco","gent"]],priLabel:"首選",alt:[],
+   notes:["≤24 小時","AUA Table V：aminoglycoside 或 aztreonam ＋ 1st／2nd 代 cephalosporin 或 vancomycin；腎功能不全以 aztreonam 取代 aminoglycoside","AUA：不建議常規用 vancomycin（對 MSSA 較差）；MRSA 帶菌者才以 vancomycin 為主","AUA：感染菌種中 anaerobe 與黴菌的報告增加"],src:["AUA_PX19"]},
+  {id:"sling",n:"女性尿失禁吊帶／陰道手術（瘻管修補、尿道憩室）",need:"需要",lvl:"warn",
+   pri:[["sam","gent"]],priLabel:"首選（單次）",alt:[["azt","metro"],["azt","clinda"],["clinda"]],altLabel:"替代",
+   notes:["AUA Table V：所有病例，單次","EAU、AWMF 沒有專屬建議"],src:["AUA_PX19"]},
+  {id:"scrotal",n:"陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）",need:"通常不需要（指引不一致）",lvl:"ok",
+   pri:[],alt:[["cz"],["cxm"],["sam"]],altLabel:"若給予：單次",
+   notes:["AUA 輸精管結紮指引 2026（Statement 7，Expert Opinion）：除非感染高風險（植入物、控制不佳的糖尿病、免疫調節藥物），可不給","AUA Table V：cefazolin（替代 ampicillin-sulbactam）單次；適用欄原文為「Of increased risk; all cases」，語意不明確，請以原文確認","AWMF（May，Grade 0）：很少需要；若給予 cefuroxime 1.5 g IV，關傷口即停"],src:["AUA_VAS26","AUA_PX19","AWMF25"]},
+  {id:"penile",n:"陰莖手術（包皮環切、陰莖切片）",need:"通常不需要",lvl:"ok",
+   pri:[],alt:[],
+   notes:["AUA Table V：可能不需要（likely not required）","EAU、AWMF 沒有專屬建議"],src:["AUA_PX19"]},
   {id:"clean",n:"未進入泌尿道之手術（如腎上腺切除）",need:"單次即可",lvl:"ok",
    pri:[["cz"]],priLabel:"術前單次",alt:[],
-   notes:["乾淨手術，依院內規範"],src:["AUA_PX19","ASHP13"]}
+   notes:["乾淨手術，依院內規範","AUA Table V：可能不需要；若給予 cefazolin（替代 clindamycin）"],src:["AUA_PX19","ASHP13"]}
 ];
 const PX_ALLERGY = [["vanco","gent"],["clinda","gent"],["azt"]];
 
@@ -687,11 +760,12 @@ const S = {
   allergy:"none", preg:false, tab:"emp",
   sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
   cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,org:"",ph:"",sus:{}},
+  drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false},
   proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null}
 };
 let R = null;
 /* 介面狀態（只影響顯示，不影響建議內容） */
-const UI = {edit:"sys", pt:null, mMore:false, more:false};
+const UI = {edit:"sys", pt:null, mMore:false, more:false, dpick:false, pxpick:true};
 
 /* ---------------- 計算 ---------------- */
 const num = v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
@@ -780,7 +854,7 @@ function vancoBrief(){
   }
   if(v.err){ const t="首劑 20–35 mg/kg（重症 25–30），之後 15–20 mg/kg q8–12h，依 AUC 400–600 調整"; return {plain:t,html:t,band:"輸入腎功能與體重後可估算",adj:false}; }
   const t=`首劑 ${v.ld} mg，之後 ${v.dose} mg IV q${v.tau}h`;
-  return {plain:t,html:t+' <span class="w">（估算 AUC ≈ '+r0(v.auc)+'；見「Vancomycin」頁）</span>',band:"一室模型估算，需依濃度調整",adj:v.tau>12};
+  return {plain:t,html:t+' <span class="w">（估算 AUC ≈ '+r0(v.auc)+'；見「TDM」頁）</span>',band:"一室模型估算，需依濃度調整",adj:v.tau>12};
 }
 
 /* 過敏判讀（AAAAI/ACAAI 2022） */
@@ -1008,13 +1082,13 @@ function rxRow(id){
   // 註解與商品名收進藥名（點藥名展開）；腎調整只在有調整時顯示
   let nt=g.note||""; if(/無需腎調整/.test(ds.band)) nt=nt.replace(/^無需腎調整[；;，、]?\s*/,"");
   const band=R&&ds.adj?`<span class="adj">${ds.band}</span>`:"";
-  const more=[d.brand?`<span class="brand">商品名：${d.brand}</span>`:"",nt?`<span>${nt}</span>`:"",!band&&ds.band&&!/^未輸入腎功能/.test(ds.band)?`<span>${ds.band}</span>`:""].filter(Boolean);
+  const more=[d.brand?`<span class="brand">商品名：${d.brand}</span>`:"",nt?`<span>${nt}</span>`:"",!band&&ds.band&&!/^未輸入腎功能/.test(ds.band)?`<span>${ds.band}</span>`:"",S.tab!=="drug"?`<span><button class="linkbtn" type="button" data-act="go-drug" data-v="${g.d}">藥物頁 ›</button></span>`:""].filter(Boolean);
   return `<div class="rx${al&&al.lvl==="danger"?" blocked":""}">
     <div class="rx-head">${nameHTML(g.d,null,more.length)}<span class="route">${g.r}</span>${S.tab==="oral"&&/PO/.test(g.r)?bioFlag(g.d):""}${fl.join("")}</div>
     <div class="rx-dose">${ds.html}</div>
     ${band?`<div class="rx-meta">${band}</div>`:""}
     ${more.length?`<div class="rx-more" hidden>${more.join("")}</div>`:""}
-    ${ix.length?`<details class="ix"><summary>交互作用 ${ix.length} 項</summary><ul>${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></details>`:""}
+    ${ix.length&&S.tab!=="drug"?`<details class="ix"><summary>交互作用 ${ix.length} 項</summary><ul>${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></details>`:""}
     <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copyTxt)}">複製</button>
   </div>`;
 }
@@ -1038,13 +1112,14 @@ function optCard(o){
   if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
   const cls=tierCls(o.tier);
   return `<div class="opt${cls==="primary"?" primary":""}">
-    <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?UPD:""}</div>
+    <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${o.upd?(typeof o.upd==="string"?updB(UPDN[o.upd]||o.upd):UPD):""}</div>
     ${formula}${body}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
     ${o.note||(o.src&&o.src.length)?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}</div>`:""}
     ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
   </div>`;
 }
+const UPDN = {PSA_AG:"CLSI M100-Ed33（2023）：P. aeruginosa 的 gentamicin 判讀標準移除，amikacin 標準只適用尿液檢體。原本 gentamicin、amikacin 擇一 → 現在只列 amikacin（膀胱炎單次）。"};
 function noteBlock(n){ return `<div class="note ${n.lvl||""}">${n.upd?UPD+" ":""}${n.t}${srcTags(n.src)}</div>`; }
 function renalBar(){
   if(!R) return `<div class="rtag"><button type="button" class="flag warn" data-act="pt-open">正常腎功能劑量・填腎功能 ›</button></div>`;
@@ -1268,16 +1343,24 @@ function pxGroup(label,groups,tcls){
   const hint=multi?`<div class="hint" style="margin:0 0 4px">選一個方案${combo?"；同一方案內的藥一起給":""}</div>`:"";
   return `<div class="opt${tcls==="primary"?" primary":""}"><div class="opt-head"><span class="tier ${tcls}">${label}</span></div>${hint}${body}</div>`;
 }
+const PXGRP = [["診斷與內視鏡",["cysto","dju"]],["攝護腺",["trbx","tpbx","brachy","turp","mist"]],["膀胱與尿道",["turbt","dviu","uplasty"]],["上泌尿道與結石",["urs","pcnl","pcn","swl"]],["開放／腹腔鏡手術",["rp","rc","clean"]],["植入物、陰道、外生殖器",["pros","sling","scrotal","penile"]]];
 function renderPx(){
-  let h=`<div class="step"><h3><span class="k">01</span>手術或處置</h3><div class="chips">${PROC.map(p=>`<button class="chip" type="button" data-act="proc" data-v="${p.id}" aria-pressed="${S.proc===p.id}">${p.n}</button>`).join("")}</div></div>`;
-  const p=PROC.find(x=>x.id===S.proc);
+  const p=PROC.find(x=>x.id===S.proc)||PROC[0];
+  let h="";
+  if(UI.pxpick){
+    const chip=x=>`<button class="chip" type="button" data-act="proc" data-v="${x.id}" aria-pressed="${S.proc===x.id}">${x.n}</button>`;
+    const used=new Set(PXGRP.flatMap(g=>g[1]));
+    const gs=PXGRP.map(([n,ids])=>[n,ids.map(id=>PROC.find(x=>x.id===id)).filter(Boolean)]).concat([["其他",PROC.filter(x=>!used.has(x.id))]]).filter(g=>g[1].length);
+    h+=`<div class="step"><h3><span class="k">01</span>手術或處置</h3>${gs.map(([n,xs])=>`<div class="dgrp"><div class="dg-h">${n}</div><div class="chips">${xs.map(chip).join("")}</div></div>`).join("")}</div>`;
+  } else h+=`<div class="picked"><span class="k">01</span><span class="q">手術或處置</span><b>${p.n}</b><button class="linkbtn" type="button" data-act="pxpick">更改</button></div>`;
   h+=`<div class="step"><h3><span class="k">02</span>${p.n}</h3><div class="res">`;
-  h+=`<div class="dur"><span class="k">是否需要</span><span class="v">${p.need}</span>${p.upd?UPD:""}${srcTags(p.src)}</div>`;
+  h+=`<div class="dur"><span class="k">是否需要</span><span class="v">${p.need}</span>${p.upd?updB(p.upd):""}${srcTags(p.src)}</div>`;
   h+=pxGroup(p.priLabel||"首選",p.pri,"primary");
   h+=pxGroup(p.altLabel||"替代",p.alt,"");
   if(S.allergy!=="none") h+=pxGroup("β-lactam 過敏",PX_ALLERGY,"allergy");
   h+=`<div class="notes">${p.notes.map(t=>`<div class="note">${t}</div>`).join("")}
-    <div class="note">通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。${srcTags(["ASHP13","AUA_PX19","EAU_UI25"])}</div></div>`;
+    <div class="note">通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。${srcTags(["ASHP13","AUA_PX19"])}</div>
+    <div class="note">術前尿液培養：會破壞黏膜的泌尿道處置（內視鏡手術、TURP、TURBT 等）前，篩檢並治療無症狀菌尿，依藥敏選藥，不用經驗性治療（EAU，Strong）。不進入泌尿道的手術不需篩檢。${srcTags(["EAU_UI26"])}</div></div>`;
   return h+`</div></div>`;
 }
 
@@ -2450,23 +2533,434 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
+    <div class="note">2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。</div>
+    <div class="note">畫底線的縮寫可點開看全稱；每張卡片只標第一次出現的位置。</div>
     <div class="note">收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。</div>
     <div class="note">示範：<button class="linkbtn" type="button" data-act="demo">填入範例病人數值</button>（72 歲男性、60 kg、165 cm、SCr 1.6）</div>
   </div></div>`;
 }
 
-const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["oral","口服降階"],["px","泌尿手術預防"],["vanco","Vancomycin"],["teico","Teicoplanin"],["ix","交互作用"],["ref","出處"]];
-const TAB_S={cur:"用藥調整"};   // 窄螢幕（≤420px）短名稱
+/* ================= v0.9 查詢：縮寫、搜尋、藥物頁 ================= */
+const GLOSS = {
+  "AdjBW":"adjusted body weight，校正體重 = IBW + 0.4 ×（實際體重 − IBW）",
+  "AFB":"acid-fast bacilli，抗酸性桿菌（痰液抹片）",
+  "AKI":"acute kidney injury，急性腎損傷",
+  "AMR":"antimicrobial resistance，抗藥性",
+  "ANC":"absolute neutrophil count，嗜中性球絕對值",
+  "ARB":"angiotensin II receptor blocker",
+  "ARC":"augmented renal clearance，腎廓清增強（CrCl >130 mL/min）",
+  "ARDS":"acute respiratory distress syndrome，急性呼吸窘迫症候群",
+  "AUC":"area under the concentration–time curve，濃度-時間曲線下面積",
+  "AUC24":"24 小時濃度-時間曲線下面積",
+  "ACEI":"angiotensin-converting enzyme inhibitor",
+  "BMI":"body mass index，身體質量指數",
+  "BOO":"bladder outlet obstruction，膀胱出口阻塞",
+  "BUN":"blood urea nitrogen，血中尿素氮",
+  "CAP":"community-acquired pneumonia，社區型肺炎",
+  "CAUTI":"catheter-associated urinary tract infection，導尿管相關泌尿道感染",
+  "CDI":"Clostridioides difficile infection",
+  "CK":"creatine kinase，肌酸激酶",
+  "CNS":"central nervous system，中樞神經系統",
+  "COPD":"chronic obstructive pulmonary disease，慢性阻塞性肺病",
+  "CRAB":"carbapenem-resistant Acinetobacter baumannii",
+  "CRBSI":"catheter-related bloodstream infection，導管相關血流感染",
+  "CRE":"carbapenem-resistant Enterobacterales，抗 carbapenem 腸道菌",
+  "CRKP":"carbapenem-resistant Klebsiella pneumoniae",
+  "CrCl":"creatinine clearance，肌酸酐廓清率（app 以 Cockcroft-Gault 計算）",
+  "CRRT":"continuous renal replacement therapy，連續性腎臟替代療法",
+  "CSF":"cerebrospinal fluid，腦脊髓液",
+  "CT":"computed tomography，電腦斷層",
+  "DAIR":"debridement, antibiotics and implant retention，清創、抗生素並保留植入物",
+  "DOAC":"direct oral anticoagulant，直接口服抗凝血劑",
+  "DS":"double strength（TMP-SMX 160/800 mg 錠）",
+  "DTR":"difficult-to-treat resistance（對所有一線 β-lactam 與 FQ 皆不感受）",
+  "ECG":"electrocardiogram，心電圖",
+  "eGFR":"estimated glomerular filtration rate，估算腎絲球過濾率",
+  "ERCP":"endoscopic retrograde cholangiopancreatography，內視鏡逆行性膽胰管攝影",
+  "ESBL":"extended-spectrum β-lactamase，廣效性 β-lactamase",
+  "ESWL":"extracorporeal shock wave lithotripsy，體外震波碎石",
+  "EVD":"external ventricular drain，腦室外引流",
+  "FMT":"fecal microbiota transplantation，糞便微菌叢移植",
+  "FN":"febrile neutropenia，發燒性嗜中性球低下",
+  "FPIA":"fluorescence polarization immunoassay，螢光偏極化免疫分析法",
+  "FQ":"fluoroquinolone",
+  "GAS":"group A Streptococcus（S. pyogenes）",
+  "GBS":"group B Streptococcus（S. agalactiae）",
+  "GNB":"Gram-negative bacilli，革蘭氏陰性桿菌",
+  "GPC":"Gram-positive cocci，革蘭氏陽性球菌",
+  "HACEK":"Haemophilus、Aggregatibacter、Cardiobacterium、Eikenella、Kingella",
+  "HAP":"hospital-acquired pneumonia，院內肺炎",
+  "HD":"hemodialysis，血液透析",
+  "HIV":"human immunodeficiency virus",
+  "HPLC":"high-performance liquid chromatography，高效液相層析",
+  "HRS":"hepatorenal syndrome，肝腎症候群",
+  "IBW":"ideal body weight，理想體重",
+  "ICU":"intensive care unit，加護病房",
+  "IE":"infective endocarditis，感染性心內膜炎",
+  "IM":"intramuscular，肌肉注射",
+  "INR":"international normalized ratio",
+  "IV":"intravenous，靜脈注射",
+  "MAOI":"monoamine oxidase inhibitor",
+  "MASCC":"Multinational Association for Supportive Care in Cancer 風險評分（≥21 分為低風險）",
+  "MDR":"multidrug-resistant，多重抗藥",
+  "MIC":"minimum inhibitory concentration，最小抑菌濃度",
+  "MRI":"magnetic resonance imaging，磁振造影",
+  "MRSA":"methicillin-resistant Staphylococcus aureus",
+  "MSSA":"methicillin-susceptible Staphylococcus aureus",
+  "NCSE":"nonconvulsive status epilepticus，非痙攣性癲癇重積",
+  "NSAID":"nonsteroidal anti-inflammatory drug，非類固醇消炎藥",
+  "PCN":"percutaneous nephrostomy，經皮腎造廔",
+  "PCNL":"percutaneous nephrolithotomy，經皮腎造廔取石",
+  "PCR":"polymerase chain reaction，聚合酶連鎖反應",
+  "PD":"peritoneal dialysis，腹膜透析",
+  "PJI":"prosthetic joint infection，人工關節感染",
+  "PK":"pharmacokinetics，藥物動力學",
+  "PO":"per os，口服",
+  "PPI":"proton pump inhibitor，氫離子幫浦抑制劑",
+  "PsA":"Pseudomonas aeruginosa",
+  "PTCD":"percutaneous transhepatic cholangial drainage，經皮穿肝膽道引流",
+  "PTGBD":"percutaneous transhepatic gallbladder drainage，經皮穿肝膽囊引流",
+  "PVP":"photoselective vaporization of the prostate，光選擇性攝護腺汽化術",
+  "QT":"心電圖 QT 間期",
+  "RIRS":"retrograde intrarenal surgery，逆行性腎內手術",
+  "SAB":"Staphylococcus aureus bacteremia，金黃色葡萄球菌菌血症",
+  "SBECD":"sulfobutylether-β-cyclodextrin（voriconazole 注射劑載體）",
+  "SBP":"spontaneous bacterial peritonitis，自發性細菌性腹膜炎",
+  "SCAR":"severe cutaneous adverse reaction，嚴重皮膚不良反應（SJS／TEN、DRESS、AGEP）",
+  "SCr":"serum creatinine，血清肌酸酐",
+  "SNRI":"serotonin–norepinephrine reuptake inhibitor",
+  "SSRI":"selective serotonin reuptake inhibitor",
+  "SSTI":"skin and soft tissue infection，皮膚軟組織感染",
+  "STI":"sexually transmitted infection，性傳染病",
+  "TB":"tuberculosis，結核",
+  "TCA":"tricyclic antidepressant，三環抗憂鬱劑",
+  "TDM":"therapeutic drug monitoring，治療藥物濃度監測",
+  "TEE":"transesophageal echocardiography，經食道心臟超音波",
+  "TPN":"total parenteral nutrition，全靜脈營養",
+  "TTE":"transthoracic echocardiography，經胸心臟超音波",
+  "TURBT":"transurethral resection of bladder tumor，經尿道膀胱腫瘤切除",
+  "TURP":"transurethral resection of the prostate，經尿道攝護腺切除",
+  "URS":"ureteroscopy，輸尿管鏡",
+  "UTI":"urinary tract infection，泌尿道感染",
+  "VAP":"ventilator-associated pneumonia，呼吸器相關肺炎",
+  "VPA":"valproic acid",
+  "VRE":"vancomycin-resistant Enterococcus",
+  "WBC":"white blood cell count，白血球數"
+};
+const GLOSS_KEYS = Object.keys(GLOSS).sort((a,b)=>b.length-a.length);
+const reEsc = s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+// 不用 lookbehind（舊版 iOS 不支援）
+const GLOSS_SRC = "(^|[^A-Za-z0-9\\-])("+GLOSS_KEYS.map(reEsc).join("|")+")(?![A-Za-z0-9\\-])";
+const GL_CARD = ".opt,.note,.dur,.ctx,.tgt,.hint,.formula,.cond,.onote,.rx-meta,.rx-more,li,td,.picked,.pfres";
+function markGloss(root){
+  if(!root||typeof document==="undefined") return;
+  root.querySelectorAll(GL_CARD).forEach(card=>{
+    if(card.parentElement&&card.parentElement.closest(GL_CARD)) return;   // 只處理最外層卡片：每張卡片第一次出現的縮寫
+    const seen=new Set();
+    const tw=document.createTreeWalker(card,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest("button,summary,.rx-dose,input,select,textarea,i")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+    const nodes=[]; while(tw.nextNode()) nodes.push(tw.currentNode);
+    for(const n of nodes){
+      const t=n.nodeValue, re=new RegExp(GLOSS_SRC,"g"); let m, last=0, changed=false; const frag=document.createDocumentFragment();
+      while((m=re.exec(t))){
+        const k=m[2], st=m.index+m[1].length;
+        if(seen.has(k)) continue;
+        seen.add(k); changed=true;
+        frag.append(t.slice(last,st));
+        const b=document.createElement("button"); b.type="button"; b.className="gl"; b.dataset.gl=k; b.textContent=k; frag.append(b);
+        last=st+k.length;
+      }
+      if(changed){ frag.append(t.slice(last)); n.replaceWith(frag); }
+    }
+  });
+}
+
+/* 搜尋 */
+let SIDX = null;
+const SCAT = ["藥物","診斷","菌種","手術預防","TDM"];
+function buildIdx(){
+  const a=[], seen=new Set();
+  const add=x=>{ const key=x.t+"|"+x.n; if(seen.has(key)) return; seen.add(key); a.push(x); };
+  for(const k of Object.keys(D)) add({t:"藥物",n:D[k].n,s:(D[k].n+" "+(D[k].brand||"")).toLowerCase(),sub:D[k].brand?`商品名：${D[k].brand}`:"",go:{tab:"drug",drug:k}});
+  for(const [sk,sy] of Object.entries(SYS)) for(const u of sy.subs) add({t:"診斷",n:u.n,s:(u.n+" "+sy.n).toLowerCase(),sub:sy.n,go:{tab:"emp",sys:sk,sub:u.id}});
+  SPC_FULL.forEach((n,i)=>add({t:"菌種",n,s:(n+" "+SPC[i]).toLowerCase(),sub:"抗菌譜",go:{tab:"spec",col:i}}));
+  for(const [p,o] of Object.entries(PATH)) if(PCOL[p]!==undefined) add({t:"菌種",n:o.n,s:o.n.toLowerCase(),sub:`抗菌譜：${SPC[PCOL[p]]}`,go:{tab:"spec",col:PCOL[p]}});
+  PROC.forEach(p=>add({t:"手術預防",n:p.n,s:p.n.toLowerCase(),sub:"泌尿手術預防",go:{tab:"px",proc:p.id}}));
+  TDM_D.forEach(([k,n])=>add({t:"TDM",n:`${n}（TDM）`,s:(n+" tdm 濃度 劑量").toLowerCase(),sub:"劑量與濃度",go:{tab:"tdm",tdm:k}}));
+  return a;
+}
+function searchHits(q){
+  q=q.trim().toLowerCase(); if(!q) return [];
+  SIDX=SIDX||buildIdx();
+  const out=[];
+  for(const c of SCAT){
+    const hs=SIDX.filter(x=>x.t===c&&x.s.includes(q)).map(x=>[x.s.indexOf(q),x]).sort((a,b)=>a[0]-b[0]).slice(0,5).map(x=>x[1]);
+    out.push(...hs);
+  }
+  return out;
+}
+let QH = [];
+function renderQ(q){
+  const box=$("qres"); QH=searchHits(q);
+  if(!q.trim()){ box.hidden=true; box.innerHTML=""; return; }
+  box.hidden=false;
+  if(!QH.length){ box.innerHTML=`<div class="qnone">找不到「${q.replace(/[<>&]/g,"")}」</div>`; return; }
+  let h="", lastT="";
+  QH.forEach((x,i)=>{ if(x.t!==lastT){ h+=`<div class="qcat">${x.t}</div>`; lastT=x.t; } h+=`<button type="button" class="qitem" data-act="go" data-i="${i}"><span>${x.n}</span>${x.sub?`<span class="qsub">${x.sub}</span>`:""}</button>`; });
+  box.innerHTML=h;
+}
+function goHit(x){
+  const g=x.go; let jump=false;
+  S.tab=g.tab;
+  if(g.tab==="emp"){ S.sys=g.sys; S.sub=g.sub; S.path=null; S.ph=null; UI.edit=null; }
+  else if(g.tab==="spec"){ S.spec.view="bac"; S.spec.cols=[g.col]; S.spec.drug=null; jump=true; }
+  else if(g.tab==="drug"){ S.drug=g.drug; UI.dpick=false; }
+  else if(g.tab==="px"){ S.proc=g.proc; UI.pxpick=false; }
+  else if(g.tab==="tdm") S.tdm=g.tdm;
+  return jump;
+}
+
+/* 藥物頁 */
+let USE = null;   // 藥物 → 在哪些經驗性情境出現（以預設情境＋各嚴重度產生）
+function drugUse(){
+  if(USE) return USE;
+  USE={}; const keep={sys:S.sys,sub:S.sub,sev:S.sev,mdr:S.mdr};
+  try{
+    for(const [sk,sy] of Object.entries(SYS)) for(const u of sy.subs){
+      if(!GEN[u.id]) continue;
+      S.sys=sk; S.sub=u.id; S.mdr=[];
+      for(const sev of (hasSev(u.id)?["none","sepsis","shock"]:["none"])){
+        let r; try{ r=GEN[u.id]({fx:fxSet(),sev,male:true}); }catch(e){ continue; }
+        (r.o||[]).forEach(o=>{ [o].concat(o.add||[]).forEach(g=>(g.regs||[]).forEach(rg=>{ const d=REG[rg]&&REG[rg].d; if(d) (USE[d]=USE[d]||new Set()).add(u.id); })); });
+      }
+    }
+  } finally { Object.assign(S,keep); }
+  return USE;
+}
+const subSys = id=>Object.keys(SYS).find(k=>SYS[k].subs.some(x=>x.id===id));
+function regsOfDrug(k){ return Object.keys(REG).filter(r=>REG[r].d===k); }
+function renalTable(g){
+  if(g.type) return "";
+  const rows=g.b.map((x,i)=>[g.b.length===1?"所有腎功能":bandRange(g.b,i),fillW(x[1])]);
+  [["hd","HD"],["pd","PD"],["crrt","CRRT"]].forEach(([k,n])=>{ if(g[k]) rows.push([n,fillW(g[k])]); });
+  const cur=R?(R.mode==="crcl"?g.b.findIndex(x=>R.val>=x[0]):-1):0;
+  const curD=R&&R.mode!=="crcl"?{hd:"HD",pd:"PD",crrt:"CRRT"}[R.mode]:null;
+  return `<div class="tbl-wrap"><table><thead><tr><th>腎功能</th><th>劑量</th></tr></thead><tbody>${rows.map((r,i)=>`<tr${(curD?r[0]===curD:i===(cur<0?g.b.length-1:cur))?' class="cur"':""}><td>${r[0].replace(/</g,"&lt;")}</td><td class="mono">${r[1]}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function spectrumOf(k){
+  const out=[];
+  SPEC_ROWS.filter(r=>r[1]===k).forEach(r=>{ const v=SPV[r[0]]; if(!v) return; v.forEach((x,i)=>{ if(x>=2) out.push([SPC_FULL[i],x]); }); });
+  const fc=FCOLS.findIndex(c=>c[2].includes(k));
+  if(fc>=0) FV.forEach((row,ri)=>{ if(row[fc]>=2) out.push([FROWS[ri][0],row[fc]]); });
+  const seen=new Set(); return out.filter(([n])=>!seen.has(n)&&seen.add(n));
+}
+function renderDrug(){
+  let h="";
+  if(!S.drug||UI.dpick){
+    h+=`<div class="step"><h3><span class="k">01</span>選擇藥物</h3>${drugChips(Object.keys(D),k=>`<button class="chip" type="button" data-act="drug" data-v="${k}" aria-pressed="${S.drug===k}">${D[k].n}</button>`)}<div class="hint">也可以用上方搜尋（藥名或商品名）。</div></div>`;
+    if(!S.drug) return h;
+  } else h+=`<div class="picked"><span class="k">01</span><span class="q">藥物</span><b>${D[S.drug].n}</b><button class="linkbtn" type="button" data-act="dpick">更改</button></div>`;
+  const k=S.drug, d=D[k], regs=regsOfDrug(k);
+  const grp=(DGRP.find(g=>g[1].includes(k))||["未分類"])[0];
+  h+=`<div class="step"><h3><span class="k">02</span>${nameHTML(k,null,d.brand?undefined:0)}<span class="flag info">${grp}</span></h3>${renalBar()}`;
+  const fl=[];
+  const al=allergyCheck(k); if(al) fl.push(`<span class="flag ${al.lvl}">${al.m}</span>`);
+  if(d.tw==="limited") fl.push(`<span class="flag info">台灣供應有限，確認院內品項</span>`);
+  if(d.restrict) fl.push(`<span class="flag info">管制抗生素・會診感染科</span>`);
+  if(fl.length) h+=`<div class="rtag">${fl.join("")}</div>`;
+  h+=`<div class="res">`;
+  if(!regs.length) h+=`<div class="note">app 內沒有這個藥的劑量資料。</div>`;
+  regs.forEach((id,i)=>{
+    const g=REG[id];
+    h+=`<div class="opt${i===0?" primary":""}"><div class="opt-head"><span class="tier${i===0?" primary":""}">${regs.length>1?`劑量 ${i+1}・`:""}${g.r}</span></div>${rxRow(id)}`;
+    if(g.type==="vanco"||g.type==="teico") h+=`<div class="srcs"><button class="linkbtn" type="button" data-act="go-tdm" data-v="${g.type}">到 TDM 頁計算 ›</button></div>`;
+    else h+=`<details class="more"><summary>各腎功能劑量</summary>${renalTable(g)}</details>`;
+    h+=`${srcTags(g.src)}</div>`;
+  });
+  h+=`</div></div>`;
+  // 其他資訊
+  const ix=INTER.filter(x=>x.d.includes(k));
+  h+=`<div class="step"><h3><span class="k">03</span>其他</h3><div class="notes">`;
+  h+=`<div class="note"><b>懷孕：</b>${d.preg||"app 未標示特別禁忌；請依仿單"}</div>`;
+  if(ix.length) h+=`<div class="note"><b>交互作用（${ix.length}）</b><ul class="ixl">${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></div>`;
+  const sp=spectrumOf(k);
+  if(sp.length) h+=`<div class="note"><b>主要涵蓋（抗菌譜 ++／+）</b><div class="chips mt">${sp.map(([n,v])=>`<span class="chip static">${n}<span class="n" style="margin:0 0 0 6px">${SYM[v]}</span></span>`).join("")}</div></div>`;
+  const use=[...((drugUse()[k])||[])];
+  if(use.length) h+=`<div class="note"><b>app 內出現的經驗性情境（${use.length}）</b><div class="chips mt">${use.map(id=>`<button class="chip" type="button" data-act="go-sub" data-v="${id}">${/^不確定/.test(SUBDEF[id].n)?SYS[subSys(id)].n+"・":""}${SUBDEF[id].n}</button>`).join("")}</div></div>`;
+  h+=`</div></div>`;
+  return h;
+}
+
+/* ================= v0.10 TDM：vancomycin、teicoplanin、aminoglycoside ================= */
+const TDM_D = [["vanco","Vancomycin"],["teico","Teicoplanin"],["gent","Gentamicin"],["amk","Amikacin"]];
+function renderTdm(){
+  let h=`<div class="chips tdmsel" role="group" aria-label="TDM 藥物">${TDM_D.map(([k,n])=>`<button class="chip" type="button" data-act="tdm" data-v="${k}" aria-pressed="${S.tdm===k}">${n}</button>`).join("")}</div>`;
+  return h+({vanco:renderVanco,teico:renderTeico,gent:()=>renderAG("gent"),amk:()=>renderAG("amk")}[S.tdm]||renderVanco)();
+}
+/* Aminoglycoside：每日一次（Hartford 7 mg/kg／Urban-Craig 5 mg/kg；amikacin 皆 15 mg/kg）、傳統分次、協同、透析 */
+const AGX = {
+  gent:{n:"Gentamicin",d:"gent",step:20,trough:1,
+    ei:[{k:"hart",n:"Hartford",mk:7,div:1,src:["NICOLAU95","STAN_AG"]},{k:"uc",n:"Urban-Craig",mk:5,div:1,src:["STAN_AG"]}],
+    conv:"1.5–2 mg/kg（UCSF 1.6；Hamilton：菌血症 1.7、重症／肺炎 2）",convMk:[1.7,2],
+    tgt:"Hamilton：菌血症 peak 6–8、trough &lt;1；重症／肺炎 peak 8–10、trough &lt;2。UCSF：peak 5–8、trough &lt;2（mg/L）",
+    hd:"Stanford：負荷 2 mg/kg → 每次透析後 1.5 mg/kg｜UCSF、Hamilton：2 mg/kg → 每次透析後 1 mg/kg",hdMk:[2,1,1.5],
+    crrt:"Stanford：負荷 3 mg/kg → 1.5–2.5 mg/kg q24–48h｜UCSF（CVVHD）：2 mg/kg → 1.5 mg/kg q24h",
+    preHD:"Hamilton 透析前濃度目標：<2（UTI／協同）、&lt;4（菌血症、肺炎）mg/L"},
+  amk:{n:"Amikacin",d:"amikacin",step:50,trough:4,
+    ei:[{k:"hart",n:"Hartford",mk:15,div:2,src:["STAN_AG","HHS_AG"]},{k:"uc",n:"Urban-Craig",mk:15,div:3,src:["STAN_AG"]}],
+    conv:"7.5 mg/kg（Hamilton）",convMk:[7.5,7.5],
+    tgt:"Hamilton：菌血症 peak 20–25、trough &lt;8；重症／肺炎 peak 25–40、trough &lt;8（mg/L）",
+    hd:"Stanford：每次透析後 5–7.5 mg/kg｜Hamilton：每次透析後 7.5 mg/kg",hdMk:[7.5,7.5,7.5],
+    crrt:"Stanford：負荷 10 mg/kg → 7.5 mg/kg q24–48h",
+    preHD:"Hamilton 透析前濃度目標：<6（UTI）、&lt;10（菌血症）、&lt;12（肺炎）mg/L"}
+};
+const AG_MODES = {ei:"每日一次（G(−) 感染）",conv:"傳統分次",syn:"G(+) 協同（心內膜炎）"};
+// 依 CrCl 決定每日一次的給藥間隔；各來源切點不同時另外回傳差異說明
+function agInterval(scheme,crcl){
+  if(crcl>=60) return {q:24};
+  if(crcl>=40) return {q:36};
+  if(crcl>=30) return {q:48};
+  if(crcl>=20) return {q:48,diff:"CrCl 20–29 各來源不一致：Nicolau 1995（Hartford）、Hamilton、Stanford 的 Urban-Craig 表仍為 q48h；Stanford 的 Hartford 表與排除條件列 CrCl &lt;30 不建議每日一次。"};
+  return {q:null};
+}
+function agCalc(){
+  const a=S.ag, out={};
+  const n=v=>Number.isFinite(v)&&v>0;
+  if(!n(a.c1)) return null;
+  out.c1=a.c1; out.t1=a.t1;
+  if(n(a.c2)&&n(a.t1)&&n(a.t2)){
+    if(a.t2<=a.t1) return {err:"第二次抽血時間要晚於第一次"};
+    if(a.c2>=a.c1) return {err:"第二次濃度要低於第一次（同一給藥間隔內）"};
+    if(a.t1<a.ti) return {err:"第一次抽血要在輸注結束後"};
+    const K=Math.log(a.c1/a.c2)/(a.t2-a.t1), th=Math.log(2)/K, cmax=a.c1*Math.exp(K*(a.t1-a.ti));
+    Object.assign(out,{K,th,cmax,two:true});
+  }
+  return out;
+}
+const f1=v=>(Math.round(v*10)/10).toString(), f2=v=>(Math.round(v*100)/100).toString();
+function renderAG(key){
+  const X=AGX[key], w=weights(), mode=(key==="amk"&&S.ag.mode==="syn")?"ei":S.ag.mode;
+  let h=`<div class="step"><h3><span class="k">01</span>用途</h3><div class="chips">${Object.entries(AG_MODES).filter(([m])=>key==="gent"||m!=="syn").map(([m,t])=>`<button class="chip" type="button" data-act="ag-mode" data-v="${m}" aria-pressed="${mode===m}">${t}</button>`).join("")}</div></div>`;
+  h+=`<div class="step"><h3><span class="k">02</span>建議劑量</h3>${renalBar()}`;
+  // 給藥體重
+  if(!w) h+=`<div class="note warn">輸入體重後才能換算 mg。</div>`;
+  else h+=`<div class="note"><b>給藥體重：</b>${w.ds} ${r0(w.dw)} kg（app 規則：低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）<details class="more"><summary>各來源的給藥體重規則不同</summary><div class="notes"><div class="note">Stanford：Hartford 用實際體重，肥胖改 AdjBW；非肥胖也可考慮 IBW。${srcTags(["STAN_AG"])}</div><div class="note">Hamilton：用 IBW（實際體重較低時用實際體重），肥胖（超過 IBW 30%）用 AdjBW。${srcTags(["HHS_AG"])}</div></div></details></div>`;
+  const dial=R&&R.mode!=="crcl";
+  const mg=mk=>w?Math.round(mk*w.dw/X.step)*X.step:null;
+  const dTxt=(mk)=>w?`${mk} mg/kg ≈ ${mg(mk)} mg`:`${mk} mg/kg`;
+  const excl=[];
+  if(S.pt.aki) excl.push("腎功能不穩定");
+  if(S.preg) excl.push("懷孕");
+  if(dial) excl.push(R.label);
+  if(R&&R.mode==="crcl"&&R.val<20) excl.push(`CrCl ${r0(R.val)}`);
+  h+=`<div class="res mt">`;
+  if(mode==="ei"){
+    if(excl.length) h+=`<div class="note danger"><b>不適用每日一次：</b>${excl.join("、")}。改用傳統分次或透析劑量，並依濃度給藥。${srcTags(["STAN_AG","HHS_AG"])}</div>`;
+    if(!R) h+=`<div class="note warn">未輸入腎功能：以下間隔以 CrCl ≥60 顯示。</div>`;
+    if(!dial&&!excl.length){
+      const crcl=R?R.val:100;
+      X.ei.forEach((s,i)=>{
+        const iv=agInterval(s.k,crcl);
+        const dose=iv.q?`${dTxt(s.mk)} IV q${iv.q}h`:"不建議每日一次 → 傳統分次、依濃度";
+        h+=`<div class="opt${i===0?" primary":""}"><div class="opt-head"><span class="tier${i===0?" primary":""}">${s.n} ${s.mk} mg/kg</span></div>
+          <div class="rx"><div class="rx-head"><span class="rx-name">${X.n}</span><span class="route">IV</span></div><div class="rx-dose">${dose}</div>
+          <div class="rx-meta">間隔：CrCl ≥60 q24h、40–59 q36h、20–39 q48h、&lt;20 不建議；四捨五入至 ${X.step} mg</div>
+          ${iv.q&&w?`<button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(`${X.n} ${mg(s.mk)} mg IV q${iv.q}h`)}">複製</button>`:""}</div>
+          <div class="cond">濃度：首劑開始輸注後 6–14 小時抽一次隨機濃度${s.div>1?`，<b>先除以 ${s.div}</b> 再標到 nomogram`:""}，依 ${s.k==="hart"?"Hartford":"Urban-Craig"} nomogram 決定間隔；壓線取較長間隔，高於 q48h 線改傳統分次。</div>
+          ${iv.diff&&i===0?`<div class="note warn mt">${iv.diff}${srcTags(["NICOLAU95","HHS_AG","STAN_AG"])}</div>`:""}${srcTags(s.src)}</div>`;
+      });
+      h+=`<div class="note">${key==="gent"?"兩種 nomogram 由不同研究建立，劑量不可混用：給 5 mg/kg 就用 Urban-Craig、給 7 mg/kg 就用 Hartford。":"Amikacin 兩者都是 15 mg/kg，差在判讀：Hartford 濃度先 ÷2、Urban-Craig 先 ÷3（Stanford）。"}app 不內建 nomogram 曲線（查無可核對的數值邊界），請用院內 nomogram 判讀，或在下方輸入兩點濃度計算。${srcTags(["STAN_AG","HHS_AG"])}</div>`;
+      h+=`<details class="more"><summary>不適用每日一次的情況</summary><div class="notes"><div class="note">CrCl &lt;30（Hamilton 為 &lt;20）或腎功能快速變化、透析／CRRT、懷孕、G(+) 協同（心內膜炎）、明顯腹水、燒傷 >20% BSA、囊性纖維化（另有劑量）；Hamilton 另列 septic shock。${srcTags(["STAN_AG","HHS_AG"])}</div></div></details>`;
+    }
+  }
+  if(mode==="conv"||(mode==="ei"&&excl.length&&!dial)){
+    const crcl=R&&R.mode==="crcl"?R.val:null;
+    const q=crcl===null?null:crcl>60?"q8h":crcl>=40?"q12h":crcl>=20?"q24h（UCSF：q12–24h）":"依濃度給藥";
+    h+=`<div class="opt"><div class="opt-head"><span class="tier">傳統分次</span></div>
+      <div class="rx"><div class="rx-head"><span class="rx-name">${X.n}</span><span class="route">IV</span></div><div class="rx-dose">${X.conv}${w?` ≈ ${mg(X.convMk[0])}${X.convMk[1]!==X.convMk[0]?`–${mg(X.convMk[1])}`:""} mg`:""}${q?` ${q}`:""}</div>
+      <div class="rx-meta">間隔（Hamilton）：CrCl >60 q8h、40–60 q12h、20–40 q24h、&lt;20 依濃度</div></div>
+      <div class="cond">目標：${X.tgt}。第 3 劑輸注結束後 30 分鐘抽 peak、第 4 劑前抽 trough。</div>${srcTags(["HHS_AG","UCSF_AG"])}</div>`;
+  }
+  if(mode==="syn"){
+    const crcl=R&&R.mode==="crcl"?R.val:null;
+    const q=crcl===null?"q8h（CrCl >60）":crcl>60?"q8h":crcl>=40?"q12h":crcl>=20?"q24h":"單次，濃度 &lt;1 mg/L 再給";
+    h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">協同劑量（分次）</span></div>
+      <div class="rx"><div class="rx-head"><span class="rx-name">Gentamicin</span><span class="route">IV</span></div><div class="rx-dose">${dTxt(1)} IV ${q}</div>
+      <div class="rx-meta">Stanford：CrCl >60 q8h、40–59 q12h、20–39 q24h、&lt;20 或 AKI 單次後依濃度；HD q48–72h</div></div>
+      <div class="cond">目標：peak 3–4、trough &lt;1 mg/L（Stanford）；Hamilton peak 3–5、trough &lt;1。</div>${srcTags(["STAN_AG","HHS_AG"])}</div>`;
+    h+=`<div class="opt"><div class="opt-head"><span class="tier">每日一次（心內膜炎替代）</span></div>
+      <div class="rx"><div class="rx-head"><span class="rx-name">Gentamicin</span><span class="route">IV</span></div><div class="rx-dose">${dTxt(3)} IV q24h</div>
+      <div class="rx-meta">ESC 2023（app 心內膜炎頁採用）；Stanford 限 CrCl >60、鏈球菌（viridans、bovis／gallolyticus）；不適用 peak 目標</div></div>${srcTags(["ESC_IE23","STAN_AG"])}</div>`;
+  }
+  if(dial){
+    h+=`<div class="opt"><div class="opt-head"><span class="tier">${R.label}</span></div>
+      <div class="onote"><b>HD：</b>${X.hd}</div><div class="onote"><b>CRRT：</b>${X.crrt}</div><div class="onote"><b>PD：</b>依濃度給藥（會診藥師）</div>
+      <div class="cond">${X.preHD}；給 2 劑後抽透析前濃度。</div>${srcTags(["STAN_AG","UCSF_AG","HHS_AG"])}</div>`;
+  }
+  if(key==="gent") h+=`<div class="note warn">${updB("CLSI M100-Ed33（2023）：gentamicin 不再列為 P. aeruginosa 的建議治療選項，實驗室可不報告或報 R。舊版仍有 gentamicin 的 P. aeruginosa 判讀標準。")} P. aeruginosa 不以 gentamicin 治療（CLSI 2023 已移除建議）；依院內藥敏選藥。${srcTags(["CLSI23"])}</div>`;
+  h+=`</div></div>`;
+  // 03 濃度計算
+  const a=S.ag, c=agCalc();
+  const inp=(f,l,u,v,st)=>`<div class="field"><label for="ag_${f}">${l} <span class="unit">${u}</span></label><input id="ag_${f}" type="number" inputmode="decimal" step="${st}" min="0" data-act="ag-f" data-v="${f}" value="${v??""}"></div>`;
+  h+=`<div class="step"><h3><span class="k">03</span>濃度判讀</h3><div class="grid2" style="max-width:520px">
+    ${inp("ti","輸注時間","小時",a.ti,"0.25")}<div></div>
+    ${inp("c1","第一次濃度","mg/L",a.c1,"0.1")}${inp("t1","距輸注開始","小時",a.t1,"0.5")}
+    ${inp("c2","第二次濃度（選填）","mg/L",a.c2,"0.1")}${inp("t2","距輸注開始","小時",a.t2,"0.5")}
+  </div><div class="hint">兩點都在同一個給藥間隔內、輸注結束之後。只輸入一點時顯示 nomogram 判讀提示。</div><div class="res mt" id="agRes">${agResHTML(key)}</div>`;
+  h+=`</div>`;
+  return h;
+}
+// 濃度判讀結果（輸入時只重繪這一塊，不打斷輸入）
+function agResHTML(key){
+  const X=AGX[key], a=S.ag, c=agCalc(); let h="";
+  if(!c) h+=`<div class="note">輸入濃度後顯示判讀。</div>`;
+  else if(c.err) h+=`<div class="note warn">${c.err}</div>`;
+  else if(!c.two){
+    const s0=X.ei[0], s1=X.ei[1];
+    const inWin=a.t1>=6&&a.t1<=14;
+    h+=`<div class="note${inWin?"":" warn"}">${inWin?"":"<b>抽血時間不在 6–14 小時內：</b>nomogram 不適用，請再輸入一點濃度用藥動計算。<br>"}Hartford（${s0.mk} mg/kg）：標到 nomogram 的值 = ${f1(a.c1/s0.div)} mg/L（${a.t1??"?"} 小時）${s0.div>1?`（原始濃度 ÷${s0.div}）`:""}。<br>Urban-Craig（${s1.mk} mg/kg）：${f1(a.c1/s1.div)} mg/L${s1.div>1?`（÷${s1.div}）`:""}。${srcTags(["STAN_AG","HHS_AG"])}</div>`;
+  } else {
+    const at=t=>c.cmax*Math.exp(-c.K*(t-a.ti));
+    const tt=a.ti+Math.log(c.cmax/X.trough)/c.K;
+    const q=[24,36,48].find(x=>x>=tt);
+    h+=`<div class="opt primary"><div class="opt-head"><span class="tier primary">藥動估算</span></div>
+      <dl class="kv"><dt>消除速率 K</dt><dd>${f2(c.K)} /h</dd><dt>半衰期</dt><dd>${f1(c.th)} h</dd><dt>輸注結束時 Cmax</dt><dd>${f1(c.cmax)} mg/L</dd>
+      <dt>24 h／36 h／48 h 濃度</dt><dd>${[24,36,48].map(t=>f2(Math.max(0,at(t)))).join("／")} mg/L</dd><dt>降到 &lt;${X.trough} mg/L</dt><dd>約 ${f1(tt)} h</dd></dl>
+      <div class="cond mt">${q?`同劑量每日一次可用 q${q}h（濃度降到 &lt;${X.trough} mg/L 所需時間 ≤${q} 小時）`:`超過 48 小時仍未降到 &lt;${X.trough} mg/L：改傳統分次或依濃度給藥`}。</div>
+      <div class="onote">公式：K = ln(C1/C2) ÷ 兩次抽血間隔；Cmax = C1 × e^(K ×（t1 − 輸注時間））。trough 目標 ${X.trough} mg/L 依每日一次給藥常用值。</div>${srcTags(["STAN_AG","HHS_AG"])}</div>`;
+  }
+  return h;
+}
+
+/* 「更新」徽章：點開說明改了什麼 */
+const updB = note=>`<button type="button" class="upd" data-upd="${String(note).replace(/"/g,"&quot;")}">更新</button>`;
+
+/* ================= v0.11 PEN-FAST（自述 penicillin 過敏的風險評估） ================= */
+// F：反應距今 ≤5 年 2 分；A/S：過敏性休克或血管性水腫，或 SCAR 2 分（同一項，最多 2 分）；T：當時需要治療 1 分
+function pfScore(pf){ return (pf.f5?2:0)+((pf.ana||pf.scar)?2:0)+(pf.tx?1:0); }
+function pfHTML(){
+  const pf=S.pf, n=pfScore(pf), sev=pf.ana||pf.scar;
+  const src=srcTags(["PENFAST20","PALACE23","ALLERGY22"]);
+  if(n<3&&!sev) return `<div class="note ok-n"><b>${n} 分：低風險（&lt;3）。</b>驗證研究中 &lt;3 分者皮膚測試陽性 3.7%（NPV 96.3%）。可考慮直接口服挑戰除去標籤（PALACE：門診成人 PEN-FAST &lt;3，單劑口服（多為 amoxicillin 250 mg）、觀察 1 小時，不劣於皮膚測試後挑戰）。
+    ${S.allergy!=="pen_low"?`<div class="mt"><button class="btn" type="button" data-act="pf-apply">過敏分類設為「Penicillin 過敏（非嚴重）」</button></div>`:""}${src}</div>`;
+  if(n<3&&sev) return `<div class="note warn"><b>${n} 分：</b>分數 &lt;3，但有${pf.scar?" SCAR":"過敏性休克／血管性水腫"}病史。PALACE 排除這類病人，不適用直接口服挑戰；請轉介過敏科。${pf.scar?"SCAR 史不做挑戰或皮膚測試（AAAAI/ACAAI 2022）。":""}${src}</div>`;
+  return `<div class="note ${pf.scar?"danger":"warn"}"><b>${n} 分：非低風險（≥3）。</b>轉介過敏科評估（皮膚測試）；用藥依上方過敏分類。${pf.scar?"SCAR 史不做挑戰或皮膚測試（AAAAI/ACAAI 2022）。":""}${src}</div>`;
+}
+function renderPf(){ const el=$("pfRes"); if(el){ el.innerHTML=pfHTML(); markGloss(el); } }
+
+const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["oral","口服降階"],["drug","藥物"],["tdm","TDM"],["px","泌尿手術預防"],["ix","交互作用"],["ref","出處"]];
+const TAB_S={cur:"用藥調整"};
+const TAB_MS={px:"手術預防",ix:"交互作用"};   // 「更多」按鈕顯示目前分頁時用短名   // 窄螢幕（≤420px）短名稱
 const TAB_MAIN=["emp","cur","oral"];   // 手機主列；其餘收進「更多」（寬螢幕全部顯示）
 function renderMain(){
   R=getRenal();
   const xt=TABS.filter(([k])=>!TAB_MAIN.includes(k)), cx=xt.find(([k])=>k===S.tab);
   $("tabs").innerHTML=TABS.map(([k,n])=>`<button class="tab${TAB_MAIN.includes(k)?"":" xtra"}" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${TAB_S[k]?`<span class="ts">${TAB_S[k]}</span>`:""}<span class="tl">${n}</span></button>`).join("")
-    +`<button class="tab morebtn" type="button" data-act="more" aria-expanded="${UI.more}" aria-controls="tabmenu" aria-selected="${!!cx}">${cx?cx[1]:"更多"} ▾</button>`;
+    +`<button class="tab morebtn" type="button" data-act="more" aria-expanded="${UI.more}" aria-controls="tabmenu" aria-selected="${!!cx}">${cx?`<span class="mcur">${TAB_MS[cx[0]]||cx[1]}</span><span class="mgen">更多</span>`:"更多"} ▾</button>`;
   const tm=$("tabmenu"); tm.hidden=!UI.more;
   tm.innerHTML=xt.map(([k,n])=>`<button class="chip" type="button" data-act="tab" data-v="${k}" aria-pressed="${S.tab===k}">${n}</button>`).join("");
-  const f={spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab];
+  const f={spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab]||renderEmp;
   $("main").innerHTML=f()+(S.tab==="spec"&&S.spec.view==="bac"&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"");
+  markGloss($("main"));
 }
 const narrow=()=>typeof matchMedia!=="undefined"&&matchMedia("(max-width:920px)").matches;
 const ALG_S={none:"",pen_low:"PCN 過敏（非嚴重）",pen_ana:"PCN 過敏性休克",ceph:"Ceph 過敏",bl_scar:"β-lactam SCAR"};
@@ -2518,14 +3012,15 @@ function readPt(){
   p.method=document.querySelector('input[name="method"]:checked').value;
   p.crcl=num($("crclIn").value); p.egfr=num($("egfrIn").value); p.aki=$("aki").checked;
   S.allergy=$("allergy").value; S.preg=$("preg").checked;
+  S.pf={f5:$("pf5").checked,ana:$("pfA").checked,scar:$("pfS").checked,tx:$("pfT").checked};
 }
 
 if(typeof document!=="undefined"){
   $("ver").textContent=`${VERSION}・查證 ${VERIFIED}`;
   $("footVer").textContent=`抗生素選擇助手 ${VERSION}・查證 ${VERIFIED}・${SCOPE}`;
   // 病人資料：值沒變就不重繪（避免 blur 時把正要點的按鈕換掉）
-  const ptKey=()=>JSON.stringify([S.pt,S.allergy,S.preg]);
-  const onPt=()=>{ const k=ptKey(); readPt(); if(ptKey()===k) return; renderRsum(); renderMain(); renderPt(); };
+  const ptKey=()=>JSON.stringify([S.pt,S.allergy,S.preg,S.pf]);
+  const onPt=()=>{ const k=ptKey(); readPt(); if(ptKey()===k) return; renderRsum(); renderMain(); renderPt(); renderPf(); };
   $("side").addEventListener("input",onPt);
   $("side").addEventListener("change",onPt);
   const showOv=(t,b)=>{ $("ovT").textContent=t; $("ovB").innerHTML=b; $("ov").hidden=false; $("ov").querySelector(".btn").focus(); };
@@ -2536,10 +3031,26 @@ if(typeof document!=="undefined"){
   document.addEventListener("click",e=>{
     const sb=e.target.closest("button.src[data-ref]");
     if(sb){ const r=REF[sb.dataset.ref]; if(r) showOv(r.s,`<p>${esc(r.f)}</p>`); return; }
-    if(e.target.closest("button.upd[data-upd]")) showOv("更新","<p>與先前版本相比的新建議（2024–2026 指引）。改了什麼請見同一列的說明與出處。</p>");
+    const ub=e.target.closest("button.upd[data-upd]");
+    if(ub){ const t=ub.dataset.upd; showOv("更新",`<p>${t&&t!=="1"?esc(t):"與先前版本相比的新建議（2024–2026 指引）。改了什麼請見同一列的說明與出處。"}</p>`); return; }
+    const gb=e.target.closest("button.gl[data-gl]");
+    if(gb){ const k=gb.dataset.gl; showOv(k,`<p>${esc(GLOSS[k]||"")}</p>`); return; }
   });
+  // 搜尋
+  const q=$("q");
+  q.addEventListener("input",()=>renderQ(q.value));
+  q.addEventListener("keydown",e=>{ if(e.key==="Enter"&&QH.length){ e.preventDefault(); $("qres").querySelector(".qitem").click(); } else if(e.key==="Escape"){ q.value=""; renderQ(""); } });
+  document.addEventListener("click",e=>{ if(!e.target.closest(".srch")) $("qres").hidden=true; });
+  q.addEventListener("focus",()=>{ if(q.value.trim()) renderQ(q.value); });
   let wasNarrow=narrow();
   addEventListener("resize",()=>{ const n=narrow(); if(n!==wasNarrow){ wasNarrow=n; renderPt(); } });
+  // TDM 濃度欄位：輸入時更新結果區，不重繪整頁
+  $("main").addEventListener("input",e=>{
+    if(e.target.dataset.act!=="ag-f") return;
+    const f=e.target.dataset.v, x=num(e.target.value);
+    S.ag[f]=x!==null&&x>0?x:(f==="ti"?0.5:null);
+    const el=$("agRes"); if(el){ el.innerHTML=agResHTML(S.tdm); markGloss(el); }
+  });
   $("main").addEventListener("change",e=>{
     const a=e.target.dataset.act; if(!a) return;
     if(a==="mdr"){ const v=e.target.dataset.v; S.mdr=e.target.checked?[...S.mdr,v]:S.mdr.filter(x=>x!==v); renderMain(); }
@@ -2549,6 +3060,7 @@ if(typeof document!=="undefined"){
     else if(a==="o-flag"){ S.oral[e.target.dataset.v]=e.target.checked; renderMain(); }
     else if(a==="vauc"){ S.vauc=Math.min(600,Math.max(400,num(e.target.value)||500)); renderMain(); }
     else if(a==="vld"){ S.vld=Math.min(35,Math.max(15,num(e.target.value)||25)); renderMain(); }
+    else if(a==="ag-f") return;   // 由 input 事件處理
   });
   document.addEventListener("click",e=>{
     const b=e.target.closest("button[data-act]"); if(!b) return;
@@ -2562,6 +3074,15 @@ if(typeof document!=="undefined"){
     else if(a==="ov-close"){ $("ov").hidden=true; return; }
     else if(a==="demo"){ $("age").value=72; $("wt").value=60; $("ht").value=165; $("scr").value=1.6; $("sexM").checked=true; document.querySelector('input[name="method"][value="cg"]').checked=true; readPt(); renderRsum(); renderPt(); toast("已填入範例數值，請改為病人資料"); }
     else if(a==="edit"){ UI.edit=UI.edit===v?null:v; }
+    else if(a==="go"){ const x=QH[+b.dataset.i]; if(!x) return; jump=goHit(x); UI.more=false; $("q").value=""; $("qres").hidden=true; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } if(!jump) scrollTo(0,0); }
+    else if(a==="drug"){ S.drug=v; UI.dpick=false; }
+    else if(a==="dpick") UI.dpick=!UI.dpick;
+    else if(a==="go-drug"){ S.tab="drug"; S.drug=v; UI.dpick=false; scrollTo(0,0); }
+    else if(a==="go-tdm"){ S.tab="tdm"; S.tdm=v; scrollTo(0,0); }
+    else if(a==="go-sub"){ S.tab="emp"; S.sys=subSys(v); S.sub=v; S.path=null; S.ph=null; UI.edit=null; scrollTo(0,0); }
+    else if(a==="tdm") S.tdm=v;
+    else if(a==="ag-mode") S.ag.mode=v;
+    else if(a==="pf-apply"){ $("allergy").value="pen_low"; readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); toast("已設為 Penicillin 過敏（非嚴重）"); return; }
     else if(a==="onote"){ const n=b.parentElement.nextElementSibling; if(n&&n.classList.contains("onote")){ n.hidden=!n.hidden; b.setAttribute("aria-expanded",String(!n.hidden)); } return; }
     else if(a==="sys"){ const ch=S.sys!==v; S.sys=v; if(ch){ S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; } UI.edit=SYS[v].subs.length>1?"sub":null; }
     else if(a==="sub"){ if(S.sub!==v){ S.sub=v; S.path=null; S.ph=null; } UI.edit=null; }
@@ -2577,8 +3098,9 @@ if(typeof document!=="undefined"){
     else if(a==="cur-org"){ S.cur.org=v; S.cur.ph=""; S.cur.sus={}; }
     else if(a==="cur-ph") S.cur.ph=v;
     else if(a==="cur-sus"){ if(v) S.cur.sus[b.dataset.d]=v; else delete S.cur.sus[b.dataset.d]; }
-    else if(a==="proc") S.proc=v;
-    else if(a==="brand"){ const sp=b.closest(".rx").querySelector(".rx-more"); if(sp){ sp.hidden=!sp.hidden; b.setAttribute("aria-expanded",String(!sp.hidden)); } return; }
+    else if(a==="proc"){ S.proc=v; UI.pxpick=false; }
+    else if(a==="pxpick") UI.pxpick=!UI.pxpick;
+    else if(a==="brand"){ const host=b.closest(".rx")||b.parentElement; const sp=host.querySelector(".rx-more"); if(sp){ sp.hidden=!sp.hidden; b.setAttribute("aria-expanded",String(!sp.hidden)); } return; }
     else if(a==="o-iv"){ const c=S.oral.ivs; S.oral.ivs=c.includes(v)?c.filter(x=>x!==v):[...c,v]; }
     else if(a==="o-org"){ S.oral.org=v; S.oral.ph=""; S.oral.sus={}; }
     else if(a==="o-ph") S.oral.ph=v;
@@ -2597,7 +3119,7 @@ if(typeof document!=="undefined"){
     renderMain();
     if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
   });
-  readPt(); renderRsum(); renderMain(); renderPt();
+  readPt(); renderRsum(); renderMain(); renderPt(); renderPf();
 }
 </script>
 

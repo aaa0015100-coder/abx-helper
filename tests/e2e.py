@@ -61,6 +61,40 @@ with sync_playwright() as p:
                 if FULL:
                     click_all(pg, "#main button[data-act]:not([data-act=copy]):not([data-act=fav-save]):not([data-act=fav-del])", W, f"tab {k} 按鈕")
                     pg.evaluate("document.querySelectorAll('#main details').forEach(d=>d.open=true)"); check(pg, W, f"tab {k} 全展開")
+            # v0.9–v0.12：搜尋 → 藥物頁、縮寫、TDM、PEN-FAST、泌尿手術預防
+            pg.fill("#q", "cefe"); pg.wait_for_timeout(50)
+            if pg.locator("#qres .qitem").count()==0: issues.append(f"{W}: 搜尋沒有結果")
+            else:
+                pg.locator("#qres .qitem").first.click(); pg.wait_for_timeout(50)
+                if "Cefepime" not in pg.inner_text("#main"): issues.append(f"{W}: 搜尋選藥未開藥物頁")
+            check(pg, W, "藥物頁")
+            pg.fill("#q", "腎盂"); pg.keyboard.press("Enter"); pg.wait_for_timeout(50)
+            if "腎盂腎炎" not in pg.inner_text("#main"): issues.append(f"{W}: 搜尋診斷未跳到經驗性治療")
+            gl = pg.locator("#main button.gl:visible").first
+            if gl.count()==0: issues.append(f"{W}: 沒有縮寫按鈕")
+            else:
+                gl.click()
+                if pg.locator("#ov").is_hidden() or not pg.inner_text("#ovB").strip(): issues.append(f"{W}: 縮寫未開啟彈出層")
+                pg.locator("[data-act=ov-close]").click()
+            go_tab(pg, "tdm"); pg.wait_for_timeout(30)
+            for td in ["teico","gent","amk","vanco"]:
+                pg.locator(f"[data-act=tdm][data-v={td}]").click(); check(pg, W, f"TDM {td}")
+            pg.locator("[data-act=tdm][data-v=gent]").click()
+            pg.fill("#ag_c1","12"); pg.fill("#ag_t1","1.5"); pg.fill("#ag_c2","2"); pg.fill("#ag_t2","12"); pg.locator("#ag_t2").blur(); pg.wait_for_timeout(50)
+            if "半衰期" not in pg.inner_text("#main"): issues.append(f"{W}: 兩點濃度未計算")
+            check(pg, W, "TDM 計算")
+            go_tab(pg, "px"); pg.wait_for_timeout(30)
+            if pg.locator("[data-act=proc][data-v=pcn]").count()==0: pg.locator("[data-act=pxpick]").click()
+            pg.locator("[data-act=proc][data-v=pcn]").click(); check(pg, W, "px pcn")
+            if "SIR" not in pg.inner_text("#main"): issues.append(f"{W}: PCN 未顯示 SIR")
+            if W <= 920: pg.locator("#ptBar").click()
+            pg.locator("#pfDet summary").click(); pg.locator("#pf5").check(); pg.wait_for_timeout(30)
+            if "低風險" not in pg.inner_text("#pfRes"): issues.append(f"{W}: PEN-FAST 未顯示低風險")
+            pg.locator("[data-act=pf-apply]").click(); pg.wait_for_timeout(30)
+            if pg.eval_on_selector("#allergy","e=>e.value")!="pen_low": issues.append(f"{W}: PEN-FAST 套用未改過敏分類")
+            pg.locator("#pf5").uncheck(); pg.select_option("#allergy","none"); pg.wait_for_timeout(30)
+            if W <= 920: pg.locator("[data-act=pt-close]").click()
+            check(pg, W, "PEN-FAST 後")
             # 出處／更新彈出層
             go_tab(pg, "emp"); pg.wait_for_timeout(30)
             pg.evaluate("document.querySelectorAll('#main details').forEach(d=>d.open=true)")

@@ -25,6 +25,16 @@ const used=new Set(), missing=new Set();
 const scan=h=>{ for(const m of h.matchAll(/data-ref="([^"]*)"/g)){ used.add(m[1]); if(!A.REF[m[1]]) missing.add(m[1]); } };
 for(const [sk,sy] of Object.entries(A.SYS)) for(const sub of sy.subs){ set({tab:"emp",sys:sk,sub:sub.id,sev:"shock",allergy:"pen_ana"}); scan(A.render("emp")); for(const p of (A.PL[sub.id]||[])){ set({tab:"emp",sys:sk,sub:sub.id,path:p}); scan(A.render("emp")); } }
 for(const t of ["spec","cur","oral","px","vanco","teico","ix","ref"]){ set({tab:t}); scan(A.render(t)); }
+// 新模組：每個藥物頁、每個手術、TDM 各藥各用途（含濃度）、PEN-FAST 各分數
+const PTS=[{},{pt:{age:72,sex:"M",wt:60,ht:165,scr:1.6,method:"cg"}},{pt:{age:60,sex:"F",wt:55,method:"hd"}}];
+for(const k of Object.keys(A.D)) for(const pt of PTS){ set(Object.assign({tab:"drug",drug:k},JSON.parse(JSON.stringify(pt)))); scan(A.render("drug")); }
+for(const p of A.PROC) for(const al of ["none","pen_ana"]){ set({tab:"px",proc:p.id,allergy:al}); scan(A.render("px")); }
+for(const td of ["vanco","teico","gent","amk"]) for(const mode of ["ei","conv","syn"]) for(const pt of PTS) for(const lv of [{},{c1:4,t1:8},{c1:12,t1:1.5,c2:2,t2:12}]){ set(Object.assign({tab:"tdm",tdm:td,ag:Object.assign({mode,ti:0.5,c1:null,t1:null,c2:null,t2:null},lv)},JSON.parse(JSON.stringify(pt)))); scan(A.render("tdm")); }
+for(let m=0;m<16;m++){ set({pf:{f5:!!(m&1),ana:!!(m&2),scar:!!(m&4),tx:!!(m&8)}}); scan(A.pfHTML()); }
+// 每筆 REF 都有被引用（來源頁本身不算）
+set({tab:"ref"}); const refHtml=A.render("ref");
+Object.keys(A.REF).forEach(k=>{ if(!refHtml.includes(A.REF[k].s)) bad.push("REF 未列在來源頁 "+k); });
+const unused=Object.keys(A.REF).filter(k=>!used.has(k)); if(unused.length) console.log("（提示）未被任何情境引用的 REF："+unused.join(", "));
 missing.forEach(k=>bad.push("出處鍵不存在 "+k));
 // 每個藥恰好屬於一個清單分組（DGRP）
 if(A.DGRP){ const cnt={}; A.DGRP.forEach(([,ks])=>ks.forEach(k=>{cnt[k]=(cnt[k]||0)+1; if(!A.D[k]) bad.push("分組內藥物不存在 "+k);}));
