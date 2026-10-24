@@ -388,7 +388,7 @@ details.pf>summary{font-size:.86rem}
 <script>
 "use strict";
 const VERIFIED = "2026-10-25";
-const VERSION = "v0.13";
+const VERSION = "v0.14";
 const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
@@ -519,6 +519,8 @@ const REG = {
   gentQ24:{d:"gent",r:"IV",b:[[60,"5 mg/kg IV q24h{AG:5}"],[40,"5 mg/kg IV q36h{AG:5}"],[20,"5 mg/kg IV q48h{AG:5}"],[0,"避免；必要時單次給藥並依血中濃度"]],...DIAL("1.5–2 mg/kg 每次透析後，依透析前濃度{AG:2}","依濃度給藥（會診藥師）","首劑 5 mg/kg，之後依濃度{AG:5}"),note:"給藥體重：IBW（肥胖用 AdjBW）；監測濃度，避免 >7 天",src:["NICOLAU95","IDSA_cUTI25"]},
   gentSingle:{d:"gent",r:"IV",b:[[0,"5 mg/kg IV 單次{AG:5}"]],...DIAL("5 mg/kg IV 單次{AG:5}","5 mg/kg IV 單次{AG:5}","5 mg/kg IV 單次{AG:5}"),note:"單次劑量腎毒性低",src:["IDSA_AMR24"]},
   gentGC:{d:"gent",r:"IM",b:[[0,"240 mg IM 單次"]],...DIAL("240 mg IM 單次","240 mg IM 單次","240 mg IM 單次"),note:"淋病・cephalosporin 過敏時，合併 azithromycin 2 g PO",src:["CDC_STI21"]},
+  gentUTI:{d:"gent",r:"IV",b:[[60,"6–7 mg/kg IV q24h{AGR:6-7}"],[0,"EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）"]],...DIAL("依濃度給藥（會診藥師）","依濃度給藥（會診藥師）","依濃度給藥（會診藥師）"),note:"EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度，避免 >7 天",src:["EAU_UI26"]},
+  amkUTI:{d:"amikacin",r:"IV",b:[[60,"25–30 mg/kg IV q24h{AGR:25-30}"],[0,"EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）"]],...DIAL("依濃度給藥（會診藥師）","依濃度給藥（會診藥師）","依濃度給藥（會診藥師）"),note:"EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度",src:["EAU_UI26"]},
   amkQ24:{d:"amikacin",r:"IV",b:[[60,"15 mg/kg IV q24h{AG:15}"],[40,"15 mg/kg IV q36h{AG:15}"],[20,"15 mg/kg IV q48h{AG:15}"],[0,"避免；必要時單次給藥並依血中濃度"]],...DIAL("5–7.5 mg/kg 每次透析後，依濃度{AG:7.5}","依濃度給藥（會診藥師）","首劑 15 mg/kg，之後依濃度{AG:15}"),note:"給藥體重：IBW（肥胖用 AdjBW）；監測濃度",src:["NICOLAU95"]},
   vanco:{d:"vanco",r:"IV",type:"vanco",src:["VANCO20"]},
   teicoIE:{d:"teico",r:"IV",type:"teico",ind:"ie",note:"仿單核准心內膜炎高劑量；國際指引以 vancomycin、daptomycin 為主，MRSA IE 證據較少",src:["TEICO_SPC","ESC_IE23"]},
@@ -826,6 +828,7 @@ function getRenal(){
 }
 function fillW(t){
   const w=weights();
+  t=t.replace(/\{AGR:([\d.]+)-([\d.]+)\}/g,(m,a,b)=>{ if(!w) return ""; const f=x=>Math.round(parseFloat(x)*w.dw/10)*10; return ` ≈ ${f(a)}–${f(b)} mg（以${w.ds} ${r0(w.dw)} kg 計）`; });
   return t.replace(/\{(AG|TBW|KG):([\d.]+)\}/g,(m,k,n)=>{
     if(!w) return "";
     const kg=k==="AG"?w.dw:w.tbw; const step=k==="TBW"?250:10;
@@ -977,11 +980,11 @@ function genUp(c){
     if(c.fx.has("esbl")){
       o.push(O("首選",["etp"],{note:"ESBL 風險、非重症",src:["IDSA_AMR24"]}));
       o.push(O("替代（台灣常用）",["flomoxef","cmz"],{note:"Carbapenem-sparing；觀察性與 PK/PD 資料，限非重症 UTI。IDSA AMR 2026 仍不建議 cephamycin（待 cefoxitin／cefotetan 臨床資料；cefmetazole 美國未上市）。",src:["HAMADA22","IDSA_AMR24"]}));
-      o.push(O("替代",["gentQ24","amkQ24"],{note:"腎毒性，宜短期",src:["IDSA_cUTI25"]}));
+      o.push(O("替代",["gentUTI","amkUTI"],{note:"腎毒性，宜短期；劑量依 EAU 2026",upd:"EAU_DOSE",src:["IDSA_cUTI25","EAU_UI26"]}));
     } else if(c.fx.has("psa")){
       o.push(O("首選",["fep2q8","tzp"],{note:"P. aeruginosa 風險（導管、器械、免疫抑制、過去 PsA）",src:["IDSA_cUTI25"]}));
     } else {
-      o.push(O("首選",["cro1"],{note:"台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階",src:["IDSA_cys10","TSAR"]}));
+      o.push(O("首選",["cro2"],{note:"台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）",upd:"EAU_DOSE",src:["IDSA_cys10","TSAR","EAU_UI26"]}));
       o.push(O("口服（條件）",["ciproPO","levo750"],{cond:"僅限先前培養感受或院內 FQ 抗藥率 <10%；否則先給一劑 IV ceftriaxone",src:["IDSA_cys10"]}));
     }
   }
@@ -990,7 +993,7 @@ function genUp(c){
   n.push(N("48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。",["EAU_UI26"]));
   n.push(N("依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。",["IDSA_cUTI25"],{upd:true}));
   n.push(N("ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。",["IDSA_AMR24"],{upd:"PTZ26"}));
-  n.push(N("EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。",["EAU_UI26","NICOLAU95"]));
+  n.push(N("上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl <60 EAU 未列調整，依濃度給藥）。其他部位與 TDM 頁仍依 Nicolau 1995 與院內規範（gentamicin 5–7、amikacin 15 mg/kg）。",["EAU_UI26","NICOLAU95","STAN_AG"]));
   if(S.sub==="cauti") n.push(N("CAUTI：導管留置 >2 週者，先更換導管再採檢與治療。念珠菌尿多為移生。",["IDSA_CAUTI09"]));
   if(S.sub==="uti_unk") n.push(N("部位未區分：依 cUTI（含 pyelonephritis）處理；確定為單純膀胱炎後可改窄效藥。",["IDSA_cUTI25"]));
   const dur = S.sub==="cauti"
@@ -1151,6 +1154,7 @@ function optCard(o){
   </div>`;
 }
 const UPDN = {
+  EAU_DOSE:"上泌尿道感染改用 EAU 2026 劑量：ceftriaxone 1 g → 2 g q24h；gentamicin 5 → 6–7 mg/kg、amikacin 15 → 25–30 mg/kg 每日一次（CrCl <60 依濃度）。",
   ESBLC26:"IDSA AMR 2026：ESBL 膀胱炎單劑 aminoglycoside 由替代改為首選；amoxicillin-clavulanate 不再建議；新增 gepotidacin、pivmecillinam、sulopenem。",
   PTZ26:"IDSA AMR 2026：piperacillin-tazobactam 由「不作 ESBL cUTI 首選」改為 cUTI 替代（非重症、無菌血症）；泌尿道外仍不建議。",
   ESBLO26:"IDSA AMR 2026：泌尿道外 ESBL 感染，重症或低白蛋白血症以 meropenem 或 imipenem 起始，不用 ertapenem。",
@@ -1247,11 +1251,17 @@ function renderEmp(){
   h+=`</div></div>`;
   return h;
 }
+const UTI_UP = ["pyelo","cuti","cauti","uti_unk"];
+const EAU_MAP = {cro1:"cro2",gentQ24:"gentUTI",amkQ24:"amkUTI"};
 function targetPanel(pid,ph,sc){
   const p=PATH[pid], g=p.g, phs=PHL[g]?Object.keys(PHL[g]):["any"];
   const cur = ph&&phs.includes(ph)?ph:phs[0];
   const t=(TGT[g]||{})[cur]||{};
-  const list=t[sc]||t.sys||t.resp||t.cys||[];
+  let list=t[sc]||t.sys||t.resp||t.cys||[];
+  if(UTI_UP.includes(S.sub)){   // 上泌尿道感染：ceftriaxone、aminoglycoside 改用 EAU 2026 劑量
+    const m=r=>EAU_MAP[r]||r, chg=o=>o.regs.some(r=>EAU_MAP[r])||(o.add||[]).some(g=>g.regs.some(r=>EAU_MAP[r]));
+    list=list.map(o=>chg(o)?Object.assign({},o,{regs:o.regs.map(m),add:(o.add||[]).map(g=>Object.assign({},g,{regs:g.regs.map(m)})),upd:o.upd||"EAU_DOSE",src:[...(o.src||[]),"EAU_UI26"]}):o);
+  }
   let h=`<div class="tgt"><h3>${p.n}</h3><div class="pnote">${p.note||""}</div>`;
   if(PCOL[pid]!==undefined) h+=`<div style="margin:-4px 0 10px"><button class="linkbtn" type="button" data-act="spec-go" data-v="${pid==="saur"&&cur==="MRSA"?2:PCOL[pid]}">在抗菌譜查看所有可用藥物</button></div>`;
   if(PHL[g]) h+=`<div class="lbl">藥敏表現型</div><div class="chips" style="margin-bottom:10px">${phs.map(k=>`<button class="chip" type="button" data-act="ph" data-v="${k}" aria-pressed="${cur===k}">${PHL[g][k]}</button>`).join("")}</div>`;

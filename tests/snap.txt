@@ -1906,8 +1906,8 @@ Warfarin：CYP2C9 抑制，INR 明顯上升。避免或密切監測 INR
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 3
 4
 48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。
@@ -1923,7 +1923,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -1948,6 +1948,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -1956,6 +1957,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -1973,7 +1975,7 @@ Yahav 2019
 其他提醒（6）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -1986,6 +1988,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2029,8 +2032,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 3
 4
@@ -2052,7 +2055,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2084,6 +2087,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -2093,6 +2097,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -2118,7 +2123,7 @@ Yahav 2019
 其他提醒（6）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -2136,6 +2141,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2193,8 +2199,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q12h
 3
 4
@@ -2210,7 +2216,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2235,6 +2241,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -2243,6 +2250,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -2261,7 +2269,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -2276,6 +2284,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2318,8 +2327,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -2341,7 +2350,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2373,6 +2382,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -2383,6 +2393,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -2409,7 +2420,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -2431,6 +2442,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2488,8 +2500,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q24h（透析後）
 3
 4
@@ -2505,7 +2517,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2530,6 +2542,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -2538,6 +2551,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -2556,7 +2570,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -2569,6 +2583,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2614,9 +2629,9 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 1.5–2 mg/kg 每次透析後，依透析前濃度
 2
+2 g IV q24h
 2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg
 250–500 mg PO q24h（透析後）
 3
@@ -2637,7 +2652,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2669,6 +2684,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -2679,6 +2695,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -2705,7 +2722,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -2723,6 +2740,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -2798,7 +2816,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2820,11 +2837,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -2888,7 +2907,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -2917,12 +2935,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -3007,7 +3027,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -3029,11 +3048,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -3098,7 +3119,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -3127,6 +3147,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
@@ -3134,6 +3155,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -3222,7 +3244,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -3244,11 +3265,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -3313,7 +3336,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -3342,6 +3364,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
@@ -3349,6 +3372,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -3425,9 +3449,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -3456,7 +3480,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -3500,6 +3525,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -3515,6 +3541,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -3550,7 +3577,7 @@ Yahav 2019
 口服（條件）
 台灣 UTI 最常見。社區株對 FQ、TMP-SMX 不感受比例高，ESBL（CTX-M 型）逐年增加。
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -3578,6 +3605,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -3658,9 +3687,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -3689,7 +3718,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -3733,6 +3763,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -3748,6 +3779,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -3782,7 +3814,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -3811,6 +3843,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -3891,9 +3925,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -3922,7 +3956,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -3966,6 +4001,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -3981,6 +4017,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -4015,7 +4052,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -4044,6 +4081,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -4123,8 +4162,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -4148,7 +4187,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -4180,6 +4219,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -4189,6 +4229,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -4211,7 +4252,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -4230,6 +4271,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -4286,10 +4328,9 @@ Yahav 2019
 04
 1
 1 g IV q12h
-1 g IV q24h
-15 mg/kg IV q48h
 2
 2 g IV q12h
+2 g IV q24h
 250–500 mg PO q12h
 3
 3.375 g IV q6h
@@ -4314,7 +4355,10 @@ DTR（FQ、cefepime、pip-tazo、carbapenem 皆抗藥）
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -4356,6 +4400,7 @@ Pseudomonas aeruginosa
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -4369,11 +4414,11 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
-≈ 900 mg（以實際體重 60 kg 計）
 ☆ 收藏
 ・點選可更換，再點一次取消
 一般感受
 上列抗藥時
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -4408,7 +4453,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -4423,7 +4468,7 @@ Yahav 2019
 商品名：Tazocin
 在抗菌譜查看所有可用藥物
 對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。
-已依腎功能調整（CrCl 20–39）
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 20–49）
@@ -4445,6 +4490,7 @@ Yahav 2019
 更新
 更新
 更新
+更新
 替代
 條件：僅限先前培養感受或院內 FQ 抗藥率
 標靶治療
@@ -4461,7 +4507,6 @@ Yahav 2019
 禁忌
 禁忌
 細分診斷
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度
 經驗性治療（未知菌種時）
 腎功能差未減量易致神經毒性（意識改變、NCSE）
 腎盂腎炎
@@ -4516,9 +4561,9 @@ Yahav 2019
 1 DS 錠（160/800 mg）PO q12h
 1 g IV q12h
 1 g IV q24h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q24h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -4544,7 +4589,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -4586,6 +4631,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -4603,6 +4649,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus
 中
 中
@@ -4639,7 +4686,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -4672,6 +4719,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -4756,8 +4804,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 3
 4
 48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。
@@ -4774,7 +4822,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -4799,6 +4847,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -4808,6 +4857,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -4825,7 +4875,7 @@ Yahav 2019
 其他提醒（6）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -4838,6 +4888,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -4881,8 +4932,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 3
 4
@@ -4905,7 +4956,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -4937,6 +4988,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -4947,6 +4999,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -4972,7 +5025,7 @@ Yahav 2019
 其他提醒（6）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -4990,6 +5043,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -5047,8 +5101,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q12h
 3
 4
@@ -5065,7 +5119,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5090,6 +5144,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -5099,6 +5154,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -5117,7 +5173,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -5132,6 +5188,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -5174,8 +5231,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -5198,7 +5255,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5230,6 +5287,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -5241,6 +5299,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -5267,7 +5326,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -5289,6 +5348,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -5346,8 +5406,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q24h（透析後）
 3
 4
@@ -5364,7 +5424,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5389,6 +5449,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -5398,6 +5459,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -5416,7 +5478,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -5429,6 +5491,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -5474,9 +5537,9 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 1.5–2 mg/kg 每次透析後，依透析前濃度
 2
+2 g IV q24h
 2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg
 250–500 mg PO q24h（透析後）
 3
@@ -5498,7 +5561,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5530,6 +5593,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -5541,6 +5605,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -5567,7 +5632,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -5585,6 +5650,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -5661,7 +5727,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5683,12 +5748,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -5753,7 +5820,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5782,6 +5848,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -5789,6 +5856,7 @@ Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -5874,7 +5942,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5896,12 +5963,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -5967,7 +6036,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -5996,6 +6064,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -6004,6 +6073,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -6093,7 +6163,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -6115,12 +6184,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -6186,7 +6257,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -6215,6 +6285,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -6223,6 +6294,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -6299,9 +6371,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -6331,7 +6403,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -6375,6 +6448,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TMP-SMX
 TSAR 國衛院
@@ -6391,6 +6465,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -6426,7 +6501,7 @@ Yahav 2019
 口服（條件）
 台灣 UTI 最常見。社區株對 FQ、TMP-SMX 不感受比例高，ESBL（CTX-M 型）逐年增加。
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -6454,6 +6529,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -6534,9 +6611,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -6566,7 +6643,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -6610,6 +6688,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TMP-SMX
 TSAR 國衛院
@@ -6626,6 +6705,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -6660,7 +6740,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -6689,6 +6769,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -6769,9 +6851,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -6801,7 +6883,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -6845,6 +6928,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TMP-SMX
 TSAR 國衛院
@@ -6861,6 +6945,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -6895,7 +6980,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -6924,6 +7009,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -7003,8 +7090,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -7029,7 +7116,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -7061,6 +7148,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -7071,6 +7159,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -7093,7 +7182,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -7112,6 +7201,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -7168,10 +7258,9 @@ Yahav 2019
 04
 1
 1 g IV q12h
-1 g IV q24h
-15 mg/kg IV q48h
 2
 2 g IV q12h
+2 g IV q24h
 250–500 mg PO q12h
 3
 3.375 g IV q6h
@@ -7197,7 +7286,10 @@ DTR（FQ、cefepime、pip-tazo、carbapenem 皆抗藥）
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -7239,6 +7331,7 @@ Pseudomonas aeruginosa
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TSAR 國衛院
 TSAR 國衛院
@@ -7253,11 +7346,11 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
-≈ 900 mg（以實際體重 60 kg 計）
 ☆ 收藏
 ・點選可更換，再點一次取消
 一般感受
 上列抗藥時
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -7292,7 +7385,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -7307,7 +7400,7 @@ Yahav 2019
 商品名：Tazocin
 在抗菌譜查看所有可用藥物
 對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。
-已依腎功能調整（CrCl 20–39）
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 20–49）
@@ -7329,6 +7422,7 @@ Yahav 2019
 更新
 更新
 更新
+更新
 替代
 條件：僅限先前培養感受或院內 FQ 抗藥率
 標靶治療
@@ -7345,7 +7439,6 @@ Yahav 2019
 禁忌
 禁忌
 細分診斷
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度
 經驗性治療（未知菌種時）
 腎功能差未減量易致神經毒性（意識改變、NCSE）
 臨床情境
@@ -7400,9 +7493,9 @@ Yahav 2019
 1 DS 錠（160/800 mg）PO q12h
 1 g IV q12h
 1 g IV q24h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q24h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -7429,7 +7522,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -7471,6 +7564,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 TMP-SMX
 TSAR 國衛院
@@ -7489,6 +7583,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus
 中
 中
@@ -7525,7 +7620,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -7558,6 +7653,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -7642,8 +7738,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q4h
 2 g IV q8h
 250–500 mg PO q12h
@@ -7663,7 +7759,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -7695,6 +7791,7 @@ Pseudomonas aeruginosa
 S. aureus 菌血症（SAB）：會診感染科，需追蹤血液培養
 Sepsis
 Septic shock
+Stanford AG 2021
 Staphylococcus aureus
 Staphylococcus aureus
 Staphylococcus aureus
@@ -7707,6 +7804,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -7726,7 +7824,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -7742,6 +7840,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -7816,7 +7915,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -7841,8 +7939,10 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 以下 2 種擇一使用，單用即可
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -7917,7 +8017,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -7950,9 +8049,11 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -8048,7 +8149,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8073,8 +8173,10 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 以下 2 種擇一使用，單用即可
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -8151,7 +8253,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8184,10 +8285,12 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Warfarin：INR 上升。監測 INR
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -8288,7 +8391,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8313,8 +8415,10 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 以下 2 種擇一使用，單用即可
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -8391,7 +8495,6 @@ Cefepime
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8424,10 +8527,12 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Warfarin：INR 上升。監測 INR
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -8528,7 +8633,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8553,10 +8657,12 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -8631,7 +8737,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8664,11 +8769,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -8764,7 +8871,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8789,10 +8895,12 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -8869,7 +8977,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -8902,12 +9009,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -9008,7 +9117,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -9033,10 +9141,12 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 1 項
 住在長照機構／護理之家
 依院內 antibiogram 調整：sepsis 排除抗藥率 >20% 的藥，septic shock 排除 >10%；有過去尿液培養以過去結果為準，否則以 E. coli 為代表。
@@ -9113,7 +9223,6 @@ Candida spp.
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -9146,12 +9255,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 交互作用 1 項
@@ -9234,9 +9345,9 @@ Warfarin：INR 上升。監測 INR
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -9267,7 +9378,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -9311,6 +9422,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -9320,6 +9432,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -9370,6 +9483,7 @@ Warfarin：INR 上升。監測 INR
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
 更改
+更新
 更新
 更新
 更新
@@ -9439,9 +9553,9 @@ Warfarin：INR 上升。監測 INR
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -9472,7 +9586,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -9516,6 +9630,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -9525,6 +9640,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -9575,6 +9691,7 @@ Warfarin：INR 上升。監測 INR
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
 更改
+更新
 更新
 更新
 更新
@@ -9644,7 +9761,6 @@ Warfarin：INR 上升。監測 INR
 04
 1
 1 g IV q12h
-15 mg/kg IV q48h
 2
 2 g IV q12h
 2 g IV q12h
@@ -9674,7 +9790,9 @@ DTR（FQ、cefepime、pip-tazo、carbapenem 皆抗藥）
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -9716,6 +9834,7 @@ Pseudomonas aeruginosa
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
 Tizanidine：CYP1A2 抑制，tizanidine 濃度大增（低血壓、嗜睡）。禁止併用
@@ -9723,11 +9842,11 @@ UTI 可單用；泌尿道外需合併。CLSI 2023：P. aeruginosa 已移除 gent
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
-≈ 900 mg（以實際體重 60 kg 計）
 ☆ 收藏
 ・點選可更換，再點一次取消
 一般感受
 上列抗藥時
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -9764,7 +9883,7 @@ Warfarin：INR 上升。監測 INR
 在抗菌譜查看所有可用藥物
 對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。
 導管或器械相關：Enterococcus 機會增加，cephalosporin 與 ertapenem 無效。尿液 Gram stain 見 GPC 時改 piperacillin-tazobactam 或加 ampicillin。
-已依腎功能調整（CrCl 20–39）
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 20–49）
@@ -9798,7 +9917,6 @@ Warfarin：INR 上升。監測 INR
 禁忌
 禁忌
 細分診斷
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度
 經驗性治療（未知菌種時）
 腎功能差未減量易致神經毒性（意識改變、NCSE）
 腎功能差未減量易致神經毒性（意識改變、NCSE）
@@ -9870,7 +9988,6 @@ Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受�
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -9902,9 +10019,11 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 以下 2 種擇一使用，單用即可
 仿單
 仿單
@@ -9978,9 +10097,9 @@ TSAR 國衛院
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -10011,7 +10130,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -10055,6 +10174,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -10064,6 +10184,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 中
 中
 中
@@ -10114,6 +10235,7 @@ Warfarin：INR 上升。監測 INR
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
 更改
+更新
 更新
 更新
 更新
@@ -10215,7 +10337,6 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -10257,6 +10378,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -10268,6 +10390,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus
 中
 中
@@ -10424,7 +10547,6 @@ Child-Pugh B 維持 35 mg
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ECMM Candida 2025
 ECMM Candida 2025
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
@@ -10462,11 +10584,13 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Warfarin、sulfonylurea、phenytoin：CYP2C9 抑制，濃度上升。監測 INR、血糖、phenytoin 濃度
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 交互作用 2 項
 以下 2 種擇一使用，單用即可
 以下 3 種擇一使用，單用即可
@@ -22974,8 +23098,8 @@ Warfarin：INR 上升。監測 INR
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 3
 4
 48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。
@@ -22991,7 +23115,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23017,6 +23141,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23025,6 +23150,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23043,7 +23169,7 @@ Yahav 2019
 其他提醒（7）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -23056,6 +23182,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23099,8 +23226,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 3
 4
@@ -23122,7 +23249,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23155,6 +23282,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23164,6 +23292,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23190,7 +23319,7 @@ Yahav 2019
 其他提醒（7）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -23208,6 +23337,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23265,8 +23395,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q12h
 3
 4
@@ -23282,7 +23412,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23308,6 +23438,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23316,6 +23447,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23335,7 +23467,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -23350,6 +23482,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23392,8 +23525,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -23415,7 +23548,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23448,6 +23581,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23458,6 +23592,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23485,7 +23620,7 @@ Yahav 2019
 劑量依 CrCl 35 mL/min
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -23507,6 +23642,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23564,8 +23700,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 250–500 mg PO q24h（透析後）
 3
 4
@@ -23581,7 +23717,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23607,6 +23743,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23615,6 +23752,7 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23634,7 +23772,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -23647,6 +23785,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23692,9 +23831,9 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 1.5–2 mg/kg 每次透析後，依透析前濃度
 2
+2 g IV q24h
 2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg
 250–500 mg PO q24h（透析後）
 3
@@ -23715,7 +23854,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23748,6 +23887,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -23758,6 +23898,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -23785,7 +23926,7 @@ Yahav 2019
 劑量依 血液透析（HD）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -23803,6 +23944,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -23878,7 +24020,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -23901,11 +24042,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 交互作用 1 項
 住在長照機構／護理之家
@@ -23970,7 +24113,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -24000,12 +24142,14 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -24091,7 +24235,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -24114,11 +24257,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 交互作用 1 項
 住在長照機構／護理之家
@@ -24184,7 +24329,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -24214,6 +24358,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
@@ -24221,6 +24366,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 300 mg（以實際體重 60 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -24310,7 +24456,6 @@ ATS/IDSA CAP 2019
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -24333,11 +24478,13 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 交互作用 1 項
 住在長照機構／護理之家
@@ -24403,7 +24550,6 @@ Aztreonam
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -24433,6 +24579,7 @@ Pseudomonas aeruginosa
 Sepsis
 Septic shock
 Septic shock：台灣腸道菌對 3rd-gen ceph 不感受比例多高於 10%，經驗性以 carbapenem 為宜。若院內 antibiogram 顯示 ceftriaxone 抗藥
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
@@ -24440,6 +24587,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ≈ 110 mg（以實際體重 55 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -24517,9 +24665,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -24548,7 +24696,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -24593,6 +24742,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -24608,6 +24758,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -24644,7 +24795,7 @@ Yahav 2019
 口服（條件）
 台灣 UTI 最常見。社區株對 FQ、TMP-SMX 不感受比例高，ESBL（CTX-M 型）逐年增加。
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -24672,6 +24823,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -24752,9 +24905,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -24783,7 +24936,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -24828,6 +24982,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -24843,6 +24998,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -24878,7 +25034,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -24907,6 +25063,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -24987,9 +25145,9 @@ Yahav 2019
 04
 1
 1 DS 錠（160/800 mg）PO q12h
-1 g IV q24h
-1 g IV q24h
 2
+2 g IV q24h
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -25018,7 +25176,8 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
 ESBL（ceftriaxone 抗藥）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -25063,6 +25222,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -25078,6 +25238,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -25113,7 +25274,7 @@ Yahav 2019
 口服降階（替代）
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -25142,6 +25303,8 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
+更新
 更新
 更新
 更新
@@ -25221,8 +25384,8 @@ Yahav 2019
 03
 04
 1
-1 g IV q24h
 2
+2 g IV q24h
 2 g IV q8h
 250–500 mg PO q12h
 3
@@ -25246,7 +25409,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -25279,6 +25442,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -25288,6 +25452,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -25311,7 +25476,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 商品名：Ciproxin
@@ -25330,6 +25495,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -25386,10 +25552,9 @@ Yahav 2019
 04
 1
 1 g IV q12h
-1 g IV q24h
-15 mg/kg IV q48h
 2
 2 g IV q12h
+2 g IV q24h
 250–500 mg PO q12h
 3
 3.375 g IV q6h
@@ -25414,7 +25579,10 @@ DTR（FQ、cefepime、pip-tazo、carbapenem 皆抗藥）
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
@@ -25457,6 +25625,7 @@ Pseudomonas aeruginosa
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 TSAR 國衛院
 Theophylline：Theophylline 中毒。監測濃度或換藥
@@ -25470,11 +25639,11 @@ Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Warfarin：INR 上升。監測 INR
 Yahav 2019
-≈ 900 mg（以實際體重 60 kg 計）
 ☆ 收藏
 ・點選可更換，再點一次取消
 一般感受
 上列抗藥時
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不確定（UTI 未區分）
 中
 中
@@ -25510,7 +25679,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -25525,7 +25694,7 @@ Yahav 2019
 商品名：Tazocin
 在抗菌譜查看所有可用藥物
 對 ceftriaxone、ertapenem、TMP-SMX 天生抗藥；多見於導管、器械、免疫抑制。
-已依腎功能調整（CrCl 20–39）
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 20–49）
@@ -25547,6 +25716,7 @@ Yahav 2019
 更新
 更新
 更新
+更新
 替代
 條件：僅限先前培養感受或院內 FQ 抗藥率
 標靶治療
@@ -25563,7 +25733,6 @@ Yahav 2019
 禁忌
 禁忌
 細分診斷
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度
 經驗性治療（未知菌種時）
 腎功能差未減量易致神經毒性（意識改變、NCSE）
 臨床情境
@@ -25618,9 +25787,9 @@ Yahav 2019
 1 DS 錠（160/800 mg）PO q12h
 1 g IV q12h
 1 g IV q24h
-1 g IV q24h
 2
 2 g IV q12h
+2 g IV q24h
 2 g IV q24h
 250–500 mg PO q12h
 250–500 mg PO q12h
@@ -25646,7 +25815,7 @@ Ciprofloxacin
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
@@ -25689,6 +25858,7 @@ PsA 全身性感染用 750 mg q12h
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TMP-SMX
 TSAR 國衛院
 TSAR 國衛院
@@ -25706,6 +25876,7 @@ Warfarin：INR 上升。監測 INR
 Yahav 2019
 ☆ 收藏
 ・點選可更換，再點一次取消
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus
 不確定（UTI 未區分）
 中
@@ -25743,7 +25914,7 @@ Yahav 2019
 口服降階
 口服（條件）
 台灣抗藥性：
-台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階
+台灣社區 E. coli 對 FQ、TMP-SMX 抗藥率高，經驗性首選 IV ceftriaxone，再依培養降階。劑量依 EAU 2026（2 g q24h）
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
 含 Ca／Mg／Al／Fe／Zn 製劑（制酸劑、sucralfate、鐵劑）：FQ 吸收大減。FQ 於這類藥前 2 小時或後 6 小時服用
@@ -25776,6 +25947,7 @@ Yahav 2019
 改善中 7 天（FQ 可 5–7 天）；合併 G(−) 菌血症且改善中亦 7 天。阻塞未解除、膿瘍、免疫抑制、反應慢：10–14 天
 更改
 更改
+更新
 更新
 更新
 更新
@@ -124364,14 +124536,14 @@ Warfarin、sulfonylurea、phenytoin：CYP2C9 抑制，濃度上升。監測 INR�
 1 g IV q24h
 1 g IV q6h
 1 g IV q6h
-15 mg/kg IV q24h
 2
+25–30 mg/kg IV q24h
 3
 4
 48–72 小時無改善：安排腎臟超音波或 CT，找阻塞、腎膿瘍、氣腫性腎盂腎炎。
 5
-5 mg/kg IV q24h
 6
+6–7 mg/kg IV q24h
 90 天內住院 ≥2 天
 90 天內用過 IV 抗生素（尤其 3rd-gen ceph、FQ）
 ATS/IDSA CAP 2019
@@ -124383,7 +124555,9 @@ Cefmetazole
 EAU 2026
 EAU 2026
 EAU 2026
-EAU 2026 的劑量與 app 不同：ceftriaxone 2 g q24h（app 非重症 1 g）；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（app 5、15 mg/kg，依 Nicolau 1995 與院內規範）。
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度，避免 >7 天
 ESBL UTI 之 PK/PD 建議劑量
 ESBL UTI 之 PK/PD 建議劑量（較台灣仿單常用 1–2 g/day 密集）
 ESBL 風險、非重症
@@ -124416,12 +124590,14 @@ Proteus mirabilis
 Pseudomonas aeruginosa
 Sepsis
 Septic shock
+Stanford AG 2021
 TSAR 國衛院
 Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他抗生素或抗癲癇藥
 Yahav 2019
-≈ 1050 mg（以實際體重 70 kg 計）
-≈ 350 mg（以實際體重 70 kg 計）
+≈ 1750–2100 mg（以實際體重 70 kg 計）
+≈ 420–490 mg（以實際體重 70 kg 計）
 ☆ 收藏
+上泌尿道感染劑量依 EAU 2026：ceftriaxone 2 g q24h；gentamicin 6–7 mg/kg、amikacin 25–30 mg/kg 每日一次（CrCl
 不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus
 交互作用 1 項
 交互作用 1 項
@@ -124451,6 +124627,7 @@ Yahav 2019
 更新
 更新
 更新
+更新
 替代
 替代（台灣常用）
 正常劑量（CrCl >30）
@@ -124467,10 +124644,8 @@ Yahav 2019
 社區 E. coli 對 FQ 與 TMP-SMX 不感受比例高，3rd-gen ceph 不感受與 ESBL 逐年上升。優先參考院內 antibiogram：sepsis 時排除抗藥率 >20% 的藥，septic shock 排除 >10%。
 禁忌
 細分診斷
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度
-給藥體重：IBW（肥胖用 AdjBW）；監測濃度，避免 >7 天
 腎功能不穩定：首劑給足量（不減量），24–48 小時後再評估；CrCl >130 可能為 ARC，β-lactam 考慮延長輸注或較高劑量。
-腎毒性，宜短期
+腎毒性，宜短期；劑量依 EAU 2026
 腎盂腎炎
 臨床情境
 藥物頁 ›
@@ -127585,7 +127760,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.13・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## ref c35
@@ -127800,7 +127975,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.13・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## ref hd
@@ -128015,7 +128190,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.13・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## drug amoxicillin
@@ -129869,9 +130044,11 @@ app 未標示特別禁忌；請依仿單
 5 mg/kg IV 單次 ≈ 300 mg（以實際體重 60 kg 計）
 5 mg/kg IV 單次 ≈ 300 mg（以實際體重 60 kg 計）
 5 mg/kg IV 單次 ≈ 300 mg（以實際體重 60 kg 計）
+6–7 mg/kg IV q24h ≈ 360–420 mg（以實際體重 60 kg 計）
 Aminoglycoside
 Aminoglycoside／glycopeptide 互相、loop diuretic、顯影劑、NSAID：腎毒性、耳毒性。縮短療程、監測濃度與 Cr
 CDC STI 2021
+CRRT
 CRRT
 CRRT
 CRRT
@@ -129881,8 +130058,14 @@ CrCl 30–59
 CrCl 40–59
 CrCl <20
 CrCl <30
+CrCl <60
 CrCl ≥60
 CrCl ≥60
+CrCl ≥60
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度，避免 >7 天
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 ESC IE 2023
 Enterobacter 等 AmpC 菌
 Gentamicin
@@ -129891,6 +130074,8 @@ Gentamicin
 Gentamicin
 Gentamicin
 Gentamicin
+Gentamicin
+HD
 HD
 HD
 HD
@@ -129901,7 +130086,9 @@ IM
 IV
 IV
 IV
+IV
 Nicolau 1995
+PD
 PD
 PD
 PD
@@ -129919,7 +130106,11 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 依濃度給藥（會診藥師）
 依濃度給藥（會診藥師）
 依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
 其他
+劑量
 劑量
 劑量
 劑量
@@ -129928,13 +130119,16 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 劑量 2・IV
 劑量 3・IM
 劑量 4・IV
+劑量 5・IV
 劑量依 CrCl 35 mL/min
 協同劑量；目標 trough
 各腎功能劑量
 各腎功能劑量
 各腎功能劑量
 各腎功能劑量
+各腎功能劑量
 單次劑量腎毒性低
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–39）
 已依腎功能調整（CrCl 30–59）
 心內膜炎・不確定
@@ -129953,7 +130147,9 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 腎功能
 腎功能
 腎功能
+腎功能
 藥物
+複製
 複製
 複製
 複製
@@ -129973,23 +130169,34 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 15 mg/kg IV q36h ≈ 900 mg（以實際體重 60 kg 計）
 15 mg/kg IV q48h
 15 mg/kg IV q48h ≈ 900 mg（以實際體重 60 kg 計）
+25–30 mg/kg IV q24h ≈ 1500–1800 mg（以實際體重 60 kg 計）
 5–7.5 mg/kg 每次透析後，依濃度 ≈ 450 mg（以實際體重 60 kg 計）
+Amikacin
 Amikacin
 Amikacin
 Amikacin
 Aminoglycoside
 Aminoglycoside／glycopeptide 互相、loop diuretic、顯影劑、NSAID：腎毒性、耳毒性。縮短療程、監測濃度與 Cr
 CRRT
+CRRT
 CrCl 20–39
 CrCl 40–59
 CrCl <20
+CrCl <60
 CrCl ≥60
+CrCl ≥60
+EAU 2026
+EAU 2026 腎盂腎炎劑量；給藥體重同 app 規則；監測濃度
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
+EAU 未列腎功能調整：依血中濃度給藥（見 TDM 頁）
 Enterobacter 等 AmpC 菌
 HAP／VAP・HAP・高死亡風險（呼吸器或休克）
+HD
 HD
 IV
 IV
 Nicolau 1995
+PD
 PD
 Pseudomonas aeruginosa
 app 內出現的經驗性情境（2）
@@ -129999,10 +130206,18 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 主要涵蓋（抗菌譜 ++／+）
 交互作用（1）
 依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
+依濃度給藥（會診藥師）
 其他
 劑量
+劑量
+劑量 1・IV
+劑量 2・IV
 劑量依 CrCl 35 mL/min
 各腎功能劑量
+各腎功能劑量
+已依腎功能調整（CrCl
 已依腎功能調整（CrCl 20–39）
 懷孕：
 更改
@@ -130010,7 +130225,9 @@ app 未收錄這個藥的肝功能劑量資料，請依仿單。
 給藥體重：IBW（肥胖用 AdjBW）；監測濃度
 肝功能：
 腎功能
+腎功能
 藥物
+複製
 複製
 避免（胎兒耳毒性）
 避免；必要時單次給藥並依血中濃度
