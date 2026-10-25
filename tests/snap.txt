@@ -127551,6 +127551,7 @@ Warfarin、sulfonylurea、phenytoin
 ## ref none
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
 ACOG 717
@@ -127760,12 +127761,15 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.15・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
+院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## ref c35
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
 ACOG 717
@@ -127975,12 +127979,15 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.15・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
+院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## ref hd
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
 ACOG 717
@@ -128190,7 +128197,9 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-25（v0.14・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-25（v0.15・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
+院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
 （72 歲男性、60 kg、165 cm、SCr 1.6）
 ## drug amoxicillin
@@ -133823,11 +133832,14 @@ mg/L
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU 2026
 TMP-SMX
@@ -133869,6 +133881,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通常不需要
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -133877,12 +133892,15 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V：膀胱鏡合併操作（切片、電燒等）列為「效益不確定、依宿主風險」，首選 TMP-SMX 或 amoxicillin-clavulanate，替代 1st／2nd 代 cephalosporin；app 比照列出
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU 2026
 EAU、AWMF 沒有支架置放或更換的專屬建議（請依院內規範）
@@ -133925,6 +133943,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 選一個方案
 長期留置支架常有細菌移生：術前做尿液培養，有菌尿依藥敏先治療（EAU，Strong）
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -133933,11 +133954,14 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 g IV 單次
+120 kg 3 g。">更新
 3 g PO 術前，24–48 小時後再 3 g
 5 mg/kg IV 單次
 ASHP 2013
+ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Ceftriaxone
 EAU 2026
 EAU 2026
@@ -133988,6 +134012,7 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -133996,15 +134021,18 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px tpbx
 01
 02
+1 g IV
 1.5 g IV
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
 3 g IV
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AWMF S3 2025
 AWMF：低風險不給；高風險術前 30 分鐘單次 IV cefuroxime、cefazolin 或 ampicillin-sulbactam
 Ampicillin-sulbactam
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Cefuroxime
 EAU 2026
 EAU 2026
@@ -134052,6 +134080,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134060,13 +134091,16 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px brachy
 01
 02
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
 900 mg IV
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V：所有病例，單次
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Clindamycin
 EAU 2026
 EAU、AWMF 沒有專屬建議
@@ -134104,6 +134138,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 追加 q6h
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134113,14 +134150,17 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
+1 g IV
 1.5 g IV
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA 列為替代
 AWMF S3 2025
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Cefuroxime
 EAU 2026
 EAU 2026
@@ -134165,6 +134205,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134175,12 +134218,15 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
 5 mg/kg IV 單次
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU、AWMF 沒有針對這些術式的建議
 Gentamicin
@@ -134226,6 +134272,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134234,7 +134283,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
@@ -134242,6 +134293,7 @@ AUA Table V：經尿道手術（含 TURBT）列為所有病例，cefazolin 或 T
 AWMF S3 2025
 AWMF（Grade B）：只對高風險者（菌尿、免疫抑制）給予
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU 2026
 EAU 2026（Weak）：只對術後敗血症高風險者給予
@@ -134283,6 +134335,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134291,13 +134346,16 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
 5 mg/kg IV 單次
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V 經尿道手術：所有病例，單次
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU、AWMF 沒有專屬建議
 Gentamicin
@@ -134341,6 +134399,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134349,8 +134410,10 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px uplasty
 01
 02
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
 3 g IV
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
@@ -134359,6 +134422,7 @@ AWMF S3 2025
 AWMF（Should，Grade B）：cefazolin 2 g IV 切皮前；超過兩個半衰期才追加；≤24 小時
 Ampicillin-sulbactam
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 TURBT
 TURP／雷射攝護腺手術（HoLEP、PVP）
@@ -134394,6 +134458,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 追加 q4h
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134403,13 +134470,16 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
 5 mg/kg IV 單次
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AWMF S3 2025
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU 2026
 EAU 2026（Weak）：建議給予，可用 TMP、TMP-SMX、2／3 代 cephalosporin、aminopenicillin＋β-lactamase 抑制劑；AWMF（Grade B）：依風險單次
@@ -134455,6 +134525,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134464,15 +134537,18 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px pcnl
 01
 02
+1 g IV
 1 g IV 單次
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
 5 mg/kg IV 單次
 500 mg IV
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AWMF S3 2025
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Ceftriaxone
 EAU 2026
 EAU 2026
@@ -134520,6 +134596,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134531,12 +134610,15 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 g IV 單次
+120 kg 3 g。">更新
 3 g IV
 5 mg/kg IV 單次
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 Ampicillin-sulbactam
 Ampicillin-sulbactam ＋ Gentamicin（同時給）
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Ceftriaxone
 EAU 2026
 Gentamicin
@@ -134581,6 +134663,7 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 追加 q2h
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 開放／腹腔鏡手術
+院內規範
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134590,11 +134673,14 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 01
 02
 1 DS 錠 PO 單次
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU 2026
 EAU（Strong）：尿液無菌不給；只在懷疑或確診感染性結石、或有菌尿時給予
@@ -134636,6 +134722,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通常不需要
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134644,8 +134733,10 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px rp
 01
 02
+1 g IV
 1.5 g IV
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 ASHP 2013
 ASHP：≤24 小時；cefazolin 手術超過 4 小時追加
@@ -134654,6 +134745,7 @@ AUA BPS 2019
 AWMF S3 2025
 AWMF（攝護腺切除，Grade A）：cefuroxime 1.5 g IV（替代 cefazolin 2 g）；手術 >3 小時或失血 >1,500 mL 追加，關傷口即停
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Cefuroxime
 EAU 2026
 EAU：證據不足，未提出建議
@@ -134691,6 +134783,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 追加 q4h
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134699,13 +134794,15 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px rc
 01
 02
+1 g IV
 1 g IV 單次
 1.5 g IV
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
 5 mg/kg IV 單次
 500 mg IV
 500 mg IV
 500 mg IV
+ASHP 2013
 ASHP 2013
 ASHP 2013
 AUA BPS 2019
@@ -134714,6 +134811,7 @@ AUA Table V：小腸 cefazolin；大腸 cephalosporin＋metronidazole 或 ertape
 AWMF S3 2025
 AWMF（Grade A）：廣效 cephalosporin＋metronidazole（例：cefotaxime 2 g＋metronidazole 500 mg IV）；>3 小時或大量失血追加
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Cefuroxime
 EAU 2026
 Ertapenem
@@ -134770,6 +134868,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 選一個方案；同一方案內的藥一起給
 選一個方案；同一方案內的藥一起給
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134779,12 +134880,14 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px pros
 01
 02
+1 g IV
+1 g IV
+120 kg 3 g。">更新
 15 mg/kg IV
 2 g IV
-2 g IV（體重 ≥120 kg：3 g）
-2 g IV（體重 ≥120 kg：3 g）
 5 mg/kg IV 單次
 5 mg/kg IV 單次
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
@@ -134794,6 +134897,7 @@ AUA：感染菌種中 anaerobe 與黴菌的報告增加
 Aztreonam
 Cefazolin
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 Gentamicin
 Gentamicin
@@ -134844,6 +134948,11 @@ Vancomycin
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案；同一方案內的藥一起給
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範
+院內規範：實際體重 60 kg
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
@@ -134854,6 +134963,7 @@ Vancomycin
 ## px sling
 01
 02
+120 kg 3 g。">更新
 2 g IV
 2 g IV
 3 g IV
@@ -134862,6 +134972,7 @@ Vancomycin
 900 mg IV
 900 mg IV
 ASHP 2013
+ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V：所有病例，單次
@@ -134869,6 +134980,7 @@ Ampicillin-sulbactam
 Ampicillin-sulbactam ＋ Gentamicin（同時給）
 Aztreonam
 Aztreonam
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Clindamycin
 Clindamycin
 EAU 2026
@@ -134923,6 +135035,7 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 選一個方案；同一方案內的藥一起給
 開放／腹腔鏡手術
+院內規範
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -134932,9 +135045,11 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px scrotal
 01
 02
+1 g IV
 1.5 g IV
-2 g IV（體重 ≥120 kg：3 g）
+120 kg 3 g。">更新
 3 g IV
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
@@ -134945,6 +135060,7 @@ AWMF S3 2025
 AWMF（May，Grade 0）：很少需要；若給予 cefuroxime 1.5 g IV，關傷口即停
 Ampicillin-sulbactam
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 Cefuroxime
 EAU 2026
 TURBT
@@ -134988,6 +135104,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通常不需要（指引不一致）
 選一個方案
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
@@ -134996,10 +135115,13 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px penile
 01
 02
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V：可能不需要（likely not required）
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 EAU、AWMF 沒有專屬建議
 TURBT
@@ -135030,6 +135152,7 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 通常不需要
 開放／腹腔鏡手術
+院內規範
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
@@ -135038,13 +135161,16 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 ## px clean
 01
 02
-2 g IV（體重 ≥120 kg：3 g）
+1 g IV
+120 kg 3 g。">更新
+ASHP 2013
 ASHP 2013
 ASHP 2013
 AUA BPS 2019
 AUA BPS 2019
 AUA Table V：可能不需要；若給予 cefazolin（替代 clindamycin）
 Cefazolin
+Cefazolin 劑量來源不同：院內規範 <80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。
 EAU 2026
 TURBT
 TURP／雷射攝護腺手術（HoLEP、PVP）
@@ -135079,6 +135205,9 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 追加 q4h
 通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。
 開放／腹腔鏡手術
+院內規範
+院內規範
+院內規範：實際體重 60 kg
 陰囊／腹股溝手術（睪丸切除、輸精管結紮、精索靜脈曲張、陰囊水腫）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）

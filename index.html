@@ -388,7 +388,7 @@ details.pf>summary{font-size:.86rem}
 <script>
 "use strict";
 const VERIFIED = "2026-10-25";
-const VERSION = "v0.14";
+const VERSION = "v0.15";
 const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防";
 
 /* ---------------- 出處 ---------------- */
@@ -417,6 +417,7 @@ const REF = {
   ISAVU_SPC:{s:"Isavuconazole 仿單",f:"Cresemba（isavuconazole）SmPC 4.2（2025-07）：Child-Pugh A、B 不需調整；Child-Pugh C 未研究，除非效益大於風險否則不建議。"},
   POSA_LABEL:{s:"Posaconazole 仿單",f:"Posaconazole delayed-release tablets US label：Child-Pugh A、B、C 不需調整（未專門研究）；口服懸液劑無肝功能劑量建議。"},
   MICA_LABEL:{s:"Micafungin 仿單",f:"Micafungin for injection US label 8.6：中度（Child-Pugh 7–9）、重度（10–12）肝功能不全不需調整。"},
+  HOSP_PX:{s:"院內規範",f:"院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重 <80 kg 1 g、>80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。"},
   CLSI23:{s:"CLSI M100 2023",f:"CLSI AST News Update（June 2023）: M100-Ed33 updated aminoglycoside breakpoints for Enterobacterales and P. aeruginosa。Gentamicin 不再列為 P. aeruginosa 的建議治療選項，建議實驗室不報告或報 R。"},
   AWMF25:{s:"AWMF S3 2025",f:"Perioperative and Peri-Interventional Antibiotic Prophylaxis in Urology: Key Recommendations from the German AWMF S3 Guideline, compared with EAU 2025. Urol Int 2025 (doi:10.1159/000550029)."},
   ASHP13:{s:"ASHP 2013",f:"Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283."},
@@ -700,7 +701,7 @@ const INTER = [
 
 /* ---------------- 泌尿手術預防 ---------------- */
 const PXR = {
-  cz:{n:"Cefazolin",t:"2 g IV（體重 ≥120 kg：3 g）",re:"q4h"},
+  cz:{n:"Cefazolin",t:"依體重（見下）",re:"q4h"},
   cxm:{n:"Cefuroxime",t:"1.5 g IV",re:"q4h"},
   cxmPO:{n:"Cefuroxime",t:"500 mg PO 單次"},
   tmp:{n:"TMP-SMX",t:"1 DS 錠 PO 單次"},
@@ -1379,9 +1380,17 @@ function curEval(tlist){
 }
 
 /* 手術預防 */
+// Cefazolin 預防劑量依院內規範（實際體重）：<80 kg 1 g、80–120 kg 2 g、>120 kg 3 g
+function czPx(){
+  const w=S.pt.wt;
+  if(!w) return {t:"1 g IV（&lt;80 kg）／2 g（80–120 kg）／3 g（&gt;120 kg）",m:"輸入體重後顯示單一劑量"};
+  const g=w>120?3:w>=80?2:1;
+  return {t:`${g} g IV`,m:`院內規範：實際體重 ${r0(w)} kg`};
+}
 function pxRow(k){
-  const p=PXR[k]; const t=fillW(p.t);
-  return `<div class="rx"><div class="rx-head"><span class="rx-name">${p.n}</span>${p.re?`<span class="flag info">追加 ${p.re}</span>`:""}</div><div class="rx-dose">${t.replace(/ ≈ (.*?)$/,' <span class="w">≈ $1</span>')}</div><button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(p.n+" "+t)}">複製</button></div>`;
+  const p=PXR[k]; let t=fillW(p.t), meta="";
+  if(k==="cz"){ const c=czPx(); t=c.t; meta=`<div class="rx-meta">${c.m}${srcTags(["HOSP_PX"])}</div>`; }
+  return `<div class="rx"><div class="rx-head"><span class="rx-name">${p.n}</span>${p.re?`<span class="flag info">追加 ${p.re}</span>`:""}</div><div class="rx-dose">${t.replace(/ ≈ (.*?)$/,' <span class="w">≈ $1</span>')}</div>${meta}<button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(p.n+" "+t.replace(/&lt;/g,"<").replace(/&gt;/g,">"))}">複製</button></div>`;
 }
 function pxGroup(label,groups,tcls){
   if(!groups.length) return "";
@@ -1411,6 +1420,7 @@ function renderPx(){
   h+=pxGroup(p.altLabel||"替代",p.alt,"");
   if(S.allergy!=="none") h+=pxGroup("β-lactam 過敏",PX_ALLERGY,"allergy");
   h+=`<div class="notes">${p.notes.map(t=>`<div class="note">${t}</div>`).join("")}
+    <div class="note">${updB("Cefazolin 預防劑量原本依 ASHP 2013（2 g，≥120 kg 3 g）→ 改依院內規範：&lt;80 kg 1 g、80–120 kg 2 g、>120 kg 3 g。")} Cefazolin 劑量來源不同：院內規範 &lt;80 kg 1 g、80–120 kg 2 g、>120 kg 3 g（app 採用）；ASHP 2013 為 2 g、≥120 kg 3 g。剛好 80 kg 算 2 g、剛好 120 kg 算 2 g。${srcTags(["HOSP_PX","ASHP13"])}</div>
     <div class="note">通則：切皮前 60 分鐘內給藥（vancomycin、FQ 120 分鐘內）；單次為主、≤24 小時；手術時間超過一個半衰期追加（cefazolin、cefuroxime q4h，clindamycin q6h）。術前尿液培養陽性屬治療，需依藥敏給足療程。單次預防劑量不需腎調整。${srcTags(["ASHP13","AUA_PX19"])}</div>
     <div class="note">術前尿液培養：會破壞黏膜的泌尿道處置（內視鏡手術、TURP、TURBT 等）前，篩檢並治療無症狀菌尿，依藥敏選藥，不用經驗性治療（EAU，Strong）。不進入泌尿道的手術不需篩檢。${srcTags(["EAU_UI26"])}</div></div>`;
   return h+`</div></div>`;
