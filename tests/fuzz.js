@@ -120,6 +120,8 @@ if(on("search")){
     if(!cat){ if(hs.length) fails.push(["search",{q},"應無結果"]); continue; }
     if(!hs.some(x=>x.t===cat&&x.n.includes(name))) fails.push(["search",{q},`缺 ${cat}：${name}`]);
   }
+  // v1.1：雙和常用與新加入的商品名要搜得到
+  for(const [q,k] of [["Curam","amoxclav"],["brosym","cps"],["Zavicefta","cza"],["贊飛得","cza"],["zerbaxa","ctz"]]){ n++; if(!A.searchHits(q).some(x=>x.go&&x.go.drug===k)) fails.push(["search",{q},"商品名搜不到 "+k]); }
   const bk=Object.keys(A.D).find(k=>A.D[k].brand);
   if(bk){ const b=A.D[bk].brand.split(/[、,／/ ]/)[0]; const hs=A.searchHits(b); n++; if(!hs.some(x=>x.go.drug===bk)) fails.push(["search",{q:b},"商品名搜不到"]); }
 }
@@ -138,8 +140,21 @@ if(on("cmp")){
   for(const r of ["ESBL","CRE"]) for(const k of BK){ n++; const v=A.cmpV(k,r); if(![0,1,2,3].includes(v)) fails.push(["cmp-x",{r,k},"值錯 "+v]);
     const x=A.XROWS[r].v[k]; if(x){ if(!x[1]||!x[2]) fails.push(["cmp-x",{r,k},"缺說明或出處"]); if(A.SPV[k][5]===0&&x[0]>0) fails.push(["cmp-x",{r,k},"G(−) 無效卻有 ESBL／CRE 值"]); } }
   // 臨床一致性：CRE 不應有 ≥ +；carbapenem ESBL ++；ESBL ≤ 一般 G(−)
-  for(const k of BK){ n++; if(A.cmpV(k,"CRE")>=2) fails.push(["cmp-c",{k},"CRE ≥ +"]); if(A.cmpV(k,"ESBL")>A.SPV[k][5]) fails.push(["cmp-c",{k},"ESBL 高於一般 G(−)"]); }
+  // v1.1：只有 ceftazidime-avibactam 可在 CRE 列 ≥ +（KPC、OXA-48）
+  for(const k of BK){ n++; if(k!=="cza"&&A.cmpV(k,"CRE")>=2) fails.push(["cmp-c",{k},"CRE ≥ +"]); if(A.cmpV(k,"ESBL")>A.SPV[k][5]) fails.push(["cmp-c",{k},"ESBL 高於一般 G(−)"]); }
   for(const k of ["etp","ipm","mem"]){ n++; if(A.cmpV(k,"ESBL")!==3) fails.push(["cmp-c",{k},"carbapenem ESBL 非 ++"]); if(A.cmpV(k,"CRE")!==0) fails.push(["cmp-c",{k},"carbapenem CRE 非 −"]); }
+  // v1.1 CZA／CTZ：臨床一致性與逐格依據
+  { n++; const V=A.SPV, e=[];
+    if(A.cmpV("cza","CRE")!==3) e.push("CZA CRE 非 ++"); if(A.cmpV("ctz","CRE")!==0) e.push("CTZ CRE 非 −");
+    if(V.ctz[6]>1) e.push("CTZ AmpC > ±"); if(V.cza[8]||V.ctz[8]) e.push("CZA／CTZ 對 A. baumannii 非 −");
+    if(V.cza[7]!==3||V.ctz[7]!==3) e.push("PsA 非 ++"); if(V.cza[9]>0) e.push("CZA 厭氧菌非 −");
+    for(const k of ["cza","ctz"]){ if(A.cmpV(k,"ESBL")>1) e.push(k+" ESBL 高於 ±（IDSA 建議保留）"); for(let c=0;c<11;c++){ const x=A.CELLN[k][c]; if(!x||!x[0]||!x[1].length) e.push(k+" 第 "+c+" 欄缺依據"); else x[1].forEach(r=>{ if(!A.REF[r]) e.push("缺 REF "+r); }); } }
+    if(e.length) fails.push(["cmp-new",{},e.join("；")]); }
+  // 管制抗生素在單一欄或多欄建議中排在最後、不進合併方案
+  for(const cols of [[5],[7],[5,7],[6,7],[5,6,7],[3,7],[2,7],[7,9],[5,9]]) run("spec-adv",{tab:"spec",spec:{view:"bac",cols}},()=>A.render("spec"),(t,h)=>{
+    if(/合併：[^<]*(Ceftazidime-avibactam|Ceftolozane-tazobactam|Colistin)/.test(t)) return "管制抗生素進入合併方案";
+    const seg=h.split("單一藥物即可涵蓋")[1]; if(seg){ const s1=seg.split("</div></div>")[0]; const iR=s1.search(/Ceftazidime-avibactam|Ceftolozane-tazobactam|Colistin/), iN=s1.search(/Meropenem|Piperacillin|Cefepime|Imipenem/); if(iR>=0&&iN>iR) return "管制抗生素排在非管制藥前面"; }
+    return ""; });
   const chk=(t,h,keys,fun)=>{
     const nm=fun?keys.map(k=>A.FCOLS.find(c=>c[0]===k)[1]):keys.map(k=>{const r=A.SPEC_ROWS.find(x=>x[0]===k);return r[4]||A.D[r[1]].n;});
     if(!nm.every(x=>t.includes(x))) return "缺藥名";

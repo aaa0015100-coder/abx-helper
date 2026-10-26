@@ -4190,6 +4190,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Ciprofloxacin
@@ -4198,12 +4200,14 @@ EAU 2026
 EAU 2026
 EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
+ESC IE 2023
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 IDSA AMR 2026
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
@@ -4218,10 +4222,12 @@ IV 首選
 Klebsiella pneumoniae
 Levofloxacin
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Nicolau 1995
 PO
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Proteus mirabilis
 PsA 全身性感染用 750 mg q12h
@@ -4275,6 +4281,7 @@ Yahav 2019
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 30–50）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -4292,6 +4299,9 @@ Yahav 2019
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -4317,6 +4327,8 @@ Yahav 2019
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -4324,7 +4336,7 @@ Yahav 2019
 過去培養出 CRE／DTR-PA
 過去培養或鼻腔篩檢 MRSA 陽性
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 高
 高
@@ -7131,6 +7143,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Ciprofloxacin
@@ -7139,12 +7153,14 @@ EAU 2026
 EAU 2026
 EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
+ESC IE 2023
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 IDSA AMR 2026
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
@@ -7159,10 +7175,12 @@ IV 首選
 Klebsiella pneumoniae
 Levofloxacin
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Nicolau 1995
 PO
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Proteus mirabilis
 PsA 全身性感染用 750 mg q12h
@@ -7217,6 +7235,7 @@ Yahav 2019
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 30–50）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -7234,6 +7253,9 @@ Yahav 2019
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -7259,6 +7281,8 @@ Yahav 2019
 複雜性 UTI（阻塞、結石、器械後）
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -7266,7 +7290,7 @@ Yahav 2019
 過去培養出 CRE／DTR-PA
 過去培養或鼻腔篩檢 MRSA 陽性
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 高
 高
@@ -10020,6 +10044,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 CAUTI（導尿管相關）
 CAUTI：導管留置 >2 週者，先更換導管再採檢與治療。念珠菌尿多為移生。
 Candida spp.
@@ -10029,6 +10055,7 @@ EAU 2026
 EAU 2026
 EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
+ESC IE 2023
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
 Enterococcus faecalis
@@ -10042,6 +10069,7 @@ IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
+IDSA cUTI 2025
 IV
 IV
 IV
@@ -10050,9 +10078,11 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Nicolau 1995
 P. aeruginosa 風險（導管、器械、免疫抑制、過去 PsA）
 PO
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Proteus mirabilis
@@ -10087,6 +10117,7 @@ TSAR 國衛院
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 30–60）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -10101,6 +10132,9 @@ TSAR 國衛院
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 用法：
 療程
 發燒性 UTI 合併水腎或結石阻塞是泌尿科急症：需立即引流（DJ stent 或 PCN），抗生素無法單獨控制。
@@ -10122,6 +10156,8 @@ TSAR 國衛院
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -10129,7 +10165,7 @@ TSAR 國衛院
 過去培養出 CRE／DTR-PA
 過去培養或鼻腔篩檢 MRSA 陽性
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 ## emp cauti path pmir
 01
@@ -13870,6 +13906,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Chlamydia trachomatis
@@ -13880,10 +13918,12 @@ EAU 2026
 EAU 2026
 EAU 2026
 EAU 2026
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IV
@@ -13895,12 +13935,14 @@ IV 首選
 Klebsiella pneumoniae
 Levofloxacin
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Methotrexate：骨髓抑制。避免併用
 Neisseria gonorrhoeae
 PO
 PO
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Proteus mirabilis
@@ -13957,6 +13999,7 @@ Warfarin：INR 上升。監測 INR
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 30–50）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 急性細菌性前列腺炎
 感染部位
 或
@@ -13974,6 +14017,9 @@ Warfarin：INR 上升。監測 INR
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 用法：
@@ -14003,6 +14049,8 @@ Warfarin：INR 上升。監測 INR
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -14012,7 +14060,7 @@ Warfarin：INR 上升。監測 INR
 避免前列腺按摩。尿滯留時導尿或恥骨上膀胱造廔皆可。
 長期導尿管、腎造廔或輸尿管支架
 需住院或有全身症狀時
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選（IV）
 高
 高
@@ -15574,6 +15622,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Chlamydia trachomatis
 Chlamydia／非典型菌
@@ -15584,12 +15634,14 @@ EAU 2026
 EAU 2026
 EAU 2026
 EAU 2026
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 FQ 4–6 週
 FQ 不可用時
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IV
@@ -15599,12 +15651,14 @@ IV 首選
 Klebsiella pneumoniae
 Levofloxacin
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Methotrexate：骨髓抑制。避免併用
 PO
 PO
 PO
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Proteus mirabilis
 PsA 全身性感染用 750 mg q12h
@@ -15657,6 +15711,7 @@ Warfarin：INR 上升。監測 INR
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 30–50）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 慢性細菌性前列腺炎
 或
@@ -15670,6 +15725,9 @@ Warfarin：INR 上升。監測 INR
 正常劑量（CrCl >30）
 正常劑量（CrCl ≥30）
 泌尿／生殖
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -15697,6 +15755,8 @@ Warfarin：INR 上升。監測 INR
 說明
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -15704,7 +15764,7 @@ Warfarin：INR 上升。監測 INR
 過去培養出 CRE／DTR-PA
 過去培養或鼻腔篩檢 MRSA 陽性
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 高
 高
@@ -22553,10 +22613,13 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Clindamycin
 EAU 2026
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
@@ -22566,6 +22629,7 @@ IDSA SSTI 2014
 IDSA SSTI 2014
 IDSA SSTI 2014
 IDSA SSTI 2014
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IV
@@ -22581,9 +22645,11 @@ Klebsiella pneumoniae
 Linezolid
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
 MRSA 肺炎證據不如 vancomycin／linezolid；骨關節、心內膜炎需高劑量（見 Teicoplanin 頁）
+Mandell 9th
 Meropenem
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Piperacillin-tazobactam：急性腎損傷風險增加（觀察性研究）。監測 Cr；可考慮 cefepime／meropenem 搭配
@@ -22634,6 +22700,7 @@ Vancomycin
 已依腎功能調整（CrCl 26–50）
 已知菌種：
 廣效 G(−)／厭氧菌 ＋ MRSA ＋ clindamycin（抑制毒素）
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 或
@@ -22650,6 +22717,9 @@ Vancomycin
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 無需腎調整
 用法：
@@ -22683,6 +22753,8 @@ Vancomycin
 複製
 說明
 說明
+說明
+說明
 負荷 400 mg IV q12h ×3 劑 → 維持 400 mg q24h；第 4 天起：400 mg q48h，或 200 mg q24h（減半）；目標 trough > 15 mg/L（FPIA）／≥10 mg/L（HPLC）
 近期泌尿道器械檢查或手術
 透析與 CRRT 劑量仿單未列，為常用做法
@@ -22692,7 +22764,7 @@ Vancomycin
 過去培養出 CRE／DTR-PA
 過去培養或鼻腔篩檢 MRSA 陽性
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首劑 1500 mg，之後 750 mg IV q24h
 首選（合併）
 高
@@ -25521,6 +25593,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 Ciprofloxacin
@@ -25529,12 +25603,14 @@ EAU 2026
 EAU 2026
 EAU 2026
 ESBL：piperacillin-tazobactam 可作 cUTI 替代（非重症、無菌血症）；泌尿道外感染不建議。Cefepime 即使感受也避免。
+ESC IE 2023
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 IDSA AMR 2026
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA cUTI 2025
@@ -25550,10 +25626,12 @@ IV 首選
 Klebsiella pneumoniae
 Levofloxacin
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Nicolau 1995
 PO
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Proteus mirabilis
 PsA 全身性感染用 750 mg q12h
@@ -25608,6 +25686,7 @@ Yahav 2019
 已依腎功能調整（CrCl 20–49）
 已依腎功能調整（CrCl 30–50）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -25625,6 +25704,9 @@ Yahav 2019
 正常劑量（CrCl ≥30）
 泌尿／生殖
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -25649,6 +25731,8 @@ Yahav 2019
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -25657,7 +25741,7 @@ Yahav 2019
 過去培養或鼻腔篩檢 MRSA 陽性
 部位未區分：依 cUTI（含 pyelonephritis）處理；確定為單純膀胱炎後可改窄效藥。
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 高
 高
@@ -43998,18 +44082,22 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 BALANCE 2024
+Bugs & Drugs
 Burkholderia pseudomallei（類鼻疽）
 CDC Vibrio 2024
 CDC Vibrio 2024
 Candida spp.
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 IDSA AMR 2026
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -44019,9 +44107,11 @@ IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
 MRSA 風險（MRSA 帶菌、導管、皮膚感染、近期住院）時加 vancomycin。
+Mandell 9th
 Melioidosis NEJM
 Melioidosis NEJM
 PO
+POET 2019
 Piperacillin-tazobactam
 Pseudomonas aeruginosa
 SSC 2021
@@ -44057,6 +44147,7 @@ Vibrio vulnificus
 已依腎功能調整（CrCl 10–49）
 已依腎功能調整（CrCl 20–40）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 敗血症・來源不明
@@ -44068,6 +44159,9 @@ Vibrio vulnificus
 標靶治療
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 療程
 社區、無抗藥風險
@@ -44086,6 +44180,8 @@ Vibrio vulnificus
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -44094,7 +44190,7 @@ Vibrio vulnificus
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 ## emp bsi_unk path gas
 01
@@ -46614,7 +46710,9 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 BALANCE 2024
+Bugs & Drugs
 CDC Vibrio 2024
 Candida albicans
 Candida parapsilosis
@@ -46623,6 +46721,7 @@ Cefepime
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
 CoNS（導管已移除）5–7 天；G(−) 7 天；S. aureus ≥14 天；Candida 血培養轉陰後 14 天
 Coagulase-negative staphylococci（CoNS）
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
@@ -46633,6 +46732,7 @@ IDSA CRBSI 2009
 IDSA CRBSI 2009
 IDSA CRBSI 2009
 IDSA Candida 2016
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -46645,8 +46745,10 @@ IV/IM
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
 MRSA 肺炎證據不如 vancomycin／linezolid；骨關節、心內膜炎需高劑量（見 Teicoplanin 頁）
+Mandell 9th
 Melioidosis NEJM
 PO
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Piperacillin-tazobactam：急性腎損傷風險增加（觀察性研究）。監測 Cr；可考慮 cefepime／meropenem 搭配
@@ -46686,6 +46788,7 @@ Vancomycin
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 30–60）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 或
@@ -46698,6 +46801,9 @@ Vancomycin
 標靶治療
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 用法：
 用法：
 療程
@@ -46724,6 +46830,8 @@ Vancomycin
 複製
 複製
 說明
+說明
+說明
 負荷 400 mg IV q12h ×3 劑 → 維持 400 mg q24h；第 4 天起：400 mg q48h，或 200 mg q24h（減半）；目標 trough > 15 mg/L（FPIA）／≥10 mg/L（HPLC）
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
@@ -46733,7 +46841,7 @@ Vancomycin
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首劑 1500 mg，之後 750 mg IV q24h
 首選
 高
@@ -51905,17 +52013,21 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 Cefazolin＋metronidazole 僅在院內 E. coli 抗藥率
 Ceftriaxone
 Ceftriaxone ＋ Metronidazole
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Ertapenem
 Escherichia coli
 IDSA cIAI 2024（Part 1）
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -51925,9 +52037,11 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Metronidazole
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 SIS 2024
 SIS/IDSA cIAI 2010
@@ -51970,6 +52084,7 @@ cIAI・社區輕中度
 已依腎功能調整（CrCl 10–49）
 已依腎功能調整（CrCl 20–40）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
@@ -51979,6 +52094,9 @@ cIAI・社區輕中度
 標靶治療
 正常劑量（CrCl >30）
 正常劑量（CrCl ≥30）
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 無需腎調整
 用法：
@@ -52003,6 +52121,8 @@ cIAI・社區輕中度
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -52012,7 +52132,7 @@ cIAI・社區輕中度
 酒精、disulfiram：Disulfiram 樣反應；與 disulfiram 併用可致精神病反應。治療期間與停藥後 3 天內禁酒；2 週內用過 disulfiram 者不用
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選（合併）
 高
 高
@@ -54356,11 +54476,14 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 Candida albicans
 Cefepime
 Cefepime ＋ Metronidazole
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterobacter／C. freundii／K. aerogenes（AmpC 中風險）
 Enterococcus faecalis
 Enterococcus faecalis
@@ -54368,6 +54491,7 @@ Enterococcus faecalis
 Escherichia coli
 IDSA Candida 2016
 IDSA cIAI 2024（Part 1）
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -54378,10 +54502,12 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Meropenem
 Metronidazole
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Pseudomonas aeruginosa
@@ -54429,6 +54555,7 @@ cIAI・重症或醫療照護相關
 已依腎功能調整（CrCl 26–50）
 已依腎功能調整（CrCl 30–60）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -54440,6 +54567,9 @@ cIAI・重症或醫療照護相關
 標靶治療
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 用法：
@@ -54466,6 +54596,8 @@ cIAI・重症或醫療照護相關
 複製
 複製
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 透析與 CRRT 劑量仿單未列，為常用做法
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
@@ -54477,7 +54609,7 @@ cIAI・重症或醫療照護相關
 醫療照護相關、上消化道穿孔反覆手術、免疫低下：考慮 Candida 涵蓋（echinocandin）。
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 高
 高
@@ -56834,10 +56966,13 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 Ceftriaxone
 Ceftriaxone 若有膽腸吻合加 metronidazole；cefazolin 僅在院內 E. coli 抗藥率
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
@@ -56847,6 +56982,7 @@ Grade III（重度）
 Grade II（中度）
 Grade I（輕度）
 IDSA cUTI 2025
+IDSA cUTI 2025
 IV
 IV
 IV
@@ -56855,7 +56991,9 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 PO
+POET 2019
 Piperacillin-tazobactam
 Pseudomonas aeruginosa
 Siu 2012
@@ -56887,6 +57025,7 @@ Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他
 已依腎功能調整（CrCl 20–40）
 已知菌種：
 引流是關鍵：中重度膽管炎早期 ERCP／PTCD；膽囊炎依嚴重度膽囊切除或 PTGBD。
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -56896,6 +57035,9 @@ Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他
 標靶治療
 正常劑量（CrCl >30）
 正常劑量（CrCl ≥30）
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -56919,6 +57061,8 @@ Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -56927,7 +57071,7 @@ Valproic acid：VPA 濃度大幅下降，可致癲癇。避免併用，改其他
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選（Grade I）
 ## emp biliary path bact
 01
@@ -60873,12 +61017,16 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -60887,7 +61035,9 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 PO
+POET 2019
 Piperacillin-tazobactam
 SBP（自發性腹膜炎）
 Sepsis
@@ -60913,6 +61063,7 @@ TSAR 國衛院
 已依腎功能調整（CrCl 10–49）
 已依腎功能調整（CrCl 20–40）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
@@ -60922,6 +61073,9 @@ TSAR 國衛院
 正常劑量（CrCl ≥30）
 治療後需次發性預防（ciprofloxacin 或 TMP-SMX）。
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 療程
 白蛋白：第 1 天 1.5 g/kg、第 3 天 1 g/kg（Cr >1 mg/dL、BUN >30 或 bilirubin >4 時），降低 HRS 與死亡。
@@ -60941,6 +61095,8 @@ TSAR 國衛院
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -60949,7 +61105,7 @@ TSAR 國衛院
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選
 ## emp iai_unk none none none
 01
@@ -63139,17 +63295,21 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 Cefazolin＋metronidazole 僅在院內 E. coli 抗藥率
 Ceftriaxone
 Ceftriaxone ＋ Metronidazole
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Ertapenem
 Escherichia coli
 IDSA cIAI 2024（Part 1）
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -63159,9 +63319,11 @@ IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床�
 IV 首選
 Klebsiella pneumoniae
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Metronidazole
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Pseudomonas aeruginosa
 SIS 2024
@@ -63206,6 +63368,7 @@ Warfarin：INR 上升。監測 INR，考慮減量
 已依腎功能調整（CrCl 10–49）
 已依腎功能調整（CrCl 20–40）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
 更改
@@ -63216,6 +63379,9 @@ Warfarin：INR 上升。監測 INR，考慮減量
 正常劑量（CrCl >30）
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 無需腎調整
 用法：
@@ -63240,6 +63406,8 @@ Warfarin：INR 上升。監測 INR，考慮減量
 複製
 說明
 說明
+說明
+說明
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
 過去 1 年培養出 P. aeruginosa
@@ -63249,7 +63417,7 @@ Warfarin：INR 上升。監測 INR，考慮減量
 酒精、disulfiram：Disulfiram 樣反應；與 disulfiram 併用可致精神病反應。治療期間與停藥後 3 天內禁酒；2 週內用過 disulfiram 者不用
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選（合併）
 高
 高
@@ -71509,14 +71677,18 @@ Amoxicillin-clavulanate
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Bacteroides／厭氧菌
+Bugs & Drugs
 CDC Vibrio 2024
 Cephalexin
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -71529,9 +71701,11 @@ IWGDF/IDSA 2023
 IWGDF/IDSA 2023
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
 MRSA 風險：TMP-SMX 或 doxycycline
+Mandell 9th
 PO
 PO
 PO
+POET 2019
 Piperacillin-tazobactam
 Pseudomonas aeruginosa
 Staphylococcus aureus
@@ -71559,6 +71733,7 @@ Streptococcus pyogenes（GAS）
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 30–59）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 採仿單院內肺炎（較高）劑量欄，適用重症／PsA
@@ -71570,6 +71745,9 @@ Streptococcus pyogenes（GAS）
 標靶治療
 正常劑量（CrCl ≥30）
 正常劑量（CrCl ≥30）
+無指引直接建議
+無指引直接建議
+無指引直接建議
 用法：
 療程
 皮膚軟組織
@@ -71591,6 +71769,8 @@ Streptococcus pyogenes（GAS）
 評估骨髓炎（probe-to-bone、X 光／MRI）與周邊動脈疾病。
 說明
 說明
+說明
+說明
 軟組織 1–2 週
 輕度
 近期泌尿道器械檢查或手術
@@ -71602,7 +71782,7 @@ Streptococcus pyogenes（GAS）
 重度（全身症狀）
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首選（輕度）
 ## emp bite none none none
 01
@@ -97798,6 +97978,8 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
+Bugs & Drugs
 Cefepime
 Ceftriaxone
 Cephalosporin 與 ertapenem 天生無效；E. faecalis 多對 ampicillin 感受（E. faecium 多抗藥）。
@@ -97805,12 +97987,14 @@ Coagulase-negative staphylococci（CoNS）
 DAIR 或一階段置換：12 週優於 6 週。
 DATIPO 2021
 DATIPO 2021
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
 Escherichia coli
 IDSA PJI 2013
 IDSA PJI 2013
+IDSA cUTI 2025
 IDSA cUTI 2025
 IDSA 脊椎骨髓炎 2015
 IDSA 脊椎骨髓炎 2015
@@ -97823,8 +98007,10 @@ IV
 IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。
 IV 首選
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
+Mandell 9th
 Melioidosis NEJM
 PO
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam：急性腎損傷風險增加（觀察性研究）。監測 Cr；可考慮 cefepime／meropenem 搭配
 Sepsis
@@ -97861,6 +98047,7 @@ Viridans streptococci（含 S. anginosus）
 已依腎功能調整（CrCl 20–40）
 已依腎功能調整（CrCl 30–60）
 已知菌種：
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 或
@@ -97873,6 +98060,9 @@ Viridans streptococci（含 S. anginosus）
 標靶治療
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎調整
 用法：
 療程
@@ -97899,6 +98089,8 @@ Viridans streptococci（含 S. anginosus）
 複製
 複製
 說明
+說明
+說明
 負荷 700 mg IV q12h ×3–5 劑 → 維持 700 mg q24h；第 4 天起：700 mg q48h，或 400 mg q24h（減半）；目標 trough > 20 mg/L（FPIA）
 近期泌尿道器械檢查或手術
 這些情況讓病人較可能感染 ESBL、MRSA、抗藥性 P. aeruginosa 或 CRE，app 會據此決定經驗性治療要不要擴大涵蓋。
@@ -97908,7 +98100,7 @@ Viridans streptococci（含 S. anginosus）
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首劑 1500 mg，之後 750 mg IV q24h
 骨關節
 高
@@ -108319,7 +108511,9 @@ Amoxicillin
 Ampicillin
 Ampicillin 感受
 Ampicillin 抗藥／VRE
+Ampicillin 是 ampicillin 感受 Enterococcus 的基礎用藥（心內膜炎指引與教科書）；泌尿道感染無指引直接建議
 Aspergillus spp.
+Bugs & Drugs
 Candida albicans
 Caspofungin
 Cefepime
@@ -108329,6 +108523,7 @@ Coagulase-negative staphylococci（CoNS）
 ECIL-4
 ECIL-4
 ECIL-4
+ESC IE 2023
 Enterococcus faecalis
 Enterococcus faecalis
 Enterococcus faecalis
@@ -108339,6 +108534,7 @@ IDSA FN 2010
 IDSA FN 2010
 IDSA FN 2010
 IDSA FN 2010
+IDSA cUTI 2025
 IDSA cUTI 2025
 IV
 IV
@@ -108356,11 +108552,13 @@ Klebsiella pneumoniae
 Liposomal amphotericin B
 MDR（多重抗藥菌）危險因子 ・勾選符合項目
 MRSA 肺炎證據不如 vancomycin／linezolid；骨關節、心內膜炎需高劑量（見 Teicoplanin 頁）
+Mandell 9th
 Meropenem
 Micafungin
 Mucormycosis 5–10 mg/kg；腎毒性較低
 PO
 PO/IV
+POET 2019
 Piperacillin-tazobactam
 Piperacillin-tazobactam
 Piperacillin-tazobactam：急性腎損傷風險增加（觀察性研究）。監測 Cr；可考慮 cefepime／meropenem 搭配
@@ -108419,6 +108617,7 @@ Voriconazole
 已依腎功能調整（CrCl 30–60）
 已知菌種：
 建議改 PO 200 mg q12h（IV 載體 SBECD 會蓄積）；需 IV 時評估效益
+心內膜炎的部分口服治療（POET）已含 E. faecalis 用 amoxicillin；UTI 改口服可延伸 IDSA cUTI 2025 的口服降階原則
 感染部位
 或
 或
@@ -108437,6 +108636,9 @@ Voriconazole
 標靶治療
 正常劑量（CrCl ≥30）
 無 sepsis
+無指引直接建議
+無指引直接建議
+無指引直接建議
 無需腎、肝調整；尿中濃度低
 無需腎調整
 無需腎調整
@@ -108485,6 +108687,8 @@ Voriconazole
 說明
 說明
 說明
+說明
+說明
 負荷 400 mg IV q12h ×3 劑 → 維持 400 mg q24h；第 4 天起：400 mg q48h，或 200 mg q24h（減半）；目標 trough > 15 mg/L（FPIA）／≥10 mg/L（HPLC）
 近期泌尿道器械檢查或手術
 退燒 ≥72 小時且臨床恢復；確定感染依部位
@@ -108496,7 +108700,7 @@ Voriconazole
 過去培養或鼻腔篩檢 MRSA 陽性
 重點：
 長期導尿管、腎造廔或輸尿管支架
-需同時涵蓋 G(−) 時
+需同時涵蓋 G(−) 時；ampicillin 感受不一定代表 piperacillin-tazobactam 感受，依藥敏
 首劑 1500 mg，之後 750 mg IV q24h
 首劑 70 mg IV，之後 50 mg IV q24h
 首選（單一 anti-pseudomonal β-lactam）
@@ -125590,6 +125794,11 @@ Yahav 2019
 +
 +
 +
++
+++
+++
+++
+++
 ++
 ++
 ++
@@ -125647,7 +125856,9 @@ Cefepime
 Cefmetazole
 Cefoperazone-sulbactam
 Ceftazidime
+Ceftazidime-avibactam
 Ceftobiprole
+Ceftolozane-tazobactam
 Ceftriaxone
 Cefuroxime（2nd）
 Ciprofloxacin
@@ -125732,6 +125943,23 @@ Vancomycin
 ±
 ±
 ±
+±
+±
+±
+±
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
 −
 −
 −
@@ -126052,6 +126280,11 @@ Vancomycin
 +
 +
 +
++
+++
+++
+++
+++
 ++
 ++
 ++
@@ -126109,7 +126342,9 @@ Cefepime
 Cefmetazole
 Cefoperazone-sulbactam
 Ceftazidime
+Ceftazidime-avibactam
 Ceftobiprole
+Ceftolozane-tazobactam
 Ceftriaxone
 Cefuroxime（2nd）
 Ciprofloxacin
@@ -126194,6 +126429,23 @@ Vancomycin
 ±
 ±
 ±
+±
+±
+±
+±
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
 −
 −
 −
@@ -126514,6 +126766,11 @@ Vancomycin
 +
 +
 +
++
+++
+++
+++
+++
 ++
 ++
 ++
@@ -126571,7 +126828,9 @@ Cefepime
 Cefmetazole
 Cefoperazone-sulbactam
 Ceftazidime
+Ceftazidime-avibactam
 Ceftobiprole
+Ceftolozane-tazobactam
 Ceftriaxone
 Cefuroxime（2nd）
 Ciprofloxacin
@@ -126656,6 +126915,23 @@ Vancomycin
 ±
 ±
 ±
+±
+±
+±
+±
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
+−
 −
 −
 −
@@ -128393,6 +128669,7 @@ Warfarin、sulfonylurea、phenytoin
 ## ref none
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
@@ -128429,6 +128706,10 @@ Bezlotoxumab 下市
 Biggins SW, et al. Diagnosis, Evaluation, and Management of Ascites, SBP and Hepatorenal Syndrome: 2021 Practice Guidance by AASLD. Hepatology 2021;74:1014-48.
 Bodilsen J, et al. ESCMID guidelines on diagnosis and treatment of brain abscess in children and adults. Clin Microbiol Infect 2024;30:66-89.
 Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283.
+Britt 2015
+Britt NS, et al. Comparison of the effectiveness and safety of linezolid and daptomycin in vancomycin-resistant enterococcal bloodstream infection: a national cohort study of Veterans Affairs patients. Clin Infect Dis 2015;61:871-8。Linezolid 治療失敗較多（調整 RR 1.15），依同期社論（McKinnell & Arias, CID 2015;61:879-82）摘要。
+Bugs & Drugs
+Bugs & Drugs（Alberta Health Services），Enterococcus faecalis：ampicillin 感受不一定代表 piperacillin-tazobactam 感受；ampicillin 抗藥則可推定 piperacillin-tazobactam 抗藥。（CLSI M100 原文未讀到，請確認）
 CDC STI 2021
 CDC Vibrio 2024
 CDC. Clinical Overview of Vibriosis（2024 更新）：3rd-gen cephalosporin（如 ceftazidime）＋ doxycycline，並積極清創。
@@ -128452,6 +128733,8 @@ Cefuroxime 仿單
 Cephalexin 仿單
 Chang CC, et al. Global guideline for the diagnosis and management of cryptococcosis: an initiative of ECMM and ISHAM in cooperation with ASM. Lancet Infect Dis 2024（2024-02）。高所得地區腦膜炎誘導：liposomal AmB 3–4 mg/kg/day ＋ flucytosine 25 mg/kg q6h。
 Chehab MA, et al. Adult and Pediatric Antibiotic Prophylaxis during Vascular and IR Procedures: A Society of Interventional Radiology Practice Parameter Update Endorsed by CIRSE and CAIR. J Vasc Interv Radiol 2018;29(11):1483-1501（網站最後更新 2024-01）。泌尿：經皮腎造廔置放與更換（IIb，C-LD／C-EO）。
+Chua 2023
+Chua KYL, et al. Antimicrobial resistance and its detection in Staphylococcus saprophyticus urinary isolates. Pathology 2023;55(7)。302 株尿液分離株：TMP-SMX 感受 98%、nitrofurantoin 100%、ciprofloxacin 100%；mecA 陽性（methicillin 抗藥）5.6%；VITEK2 判讀 methicillin 抗藥特異性差。
 Cipro US prescribing information, Table 4：CrCl 30–50 250–500 mg q12h；5–29 250–500 mg q18h；血液或腹膜透析 250–500 mg q24h（透析後）。
 Ciprofloxacin 仿單
 Copaescu AM, et al. Efficacy of a Clinical Decision Rule to Enable Direct Oral Challenge in Patients With Low-Risk Penicillin Allergy: The PALACE Randomized Clinical Trial. JAMA Intern Med 2023（PMID 37459086）。門診過敏科成人、PEN-FAST
@@ -128478,6 +128761,8 @@ ESCMID 腦膿瘍 2024
 Ertapenem 仿單
 Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49:e1063-143.
 Fluconazole 仿單
+Foolad 2018
+Foolad F, Taylor BD, Shelburne SA, Arias CA, Aitken SL. Association of daptomycin dosing regimen and mortality in patients with VRE bacteraemia: a review. J Antimicrob Chemother 2018;73:2277-83。結論：VRE 菌血症以 daptomycin 為優先；≥9 mg/kg 與較低 14 天死亡率相關（Chuang 2017 調整 OR 0.09，回溯性）。
 Fortaz US prescribing information, Table 4：CrCl 31–50 1 g q12h；16–30 1 g q24h；6–15 500 mg q24h；
 Freifeld AG, et al. Clinical Practice Guideline for the Use of Antimicrobial Agents in Neutropenic Patients with Cancer: 2010 Update by IDSA. Clin Infect Dis 2011;52:e56-93.
 Gjika 2019
@@ -128508,6 +128793,7 @@ IDSA PJI 2013
 IDSA SSTI 2014
 IDSA cIAI 2024（Part 1）
 IDSA cUTI 2025
+IDSA cUTI 2025 只處理經驗性用藥（未針對 Enterococcus、S. aureus、S. saprophyticus 給建議），IDSA AMR 2026 只涵蓋 G(−) 抗藥菌，IDSA MRSA 2011 未涵蓋泌尿道感染。此選項依同一行其他出處（原始研究、綜論、教科書）與仿單。
 IDSA 脊椎骨髓炎 2015
 IDSA 腦膜炎 2004
 IDSA 院內腦膜炎 2017
@@ -128536,6 +128822,8 @@ Li HK, et al. Oral versus Intravenous Antibiotics for Bone and Joint Infection. 
 Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55.
 Macrobid（nitrofurantoin monohydrate／macrocrystals）US prescribing information：無尿、少尿或明顯腎功能不全（CrCl
 Mandell 9th
+Mason 2023
+Mason CY, Sobti A, Goodman AL. Staphylococcus aureus bacteriuria: implications and management. JAC Antimicrob Resist 2023（doi 10.1093/jacamr/dlac123）。無症狀者不治療（孕婦、泌尿道器械前例外）；全身不適（發燒、發炎指數上升、急性入院）時抽血液培養，閾值宜低；用藥依藥敏。
 Matzke 1984
 Matzke GR, et al. Pharmacokinetics of vancomycin in patients with various degrees of renal function. Antimicrob Agents Chemother 1984;25:433-7.
 Melioidosis NEJM
@@ -128618,6 +128906,8 @@ Vancomycin 共識 2020
 Voriconazole 仿單
 Wheat LJ, et al. Clinical Practice Guidelines for the Management of Patients with Histoplasmosis: 2007 Update by IDSA. Clin Infect Dis 2007;45:807-25.
 Wiersinga WJ, Currie BJ, Peacock SJ. Melioidosis. N Engl J Med 2012;367:1035-44.
+Wingler 2021
+Wingler MJ, et al. Linezolid for the Treatment of Urinary Tract Infections Caused by Vancomycin-Resistant Enterococci. Pharmacy (Basel) 2021;9:175。單中心 45 例（linezolid 33 例，皆 ampicillin 抗藥 E. faecium）：微生物清除 100%，臨床治癒與其他藥物無顯著差異；樣本小。
 Workowski KA, et al. Sexually Transmitted Infections Treatment Guidelines, 2021. MMWR Recomm Rep 2021;70(4).
 Yahav 2019
 Yahav D, et al. Seven Versus 14 Days of Antibiotic Therapy for Uncomplicated Gram-negative Bacteremia. Clin Infect Dis 2019;69:1091-8.
@@ -128639,13 +128929,14 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 各藥品仿單（FDA label／DailyMed、台灣仿單）。v1.0 已將主要腎調整藥物改為各藥仿單出處；仍標「仿單」者多為不需腎調整的藥（ceftriaxone、moxifloxacin、doxycycline、linezolid、metronidazole、oxacillin、fusidic acid、rifampin、itraconazole）或仿單未列分段（ampicillin、amoxicillin）。Sanford Guide 為訂閱制，未逐筆比對。
 填入範例病人數值
 收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。
+無指引直接建議
 生體可用率
 畫底線的縮寫可點開看全稱；每張卡片只標第一次出現的位置。
 示範：
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-27（v1.0・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-27（v1.1・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
 院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
@@ -128653,6 +128944,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 ## ref c35
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
@@ -128689,6 +128981,10 @@ Bezlotoxumab 下市
 Biggins SW, et al. Diagnosis, Evaluation, and Management of Ascites, SBP and Hepatorenal Syndrome: 2021 Practice Guidance by AASLD. Hepatology 2021;74:1014-48.
 Bodilsen J, et al. ESCMID guidelines on diagnosis and treatment of brain abscess in children and adults. Clin Microbiol Infect 2024;30:66-89.
 Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283.
+Britt 2015
+Britt NS, et al. Comparison of the effectiveness and safety of linezolid and daptomycin in vancomycin-resistant enterococcal bloodstream infection: a national cohort study of Veterans Affairs patients. Clin Infect Dis 2015;61:871-8。Linezolid 治療失敗較多（調整 RR 1.15），依同期社論（McKinnell & Arias, CID 2015;61:879-82）摘要。
+Bugs & Drugs
+Bugs & Drugs（Alberta Health Services），Enterococcus faecalis：ampicillin 感受不一定代表 piperacillin-tazobactam 感受；ampicillin 抗藥則可推定 piperacillin-tazobactam 抗藥。（CLSI M100 原文未讀到，請確認）
 CDC STI 2021
 CDC Vibrio 2024
 CDC. Clinical Overview of Vibriosis（2024 更新）：3rd-gen cephalosporin（如 ceftazidime）＋ doxycycline，並積極清創。
@@ -128712,6 +129008,8 @@ Cefuroxime 仿單
 Cephalexin 仿單
 Chang CC, et al. Global guideline for the diagnosis and management of cryptococcosis: an initiative of ECMM and ISHAM in cooperation with ASM. Lancet Infect Dis 2024（2024-02）。高所得地區腦膜炎誘導：liposomal AmB 3–4 mg/kg/day ＋ flucytosine 25 mg/kg q6h。
 Chehab MA, et al. Adult and Pediatric Antibiotic Prophylaxis during Vascular and IR Procedures: A Society of Interventional Radiology Practice Parameter Update Endorsed by CIRSE and CAIR. J Vasc Interv Radiol 2018;29(11):1483-1501（網站最後更新 2024-01）。泌尿：經皮腎造廔置放與更換（IIb，C-LD／C-EO）。
+Chua 2023
+Chua KYL, et al. Antimicrobial resistance and its detection in Staphylococcus saprophyticus urinary isolates. Pathology 2023;55(7)。302 株尿液分離株：TMP-SMX 感受 98%、nitrofurantoin 100%、ciprofloxacin 100%；mecA 陽性（methicillin 抗藥）5.6%；VITEK2 判讀 methicillin 抗藥特異性差。
 Cipro US prescribing information, Table 4：CrCl 30–50 250–500 mg q12h；5–29 250–500 mg q18h；血液或腹膜透析 250–500 mg q24h（透析後）。
 Ciprofloxacin 仿單
 Copaescu AM, et al. Efficacy of a Clinical Decision Rule to Enable Direct Oral Challenge in Patients With Low-Risk Penicillin Allergy: The PALACE Randomized Clinical Trial. JAMA Intern Med 2023（PMID 37459086）。門診過敏科成人、PEN-FAST
@@ -128738,6 +129036,8 @@ ESCMID 腦膿瘍 2024
 Ertapenem 仿單
 Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49:e1063-143.
 Fluconazole 仿單
+Foolad 2018
+Foolad F, Taylor BD, Shelburne SA, Arias CA, Aitken SL. Association of daptomycin dosing regimen and mortality in patients with VRE bacteraemia: a review. J Antimicrob Chemother 2018;73:2277-83。結論：VRE 菌血症以 daptomycin 為優先；≥9 mg/kg 與較低 14 天死亡率相關（Chuang 2017 調整 OR 0.09，回溯性）。
 Fortaz US prescribing information, Table 4：CrCl 31–50 1 g q12h；16–30 1 g q24h；6–15 500 mg q24h；
 Freifeld AG, et al. Clinical Practice Guideline for the Use of Antimicrobial Agents in Neutropenic Patients with Cancer: 2010 Update by IDSA. Clin Infect Dis 2011;52:e56-93.
 Gjika 2019
@@ -128768,6 +129068,7 @@ IDSA PJI 2013
 IDSA SSTI 2014
 IDSA cIAI 2024（Part 1）
 IDSA cUTI 2025
+IDSA cUTI 2025 只處理經驗性用藥（未針對 Enterococcus、S. aureus、S. saprophyticus 給建議），IDSA AMR 2026 只涵蓋 G(−) 抗藥菌，IDSA MRSA 2011 未涵蓋泌尿道感染。此選項依同一行其他出處（原始研究、綜論、教科書）與仿單。
 IDSA 脊椎骨髓炎 2015
 IDSA 腦膜炎 2004
 IDSA 院內腦膜炎 2017
@@ -128796,6 +129097,8 @@ Li HK, et al. Oral versus Intravenous Antibiotics for Bone and Joint Infection. 
 Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55.
 Macrobid（nitrofurantoin monohydrate／macrocrystals）US prescribing information：無尿、少尿或明顯腎功能不全（CrCl
 Mandell 9th
+Mason 2023
+Mason CY, Sobti A, Goodman AL. Staphylococcus aureus bacteriuria: implications and management. JAC Antimicrob Resist 2023（doi 10.1093/jacamr/dlac123）。無症狀者不治療（孕婦、泌尿道器械前例外）；全身不適（發燒、發炎指數上升、急性入院）時抽血液培養，閾值宜低；用藥依藥敏。
 Matzke 1984
 Matzke GR, et al. Pharmacokinetics of vancomycin in patients with various degrees of renal function. Antimicrob Agents Chemother 1984;25:433-7.
 Melioidosis NEJM
@@ -128878,6 +129181,8 @@ Vancomycin 共識 2020
 Voriconazole 仿單
 Wheat LJ, et al. Clinical Practice Guidelines for the Management of Patients with Histoplasmosis: 2007 Update by IDSA. Clin Infect Dis 2007;45:807-25.
 Wiersinga WJ, Currie BJ, Peacock SJ. Melioidosis. N Engl J Med 2012;367:1035-44.
+Wingler 2021
+Wingler MJ, et al. Linezolid for the Treatment of Urinary Tract Infections Caused by Vancomycin-Resistant Enterococci. Pharmacy (Basel) 2021;9:175。單中心 45 例（linezolid 33 例，皆 ampicillin 抗藥 E. faecium）：微生物清除 100%，臨床治癒與其他藥物無顯著差異；樣本小。
 Workowski KA, et al. Sexually Transmitted Infections Treatment Guidelines, 2021. MMWR Recomm Rep 2021;70(4).
 Yahav 2019
 Yahav D, et al. Seven Versus 14 Days of Antibiotic Therapy for Uncomplicated Gram-negative Bacteremia. Clin Infect Dis 2019;69:1091-8.
@@ -128899,13 +129204,14 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 各藥品仿單（FDA label／DailyMed、台灣仿單）。v1.0 已將主要腎調整藥物改為各藥仿單出處；仍標「仿單」者多為不需腎調整的藥（ceftriaxone、moxifloxacin、doxycycline、linezolid、metronidazole、oxacillin、fusidic acid、rifampin、itraconazole）或仿單未列分段（ampicillin、amoxicillin）。Sanford Guide 為訂閱制，未逐筆比對。
 填入範例病人數值
 收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。
+無指引直接建議
 生體可用率
 畫底線的縮寫可點開看全稱；每張卡片只標第一次出現的位置。
 示範：
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-27（v1.0・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-27（v1.1・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
 院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
@@ -128913,6 +129219,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 ## ref hd
 2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。
 2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。
+2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 AAAAI/ACAAI 2022
 AASLD 2021
@@ -128949,6 +129256,10 @@ Bezlotoxumab 下市
 Biggins SW, et al. Diagnosis, Evaluation, and Management of Ascites, SBP and Hepatorenal Syndrome: 2021 Practice Guidance by AASLD. Hepatology 2021;74:1014-48.
 Bodilsen J, et al. ESCMID guidelines on diagnosis and treatment of brain abscess in children and adults. Clin Microbiol Infect 2024;30:66-89.
 Bratzler DW, et al. Clinical practice guidelines for antimicrobial prophylaxis in surgery. Am J Health Syst Pharm 2013;70:195-283.
+Britt 2015
+Britt NS, et al. Comparison of the effectiveness and safety of linezolid and daptomycin in vancomycin-resistant enterococcal bloodstream infection: a national cohort study of Veterans Affairs patients. Clin Infect Dis 2015;61:871-8。Linezolid 治療失敗較多（調整 RR 1.15），依同期社論（McKinnell & Arias, CID 2015;61:879-82）摘要。
+Bugs & Drugs
+Bugs & Drugs（Alberta Health Services），Enterococcus faecalis：ampicillin 感受不一定代表 piperacillin-tazobactam 感受；ampicillin 抗藥則可推定 piperacillin-tazobactam 抗藥。（CLSI M100 原文未讀到，請確認）
 CDC STI 2021
 CDC Vibrio 2024
 CDC. Clinical Overview of Vibriosis（2024 更新）：3rd-gen cephalosporin（如 ceftazidime）＋ doxycycline，並積極清創。
@@ -128972,6 +129283,8 @@ Cefuroxime 仿單
 Cephalexin 仿單
 Chang CC, et al. Global guideline for the diagnosis and management of cryptococcosis: an initiative of ECMM and ISHAM in cooperation with ASM. Lancet Infect Dis 2024（2024-02）。高所得地區腦膜炎誘導：liposomal AmB 3–4 mg/kg/day ＋ flucytosine 25 mg/kg q6h。
 Chehab MA, et al. Adult and Pediatric Antibiotic Prophylaxis during Vascular and IR Procedures: A Society of Interventional Radiology Practice Parameter Update Endorsed by CIRSE and CAIR. J Vasc Interv Radiol 2018;29(11):1483-1501（網站最後更新 2024-01）。泌尿：經皮腎造廔置放與更換（IIb，C-LD／C-EO）。
+Chua 2023
+Chua KYL, et al. Antimicrobial resistance and its detection in Staphylococcus saprophyticus urinary isolates. Pathology 2023;55(7)。302 株尿液分離株：TMP-SMX 感受 98%、nitrofurantoin 100%、ciprofloxacin 100%；mecA 陽性（methicillin 抗藥）5.6%；VITEK2 判讀 methicillin 抗藥特異性差。
 Cipro US prescribing information, Table 4：CrCl 30–50 250–500 mg q12h；5–29 250–500 mg q18h；血液或腹膜透析 250–500 mg q24h（透析後）。
 Ciprofloxacin 仿單
 Copaescu AM, et al. Efficacy of a Clinical Decision Rule to Enable Direct Oral Challenge in Patients With Low-Risk Penicillin Allergy: The PALACE Randomized Clinical Trial. JAMA Intern Med 2023（PMID 37459086）。門診過敏科成人、PEN-FAST
@@ -128998,6 +129311,8 @@ ESCMID 腦膿瘍 2024
 Ertapenem 仿單
 Evans L, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. Crit Care Med 2021;49:e1063-143.
 Fluconazole 仿單
+Foolad 2018
+Foolad F, Taylor BD, Shelburne SA, Arias CA, Aitken SL. Association of daptomycin dosing regimen and mortality in patients with VRE bacteraemia: a review. J Antimicrob Chemother 2018;73:2277-83。結論：VRE 菌血症以 daptomycin 為優先；≥9 mg/kg 與較低 14 天死亡率相關（Chuang 2017 調整 OR 0.09，回溯性）。
 Fortaz US prescribing information, Table 4：CrCl 31–50 1 g q12h；16–30 1 g q24h；6–15 500 mg q24h；
 Freifeld AG, et al. Clinical Practice Guideline for the Use of Antimicrobial Agents in Neutropenic Patients with Cancer: 2010 Update by IDSA. Clin Infect Dis 2011;52:e56-93.
 Gjika 2019
@@ -129028,6 +129343,7 @@ IDSA PJI 2013
 IDSA SSTI 2014
 IDSA cIAI 2024（Part 1）
 IDSA cUTI 2025
+IDSA cUTI 2025 只處理經驗性用藥（未針對 Enterococcus、S. aureus、S. saprophyticus 給建議），IDSA AMR 2026 只涵蓋 G(−) 抗藥菌，IDSA MRSA 2011 未涵蓋泌尿道感染。此選項依同一行其他出處（原始研究、綜論、教科書）與仿單。
 IDSA 脊椎骨髓炎 2015
 IDSA 腦膜炎 2004
 IDSA 院內腦膜炎 2017
@@ -129056,6 +129372,8 @@ Li HK, et al. Oral versus Intravenous Antibiotics for Bone and Joint Infection. 
 Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55.
 Macrobid（nitrofurantoin monohydrate／macrocrystals）US prescribing information：無尿、少尿或明顯腎功能不全（CrCl
 Mandell 9th
+Mason 2023
+Mason CY, Sobti A, Goodman AL. Staphylococcus aureus bacteriuria: implications and management. JAC Antimicrob Resist 2023（doi 10.1093/jacamr/dlac123）。無症狀者不治療（孕婦、泌尿道器械前例外）；全身不適（發燒、發炎指數上升、急性入院）時抽血液培養，閾值宜低；用藥依藥敏。
 Matzke 1984
 Matzke GR, et al. Pharmacokinetics of vancomycin in patients with various degrees of renal function. Antimicrob Agents Chemother 1984;25:433-7.
 Melioidosis NEJM
@@ -129138,6 +129456,8 @@ Vancomycin 共識 2020
 Voriconazole 仿單
 Wheat LJ, et al. Clinical Practice Guidelines for the Management of Patients with Histoplasmosis: 2007 Update by IDSA. Clin Infect Dis 2007;45:807-25.
 Wiersinga WJ, Currie BJ, Peacock SJ. Melioidosis. N Engl J Med 2012;367:1035-44.
+Wingler 2021
+Wingler MJ, et al. Linezolid for the Treatment of Urinary Tract Infections Caused by Vancomycin-Resistant Enterococci. Pharmacy (Basel) 2021;9:175。單中心 45 例（linezolid 33 例，皆 ampicillin 抗藥 E. faecium）：微生物清除 100%，臨床治癒與其他藥物無顯著差異；樣本小。
 Workowski KA, et al. Sexually Transmitted Infections Treatment Guidelines, 2021. MMWR Recomm Rep 2021;70(4).
 Yahav 2019
 Yahav D, et al. Seven Versus 14 Days of Antibiotic Therapy for Uncomplicated Gram-negative Bacteremia. Clin Infect Dis 2019;69:1091-8.
@@ -129159,13 +129479,14 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 各藥品仿單（FDA label／DailyMed、台灣仿單）。v1.0 已將主要腎調整藥物改為各藥仿單出處；仍標「仿單」者多為不需腎調整的藥（ceftriaxone、moxifloxacin、doxycycline、linezolid、metronidazole、oxacillin、fusidic acid、rifampin、itraconazole）或仿單未列分段（ampicillin、amoxicillin）。Sanford Guide 為訂閱制，未逐筆比對。
 填入範例病人數值
 收藏只存在這次開啟的頁面（部位、嚴重度、危險因子），重新整理即清空；不存病人資料。
+無指引直接建議
 生體可用率
 畫底線的縮寫可點開看全稱；每張卡片只標第一次出現的位置。
 示範：
 肝功能：病人卡可算 Child-Pugh；只有仿單明確說明的藥（tigecycline、caspofungin、voriconazole、metronidazole、ceftriaxone、isavuconazole、posaconazole、micafungin）在藥物頁列出各分級劑量，其他藥標「app 未收錄」。經驗性方案卡不依肝功能改劑量。
 腎功能：Cockcroft-Gault，體重自動選擇（低於 IBW 用實際體重、≤120% IBW 用 IBW、>120% 用 AdjBW）；未填身高時用實際體重。eGFR（mL/min/1.73m²）在極端體型下與 CrCl 差異大，仿單劑量多以 CrCl 為準。
 資料來源
-資料查證日：2026-10-27（v1.0・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
+資料查證日：2026-10-27（v1.1・12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較）。標示「更新」者為 2024–2026 新指引與舊版不同之處。
 院內泌尿手術預防用藥規範（使用者提供，2026-10-25）：cefazolin 體重
 院內規範
 點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。
@@ -130113,6 +130434,9 @@ app 未標示特別禁忌；請依仿單
 資料有限，請會診藥師
 鏈球菌（肺炎鏈球菌、GAS、viridans）
 ## drug cza
+++
+++
+++
 0.94 g IV q12h
 0.94 g IV q24h
 0.94 g IV q48h
@@ -130136,20 +130460,25 @@ CrCl 31–50
 CrCl 6–15
 CrCl >50
 CrCl ≤5
+Enterobacter 等 AmpC 菌
 HD
 IDSA AMR 2026
 IV
 IV
 KPC／OXA-48 CRE、DTR-PA；NDM 等 MBL 需合併 aztreonam
 PD
+Pseudomonas aeruginosa
 app 未收錄這個藥的肝功能劑量資料，請依仿單。
 app 未標示特別禁忌；請依仿單
+一般腸道 G(−)（E. coli、Klebsiella、Proteus）
+主要涵蓋（抗菌譜 ++／+）
 其他
 劑量
 劑量依 CrCl 35 mL/min
+加入比較
 各腎功能劑量
-商品名：Zavicefta
-商品名：Zavicefta
+商品名：Zavicefta（贊飛得）
+商品名：Zavicefta（贊飛得）
 已依腎功能調整（CrCl 31–50）
 懷孕：
 更改
@@ -130160,6 +130489,8 @@ app 未標示特別禁忌；請依仿單
 藥物
 複製
 ## drug ctz
++
+++
 01
 02
 03
@@ -130183,13 +130514,17 @@ IDSA AMR 2026
 IV
 IV
 PD
+Pseudomonas aeruginosa
 app 未收錄這個藥的肝功能劑量資料，請依仿單。
 app 未標示特別禁忌；請依仿單
 cIAI／cUTI 劑量；HABP／VABP 劑量加倍（3 g q8h；HD 2.25 g 首劑後 450 mg q8h）
+一般腸道 G(−)（E. coli、Klebsiella、Proteus）
+主要涵蓋（抗菌譜 ++／+）
 仿單無資料，請會診藥師
 其他
 劑量
 劑量依 CrCl 35 mL/min
+加入比較
 各腎功能劑量
 商品名：Zerbaxa
 商品名：Zerbaxa

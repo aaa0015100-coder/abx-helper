@@ -121,6 +121,25 @@ with sync_playwright() as p:
             pg.locator("input[data-act=cmp-diff]").check(); pg.wait_for_timeout(30)
             if pg.locator("#main [data-act=cmp-cell]").count()>=3*13: issues.append(f"{W}: 只看差異未隱藏相同列")
             check(pg, W, "抗菌譜比較")
+            # v1.1：CZA／CTZ 四藥比較、表頭商品名、CRE 格說明、抗菌譜逐欄依據
+            if pg.locator("input[data-act=cmp-diff]").is_checked(): pg.locator("input[data-act=cmp-diff]").uncheck()
+            if pg.locator("[data-act=cmp-clear]").count(): pg.locator("[data-act=cmp-clear]").click()
+            else: pg.evaluate("S.spec.cmp=[];UI.cmpPick=true;render()")
+            for k in ["cza","ctz","mem","tzp"]:
+                if pg.locator(f"[data-act=cmp-add][data-v={k}]").count()==0: pg.locator("[data-act=cmp-pick]").click()
+                pg.locator(f"[data-act=cmp-add][data-v={k}]").click(); pg.wait_for_timeout(20)
+            if pg.locator("#main [data-act=cmp-cell]").count()!=4*13: issues.append(f"{W}: CZA／CTZ 四藥比較格數錯")
+            hb = pg.locator("th.cmph .brandbtn").first
+            hb.click(); pg.wait_for_timeout(20)
+            if "Zavicefta" not in pg.inner_text("th.cmph >> nth=0"): issues.append(f"{W}: 比較表頭點藥名未顯示商品名")
+            pg.locator("[data-act=cmp-cell][data-v='CRE|cza']").click(); pg.wait_for_timeout(30)
+            if "OXA-48" not in pg.inner_text("#specAdv"): issues.append(f"{W}: CZA CRE 格說明未顯示")
+            check(pg, W, "CZA／CTZ 比較")
+            pg.locator("[data-act=spec-view][data-v=bac]").click(); pg.wait_for_timeout(20)
+            pg.locator("[data-act=spec-drug][data-v=ctz]").click(); pg.wait_for_timeout(30)
+            pg.locator("#specAdv details summary").first.click(); pg.wait_for_timeout(20)
+            if "AmpC 菌 ±" not in pg.inner_text("#specAdv"): issues.append(f"{W}: CTZ 逐欄依據未顯示")
+            check(pg, W, "CTZ 抗菌譜")
             if W <= 920 and pg.locator("#ptBody").is_hidden(): pg.locator("#ptBar").click()
             pg.fill("#age","50"); pg.locator("#pf5").check(force=True) if pg.locator("#pf5").is_visible() else None
             pg.locator("[data-act=clear-all]").click(); pg.wait_for_timeout(50)
