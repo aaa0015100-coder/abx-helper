@@ -105,10 +105,13 @@ with sync_playwright() as p:
             if "目前 Child-Pugh B" not in pg.inner_text("#main"): issues.append(f"{W}: 藥物頁未顯示目前 Child-Pugh")
             check(pg, W, "藥物頁肝功能")
             # v0.16：藥物頁「加入比較」→ 比較表；點格子看說明；只看差異
+            pg.evaluate("S.spec.cmp=[];S.spec.cmpf=[];S.spec.diff=false;UI.cmpPick=true")
             pg.locator("[data-act=cmp-go]").click(); pg.wait_for_timeout(30)
             pg.locator("[data-act=cmp-add][data-v=fluco]").click(); pg.wait_for_timeout(30)
             if pg.locator("#main [data-act=cmp-cell]").count()!=2*pg.evaluate("FROWS.length"): issues.append(f"{W}: 黴菌比較表格數錯")
             pg.locator("[data-act=cmp-t][data-v=bac]").click()
+            if pg.locator("[data-act=cmp-clear]").count(): pg.locator("[data-act=cmp-clear]").click()
+            if pg.locator("input[data-act=cmp-diff]").count() and pg.locator("input[data-act=cmp-diff]").is_checked(): pg.locator("input[data-act=cmp-diff]").uncheck()
             for k in ["mem","tzp","fep"]:
                 if pg.locator(f"[data-act=cmp-add][data-v={k}]").count()==0: pg.locator("[data-act=cmp-pick]").click()
                 pg.locator(f"[data-act=cmp-add][data-v={k}]").click(); pg.wait_for_timeout(20)

@@ -393,8 +393,8 @@ details.pf>summary{font-size:.86rem}
 
 <script>
 "use strict";
-const VERIFIED = "2026-10-26";
-const VERSION = "v0.16";
+const VERIFIED = "2026-10-27";
+const VERSION = "v1.0";
 const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較";
 
 /* ---------------- 出處 ---------------- */
@@ -444,7 +444,7 @@ const REF = {
   NICOLAU95:{s:"Nicolau 1995",f:"Nicolau DP, et al. Experience with a once-daily aminoglycoside program administered to 2,184 adult patients. Antimicrob Agents Chemother 1995;39:650-5."},
   PARENTE18:{s:"Parente 2018",f:"Parente DM, et al. The Clinical Utility of MRSA Nasal Screening to Rule Out MRSA Pneumonia: A Diagnostic Meta-analysis. Clin Infect Dis 2018;67:1-7."},
   ACOG717:{s:"ACOG 717",f:"ACOG Committee Opinion No. 717: Sulfonamides, Nitrofurantoin, and Risk of Birth Defects. Obstet Gynecol 2017;130:e150-2."},
-  LABEL:{s:"仿單",f:"各藥品仿單（FDA label／DailyMed、台灣仿單）之腎功能劑量調整。Sanford Guide 為訂閱制，未能逐筆比對，請以院內藥劑部或 Sanford 核對。"}
+  LABEL:{s:"仿單",f:"各藥品仿單（FDA label／DailyMed、台灣仿單）。v1.0 已將主要腎調整藥物改為各藥仿單出處；仍標「仿單」者多為不需腎調整的藥（ceftriaxone、moxifloxacin、doxycycline、linezolid、metronidazole、oxacillin、fusidic acid、rifampin、itraconazole）或仿單未列分段（ampicillin、amoxicillin）。Sanford Guide 為訂閱制，未逐筆比對。"}
 };
 
 /* ---------------- 藥物 ---------------- */
@@ -493,32 +493,32 @@ const REG = {
   cro1:{d:"ceftriaxone",r:"IV",b:[[0,"1 g IV q24h"]],...DIAL("1 g IV q24h","1 g IV q24h","1 g IV q24h"),note:"無需腎調整",src:["LABEL"]},
   cro2:{d:"ceftriaxone",r:"IV",b:[[0,"2 g IV q24h"]],...DIAL("2 g IV q24h","2 g IV q24h","2 g IV q24h"),note:"無需腎調整",src:["LABEL"]},
   croIM:{d:"ceftriaxone",r:"IM",b:[[0,"500 mg IM 單次（體重 ≥150 kg：1 g）"]],...DIAL("500 mg IM 單次","500 mg IM 單次","500 mg IM 單次"),src:["CDC_STI21"]},
-  czTx:{d:"cefazolin",r:"IV",b:[[35,"2 g IV q8h"],[10.01,"1 g IV q12h"],[0,"1 g IV q24h"]],...DIAL("2 g IV 每次透析後（72 小時間隔前可給 3 g）","1 g IV q24h","2 g IV q12h"),src:["LABEL"]},
-  cxmPO:{d:"cefuroxime",r:"PO",b:[[30,"500 mg PO q12h"],[10,"500 mg PO q24h"],[0,"500 mg PO q48h"]],...DIAL("500 mg PO q48h，透析後補一劑","500 mg PO q48h","500 mg PO q24h"),src:["LABEL"]},
-  lexPO:{d:"cephalexin",r:"PO",b:[[30,"500 mg PO q12h"],[15,"250 mg PO q8–12h"],[0,"250 mg PO q24h"]],...DIAL("250 mg PO q24h（透析日於透析後）","250 mg PO q24h","250–500 mg PO q12h"),src:["LABEL"]},
-  amxPO:{d:"amoxicillin",r:"PO",b:[[30,"1 g PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析後補一劑","500 mg PO q24h","500 mg PO q12h"),note:"CAP 高劑量；CrCl <30 不用 875 mg 錠",src:["ATS19","LABEL"]},
-  amxEnt:{d:"amoxicillin",r:"PO",b:[[30,"500 mg PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析後補一劑","500 mg PO q24h","500 mg PO q12h"),src:["LABEL"]},
-  amcPO:{d:"amoxclav",r:"PO",b:[[30,"875/125 mg PO q12h"],[10,"500/125 mg PO q12h"],[0,"500/125 mg PO q24h"]],...DIAL("500/125 mg PO q24h，透析後補一劑","500/125 mg PO q24h","500/125 mg PO q12h"),src:["LABEL"]},
-  ampIV:{d:"ampicillin",r:"IV",b:[[50,"2 g IV q6h"],[10,"2 g IV q8h"],[0,"2 g IV q12h"]],...DIAL("2 g IV q12h（透析日於透析後）","2 g IV q12h","2 g IV q6–8h"),src:["LABEL"]},
-  samIV:{d:"ampsulb",r:"IV",b:[[30,"3 g IV q6h"],[15,"3 g IV q12h"],[0,"3 g IV q24h"]],...DIAL("3 g IV q24h（透析日於透析後）","3 g IV q24h","3 g IV q8–12h"),src:["LABEL"]},
-  penG:{d:"penG",r:"IV",b:[[50.01,"4 MU IV q4h"],[10,"3 MU IV q4h"],[0,"2 MU IV q6h"]],...DIAL("2 MU IV q6h（透析日於透析後）","2 MU IV q6h","4 MU IV q6h"),src:["LABEL"]},
-  tzp:{d:"piptazo",r:"IV",b:[[40.01,"4.5 g IV q6h（或 4.5 g q8h 延長輸注 4 h）"],[20,"3.375 g IV q6h"],[0,"2.25 g IV q6h"]],...DIAL("2.25 g IV q8h，每次透析後加 0.75 g","2.25 g IV q8h","4.5 g IV q8h 延長輸注（或 3.375 g q6h）"),note:"採仿單院內肺炎（較高）劑量欄，適用重症／PsA",src:["LABEL"]},
-  fep2q8:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q8h"],[30,"2 g IV q12h"],[11,"2 g IV q24h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","2 g IV q48h","2 g IV q12h"),note:"腎功能差未減量易致神經毒性（意識改變、NCSE）",src:["LABEL"]},
-  fep2q12:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q12h"],[30,"2 g IV q24h"],[11,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("首日 1 g，之後 500 mg IV q24h（透析後）","1 g IV q24h","2 g IV q12h"),note:"非 PsA 劑量；懷疑 PsA 改 q8h",src:["LABEL"]},
-  etp:{d:"ertapenem",r:"IV",b:[[30.01,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h；若透析前 6 小時內給藥，透析後補 150 mg","500 mg IV q24h","1 g IV q24h（資料有限）"),note:"不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus",src:["LABEL"]},
-  mem:{d:"meropenem",r:"IV",b:[[50.01,"1 g IV q8h"],[26,"1 g IV q12h"],[10,"500 mg IV q12h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h（透析日於透析後）","500 mg IV q24h","1 g IV q8–12h"),src:["LABEL"]},
+  czTx:{d:"cefazolin",r:"IV",b:[[35,"2 g IV q8h"],[10.01,"1 g IV q12h"],[0,"1 g IV q18–24h"]],...DIAL("2 g IV 每次透析後（72 小時間隔前可給 3 g）","1 g IV q24h","2 g IV q12h"),note:"透析與 CRRT 劑量仿單未列，為常用做法",src:["CZ_LABEL"]},
+  cxmPO:{d:"cefuroxime",r:"PO",b:[[30,"500 mg PO q12h"],[10,"500 mg PO q24h"],[0,"500 mg PO q48h"]],...DIAL("500 mg PO q48h，每次透析結束時加一劑","500 mg PO q48h","500 mg PO q24h"),src:["CXM_LABEL"]},
+  lexPO:{d:"cephalexin",r:"PO",b:[[30,"500 mg PO q12h"],[15,"250 mg PO q8–12h"],[5,"250 mg PO q24h"],[0,"250 mg PO q48–60h"]],...DIAL("仿單無透析資料；常用 250 mg PO q24h（透析日於透析後）","仿單無資料；常用 250 mg PO q24h","250–500 mg PO q12h（仿單無資料）"),src:["LEX_LABEL"]},
+  amxPO:{d:"amoxicillin",r:"PO",b:[[30,"1 g PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析中與透析後各補一劑","500 mg PO q24h","500 mg PO q12h"),note:"CAP 高劑量；CrCl <30 不用 875 mg 錠",src:["ATS19","LABEL"]},
+  amxEnt:{d:"amoxicillin",r:"PO",b:[[30,"500 mg PO q8h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析中與透析後各補一劑","500 mg PO q24h","500 mg PO q12h"),src:["LABEL"]},
+  amcPO:{d:"amoxclav",r:"PO",b:[[30,"875/125 mg PO q12h"],[10,"500/125 mg PO q12h"],[0,"500/125 mg PO q24h"]],...DIAL("500/125 mg PO q24h，透析中與透析後各補一劑","500/125 mg PO q24h","500/125 mg PO q12h"),src:["AMC_LABEL"]},
+  ampIV:{d:"ampicillin",r:"IV",b:[[50,"2 g IV q6h"],[10,"2 g IV q8h"],[0,"2 g IV q12h"]],...DIAL("2 g IV q12h（透析日於透析後）","2 g IV q12h","2 g IV q6–8h"),note:"仿單只寫 CrCl <10 減量或延長間隔、透析後補一劑；各段為常用做法，請以院內藥劑部核對",src:["LABEL"]},
+  samIV:{d:"ampsulb",r:"IV",b:[[30,"3 g IV q6h"],[15,"3 g IV q12h"],[0,"3 g IV q24h"]],...DIAL("3 g IV q24h（透析日於透析後）","3 g IV q24h","3 g IV q8–12h"),note:"仿單 CrCl ≥30 為 1.5–3 g q6–8h；&lt;5 仿單無資料",src:["SAM_LABEL"]},
+  penG:{d:"penG",r:"IV",b:[[50.01,"4 MU IV q4h"],[10.01,"首劑 4 MU，之後 2 MU IV q4–5h"],[0,"首劑 4 MU，之後 2 MU IV q8–10h"]],...DIAL("首劑 4 MU，之後 2 MU IV q8–10h（透析日於透析後；仿單未列透析）","首劑 4 MU，之後 2 MU IV q8–10h（仿單未列透析）","4 MU IV q6h（仿單未列，會診藥師）"),note:"仿單：尿毒症 CrCl >10 給足量負荷後每 4–5 小時給半量；CrCl ≤10 每 8–10 小時給半量。app 將 CrCl 10–50 視為需調整",src:["PENG_LABEL"]},
+  tzp:{d:"piptazo",r:"IV",b:[[40.01,"4.5 g IV q6h（或 4.5 g q8h 延長輸注 4 h）"],[20,"3.375 g IV q6h"],[0,"2.25 g IV q6h"]],...DIAL("2.25 g IV q8h，每次透析後加 0.75 g","2.25 g IV q8h","4.5 g IV q8h 延長輸注（或 3.375 g q6h）"),note:"採仿單院內肺炎（較高）劑量欄，適用重症／PsA",src:["TZP_LABEL"]},
+  fep2q8:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q8h"],[30,"2 g IV q12h"],[11,"2 g IV q24h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","2 g IV q48h","2 g IV q12h"),note:"腎功能差未減量易致神經毒性（意識改變、NCSE）",src:["FEP_LABEL"]},
+  fep2q12:{d:"cefepime",r:"IV",b:[[60.01,"2 g IV q12h"],[30,"2 g IV q24h"],[11,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("首日 1 g，之後 500 mg IV q24h（透析後）","2 g IV q48h","2 g IV q12h"),note:"非 PsA 劑量；懷疑 PsA 改 q8h",src:["FEP_LABEL"]},
+  etp:{d:"ertapenem",r:"IV",b:[[30.01,"1 g IV q24h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h；若透析前 6 小時內給藥，透析後補 150 mg","500 mg IV q24h","1 g IV q24h（資料有限）"),note:"不涵蓋 P. aeruginosa、Acinetobacter、Enterococcus",src:["ETP_LABEL"]},
+  mem:{d:"meropenem",r:"IV",b:[[50.01,"1 g IV q8h"],[26,"1 g IV q12h"],[10,"500 mg IV q12h"],[0,"500 mg IV q24h"]],...DIAL("500 mg IV q24h（透析日於透析後）","500 mg IV q24h","1 g IV q8–12h"),note:"透析與 CRRT 劑量仿單未列，為常用做法",src:["MEM_LABEL"]},
   flomoxef:{d:"flomoxef",r:"IV",b:[[50.01,"1 g IV q6h"],[10,"1 g IV q8–12h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後；資料有限）","1 g IV q24h（資料有限）","資料有限，請會診藥師"),note:"ESBL UTI 之 PK/PD 建議劑量（較台灣仿單常用 1–2 g/day 密集）",src:["HAMADA22"]},
   cmz:{d:"cefmetazole",r:"IV",b:[[60,"1 g IV q6h"],[30.01,"1 g IV q8h"],[0,"1 g IV q12h"]],...DIAL("1 g IV q24h（資料有限）","1 g IV q24h（資料有限）","資料有限，請會診藥師"),note:"ESBL UTI 之 PK/PD 建議劑量",src:["HAMADA22"]},
-  cza:{d:"cza",r:"IV",b:[[50.01,"2.5 g IV q8h"],[30.01,"1.25 g IV q8h"],[15.01,"0.94 g IV q12h"],[5.01,"0.94 g IV q24h"],[0,"0.94 g IV q48h"]],...DIAL("0.94 g IV q48h（透析日於透析後）","0.94 g IV q48h","1.25 g IV q8h（資料有限，會診藥師）"),note:"KPC／OXA-48 CRE、DTR-PA；NDM 等 MBL 需合併 aztreonam",src:["LABEL","IDSA_AMR24"]},
-  ctz:{d:"ctz",r:"IV",b:[[50.01,"1.5 g IV q8h"],[30,"750 mg IV q8h"],[15,"375 mg IV q8h"],[0,"750 mg 首劑，之後 150 mg IV q8h"]],...DIAL("750 mg 首劑，之後 150 mg IV q8h（透析日於透析後）","750 mg 首劑，之後 150 mg IV q8h","資料有限，請會診藥師"),note:"cUTI 劑量；肺炎劑量加倍（3 g q8h）",src:["LABEL","IDSA_AMR24"]},
-  azt:{d:"aztreonam",r:"IV",b:[[30.01,"2 g IV q8h"],[10,"2 g 首劑，之後 1 g IV q8h"],[0,"2 g 首劑，之後 500 mg IV q8h"]],...DIAL("2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg","2 g 首劑，之後 500 mg IV q8h","2 g 首劑，之後 1 g IV q8h"),note:"與 ceftazidime 側鏈相同，其餘 β-lactam 過敏者可用",src:["LABEL","ALLERGY22"]},
-  tmpsmx:{d:"tmpsmx",r:"PO",b:[[30.01,"1 DS 錠（160/800 mg）PO q12h"],[15,"1 DS 錠 PO q24h（減半）"],[0,"不建議（CrCl <15）"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","不建議；必要時會診藥師"),note:"高血鉀；Cr 可假性上升（抑制腎小管分泌）",src:["LABEL"]},
-  nitro:{d:"nitrofurantoin",r:"PO",b:[[30,"100 mg PO q12h（macrocrystal）"],[0,"避免使用（CrCl <30）"]],...DIAL("避免使用","避免使用","避免使用"),note:"只用於膀胱炎；不用於腎盂腎炎、前列腺炎、菌血症",src:["LABEL","IDSA_cys10"]},
+  cza:{d:"cza",r:"IV",b:[[50.01,"2.5 g IV q8h"],[30.01,"1.25 g IV q8h"],[15.01,"0.94 g IV q12h"],[5.01,"0.94 g IV q24h"],[0,"0.94 g IV q48h"]],...DIAL("0.94 g IV q48h（透析日於透析後）","0.94 g IV q48h","1.25 g IV q8h（資料有限，會診藥師）"),note:"KPC／OXA-48 CRE、DTR-PA；NDM 等 MBL 需合併 aztreonam",src:["CZA_LABEL","IDSA_AMR24"]},
+  ctz:{d:"ctz",r:"IV",b:[[50.01,"1.5 g IV q8h"],[30,"750 mg IV q8h"],[15,"375 mg IV q8h"],[0,"未透析：仿單未建立劑量（會診藥師）"]],...DIAL("750 mg 首劑，之後 150 mg IV q8h（透析日於透析後盡早給）","仿單無資料，請會診藥師","資料有限，請會診藥師"),note:"cIAI／cUTI 劑量；HABP／VABP 劑量加倍（3 g q8h；HD 2.25 g 首劑後 450 mg q8h）",src:["CTZ_LABEL","IDSA_AMR24"]},
+  azt:{d:"aztreonam",r:"IV",b:[[30.01,"2 g IV q8h"],[10,"2 g 首劑，之後 1 g IV q8h"],[0,"2 g 首劑，之後 500 mg IV q8h"]],...DIAL("2 g 首劑，之後 500 mg IV q8h，每次透析後加 250 mg","2 g 首劑，之後 500 mg IV q8h","2 g 首劑，之後 1 g IV q8h"),note:"與 ceftazidime 側鏈相同，其餘 β-lactam 過敏者可用",src:["AZT_LABEL","ALLERGY22"]},
+  tmpsmx:{d:"tmpsmx",r:"PO",b:[[30.01,"1 DS 錠（160/800 mg）PO q12h"],[15,"1 DS 錠 PO q24h（減半）"],[0,"不建議（CrCl <15）"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","不建議；必要時會診藥師"),note:"高血鉀；Cr 可假性上升（抑制腎小管分泌）",src:["SXT_LABEL"]},
+  nitro:{d:"nitrofurantoin",r:"PO",b:[[60,"100 mg PO q12h（macrocrystal）"],[30,"100 mg PO q12h（來源不一致：仿單 CrCl &lt;60 禁用；AGS Beers 2023 只在 CrCl &lt;30 避免）"],[0,"避免使用（CrCl &lt;30）"]],...DIAL("避免使用","避免使用","避免使用"),note:"只用於膀胱炎；不用於腎盂腎炎、前列腺炎、菌血症",src:["NITRO_LABEL","BEERS23","IDSA_cys10"]},
   fos:{d:"fosfomycin",r:"PO",b:[[0,"3 g PO 單次"]],...DIAL("3 g PO 單次","3 g PO 單次","3 g PO 單次"),note:"單次劑量無需腎調整",src:["LABEL"]},
-  ciproPO:{d:"cipro",r:"PO",b:[[50.01,"500 mg PO q12h"],[30,"250–500 mg PO q12h"],[0,"250–500 mg PO q18h"]],...DIAL("250–500 mg PO q24h（透析後）","250–500 mg PO q24h","500 mg PO q12h"),note:"PsA 全身性感染用 750 mg q12h",src:["LABEL"]},
-  ciproIV:{d:"cipro",r:"IV",b:[[30,"400 mg IV q12h"],[0,"400 mg IV q24h"]],...DIAL("400 mg IV q24h（透析後）","400 mg IV q24h","400 mg IV q12h"),src:["LABEL"]},
-  levo750:{d:"levo",r:"PO/IV",b:[[50,"750 mg PO/IV q24h"],[20,"750 mg PO/IV q48h"],[0,"750 mg 首劑，之後 500 mg q48h"]],...DIAL("750 mg 首劑，之後 500 mg q48h","750 mg 首劑，之後 500 mg q48h","750 mg PO/IV q48h"),src:["LABEL"]},
-  levo500:{d:"levo",r:"PO/IV",b:[[50,"500 mg PO/IV q24h"],[20,"500 mg 首劑，之後 250 mg q24h"],[0,"500 mg 首劑，之後 250 mg q48h"]],...DIAL("500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q24h"),src:["LABEL"]},
+  ciproPO:{d:"cipro",r:"PO",b:[[50.01,"500 mg PO q12h"],[30,"250–500 mg PO q12h"],[0,"250–500 mg PO q18h"]],...DIAL("250–500 mg PO q24h（透析後）","250–500 mg PO q24h","500 mg PO q12h"),note:"PsA 全身性感染用 750 mg q12h",src:["CIP_LABEL"]},
+  ciproIV:{d:"cipro",r:"IV",b:[[30,"400 mg IV q12h"],[0,"400 mg IV q24h"]],...DIAL("400 mg IV q24h（透析後）","400 mg IV q24h","400 mg IV q12h"),src:["CIP_LABEL"]},
+  levo750:{d:"levo",r:"PO/IV",b:[[50,"750 mg PO/IV q24h"],[20,"750 mg PO/IV q48h"],[0,"750 mg 首劑，之後 500 mg q48h"]],...DIAL("750 mg 首劑，之後 500 mg q48h","750 mg 首劑，之後 500 mg q48h","750 mg PO/IV q48h"),src:["LVX_LABEL"]},
+  levo500:{d:"levo",r:"PO/IV",b:[[50,"500 mg PO/IV q24h"],[20,"500 mg 首劑，之後 250 mg q24h"],[0,"500 mg 首劑，之後 250 mg q48h"]],...DIAL("500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q48h","500 mg 首劑，之後 250 mg q24h"),src:["LVX_LABEL"]},
   moxi:{d:"moxi",r:"PO/IV",b:[[0,"400 mg PO/IV q24h"]],...DIAL("400 mg PO/IV q24h","400 mg PO/IV q24h","400 mg PO/IV q24h"),note:"無需腎調整；不用於 UTI（尿中濃度低）",src:["LABEL"]},
   doxy:{d:"doxy",r:"PO",b:[[0,"100 mg PO q12h"]],...DIAL("100 mg PO q12h","100 mg PO q12h","100 mg PO q12h"),note:"無需腎調整",src:["LABEL"]},
   azi:{d:"azithro",r:"PO/IV",b:[[0,"500 mg PO/IV q24h"]],...DIAL("500 mg PO/IV q24h","500 mg PO/IV q24h","500 mg PO/IV q24h"),note:"門診 CAP 可首日 500 mg、之後 250 mg ×4 天",src:["ATS19"]},
@@ -1533,6 +1533,27 @@ Object.assign(REF,{
   POLY19:{s:"Polymyxin 共識 2019",f:"Tsuji BT, et al. International Consensus Guidelines for the Optimal Use of the Polymyxins. Pharmacotherapy 2019;39:10-39."},
   CPS_LABEL:{s:"Sulbactam/cefoperazone 仿單",f:"Sulbactam/cefoperazone（Pfizer）仿單：成人劑量、sulbactam 每日上限 4 g、腎功能調整。"},
   BPR_LABEL:{s:"Ceftobiprole 仿單",f:"Zevtera (ceftobiprole medocaril) SmPC, UK eMC."},
+  CZ_LABEL:{s:"Cefazolin 仿單",f:"Cefazolin for Injection USP, US prescribing information, Table 5：CrCl 35–54 每 8 小時以上；11–34 半量 q12h；≤10 半量 q18–24h。透析與 CRRT 未列。"},
+  LEX_LABEL:{s:"Cephalexin 仿單",f:"Keflex（cephalexin）US prescribing information, Table 1：CrCl ≥60 不調整；30–59 每日上限 1 g；15–29 250 mg q8–12h；5–14 250 mg q24h；1–4 250 mg q48–60h；透析資料不足。"},
+  AMC_LABEL:{s:"Amox-clav 仿單",f:"Augmentin（amoxicillin／clavulanate）US prescribing information：GFR <30 不用 875 mg；10–30 250–500 mg q12h；<10 q24h；血液透析 q24h，透析中與透析結束各加一劑。"},
+  SAM_LABEL:{s:"Ampicillin-sulbactam 仿單",f:"Unasyn US prescribing information, Table 3：CrCl ≥30 1.5–3 g q6–8h；15–29 q12h；5–14 q24h。"},
+  PENG_LABEL:{s:"Penicillin G 仿單",f:"Pfizerpen（penicillin G potassium）US prescribing information：只有重度腎功能不全需調整；尿毒症 CrCl >10：足量負荷後半量 q4–5h；CrCl <10：足量負荷後半量 q8–10h。"},
+  TZP_LABEL:{s:"Piperacillin-tazobactam 仿單",f:"Zosyn US prescribing information, Table 1：院內肺炎 CrCl >40 4.5 g q6h；20–40 3.375 g q6h；<20 2.25 g q6h；HD 2.25 g q8h，每次透析後加 0.75 g；CAPD 2.25 g q8h。"},
+  FEP_LABEL:{s:"Cefepime 仿單",f:"Cefepime US prescribing information, Table 2：CrCl >60 正常；30–60、11–29、<11 依原劑量欄調整；CAPD 2 g q48h（2 g q12h、q8h 欄）；HD 首日 1 g 之後 500 mg q24h（發燒性嗜中性球低下 1 g q24h），透析日於透析後。"},
+  ETP_LABEL:{s:"Ertapenem 仿單",f:"Invanz US prescribing information：CrCl ≤30 500 mg q24h；透析前 6 小時內給藥者，透析後補 150 mg。"},
+  MEM_LABEL:{s:"Meropenem 仿單",f:"Meropenem US prescribing information, Table 1：CrCl >50 q8h；26–50 原劑量 q12h；10–25 半量 q12h；<10 半量 q24h。"},
+  CZA_LABEL:{s:"Ceftazidime-avibactam 仿單",f:"Avycaz US prescribing information, Table 3：CrCl 31–50 1.25 g q8h；16–30 0.94 g q12h；6–15 0.94 g q24h；≤5 0.94 g q48h；透析日於透析後。"},
+  CTZ_LABEL:{s:"Ceftolozane-tazobactam 仿單",f:"Zerbaxa US prescribing information, Table 3：cIAI／cUTI CrCl 30–50 750 mg、15–29 375 mg、HD 750 mg 首劑後 150 mg（皆 q8h）；HABP／VABP 加倍；CrCl <15 未透析者劑量未建立。"},
+  AZT_LABEL:{s:"Aztreonam 仿單",f:"Aztreonam for Injection US prescribing information（Pfizer）：CrCl 10–30 首劑後減半；<10 首劑後 1/4；重症血液透析者每次透析後加首劑的 1/8。"},
+  CAZ_LABEL:{s:"Ceftazidime 仿單",f:"Fortaz US prescribing information, Table 4：CrCl 31–50 1 g q12h；16–30 1 g q24h；6–15 500 mg q24h；<5 500 mg q48h；HD 首劑 1 g，每次透析後 1 g；PD 首劑 1 g 之後 500 mg q24h；重症可增加 50%。"},
+  SXT_LABEL:{s:"TMP-SMX 仿單",f:"Bactrim DS US prescribing information：CrCl >30 一般劑量；15–30 半量；<15 不建議。"},
+  NITRO_LABEL:{s:"Nitrofurantoin 仿單",f:"Macrobid（nitrofurantoin monohydrate／macrocrystals）US prescribing information：無尿、少尿或明顯腎功能不全（CrCl <60 mL/min 或血清肌酸酐明顯上升）禁用。"},
+  BEERS23:{s:"AGS Beers 2023",f:"American Geriatrics Society 2023 Updated AGS Beers Criteria：nitrofurantoin 在 CrCl <30 mL/min 避免使用（2015 版起由 <60 下修）。"},
+  CIP_LABEL:{s:"Ciprofloxacin 仿單",f:"Cipro US prescribing information, Table 4：CrCl 30–50 250–500 mg q12h；5–29 250–500 mg q18h；血液或腹膜透析 250–500 mg q24h（透析後）。"},
+  LVX_LABEL:{s:"Levofloxacin 仿單",f:"Levaquin US prescribing information：CrCl ≥50 不調整；750 mg 方案 20–49 q48h、10–19 與 HD／CAPD 首劑 750 mg 後 500 mg q48h；500 mg 方案 20–49 首劑後 250 mg q24h、10–19 與 HD／CAPD 250 mg q48h。"},
+  CXM_LABEL:{s:"Cefuroxime 仿單",f:"Zinacef SmPC（UK eMC）：CrCl >20 不減量；10–20 750 mg bid；<10 750 mg qd；每次透析結束加 750 mg；CAVH／高通量血液過濾 750 mg bid。Cefuroxime axetil 錠 US 仿單：CrCl 10–<30 q24h；<10 q48h；透析結束加一劑。"},
+  DAP_LABEL:{s:"Daptomycin 仿單",f:"Cubicin RF US prescribing information：CrCl ≥30 不調整；<30（含 HD、CAPD）每 48 小時；透析日盡量於透析後給。"},
+  FLU_LABEL:{s:"Fluconazole 仿單",f:"Diflucan US prescribing information：負荷劑量不減；CrCl >50 100%；≤50（未透析）50%；血液透析每次透析後給 100%。"},
   IPM_LABEL:{s:"Imipenem 仿單",f:"Imipenem and Cilastatin for Injection, US prescribing information, Table 3（依 CrCl 劑量）。"},
   SAB26:{s:"IDSA/ESCMID SAB 2026",f:"IDSA/ESCMID 2026 Guidance: Staphylococcus aureus Bacteremia — Risk Stratification, Diagnostic Evaluation, and Management of Adults and Children。依 Guideline Central 摘要核對：48 小時抽 ≥2 套追蹤血培養、之後每 24–48 小時至轉陰；所有成人 TTE；有增加風險特徵者 TEE；增加風險且病灶不明做全身影像；評估後無深部病灶 14 天。口服降階、用藥選擇部分未核對。"},
   IDSA_MRSA11:{s:"IDSA MRSA 2011",f:"Liu C, et al. Clinical Practice Guidelines by IDSA for the Treatment of MRSA Infections. Clin Infect Dis 2011;52:e18-55."},
@@ -1569,13 +1590,13 @@ const SAME = t=>({b:[[0,t]],hd:t,pd:t,crrt:t});
 const COLT=[[90,360],[80,340],[70,300],[60,275],[50,245],[40,220],[30,195],[20,175],[10,160],[5,145],[0,130]];
 Object.assign(REG,{
   oxa:{d:"oxa",r:"IV",...SAME("2 g IV q4h"),note:"無需腎調整",src:["LABEL"]},
-  cxmIV:{d:"cefuroxime",r:"IV",b:[[20.01,"1.5 g IV q8h"],[10,"750 mg IV q12h"],[0,"750 mg IV q24h"]],...DIAL("750 mg IV q24h（透析日於透析後）","750 mg IV q24h","750 mg–1.5 g IV q12h"),src:["LABEL"]},
-  caz:{d:"caz",r:"IV",b:[[50.01,"2 g IV q8h"],[30.01,"1 g IV q12h"],[15.01,"1 g IV q24h"],[5.01,"500 mg IV q24h"],[0,"500 mg IV q48h"]],...DIAL("首劑 1 g，之後每次透析後 1 g","500 mg IV q24h","2 g IV q12h"),note:"仿單：重症可增加 50%；G(+) 活性差",src:["LABEL"]},
+  cxmIV:{d:"cefuroxime",r:"IV",b:[[20.01,"1.5 g IV q8h"],[10,"750 mg IV q12h"],[0,"750 mg IV q24h"]],...DIAL("750 mg IV q24h，另於每次透析結束時加 750 mg","750 mg IV q24h","750 mg IV q12h"),src:["CXM_LABEL"]},
+  caz:{d:"caz",r:"IV",b:[[50.01,"2 g IV q8h"],[30.01,"1 g IV q12h"],[15.01,"1 g IV q24h"],[5.01,"500 mg IV q24h"],[0,"500 mg IV q48h"]],...DIAL("首劑 1 g，之後每次透析後 1 g","500 mg IV q24h","2 g IV q12h"),note:"仿單：重症可增加 50%；G(+) 活性差",src:["CAZ_LABEL"]},
   cps:{d:"cps",r:"IV",b:[[30,"2 g（1:1）IV q12h；重症可至 4 g q12h"],[15,"2 g（1:1）IV q12h（sulbactam 上限 2 g/day）"],[0,"1 g（1:1）IV q12h（sulbactam 上限 1 g/day）"]],...DIAL("1 g（1:1）IV q12h，透析日於透析後","1 g（1:1）IV q12h","2 g（1:1）IV q12h（資料有限）"),note:"Sulbactam 每日上限 4 g；重症需更多 cefoperazone 時另外加；監測 PT（vitamin K 缺乏）",src:["CPS_LABEL"]},
   bpr:{d:"bpr",r:"IV",b:[[50,"500 mg IV q8h（輸注 2 h）"],[30,"500 mg IV q12h"],[10,"250 mg IV q12h"],[0,"250 mg IV q24h"]],...DIAL("250 mg IV q24h（透析日於透析後）","250 mg IV q24h","資料有限，請會診藥師"),note:"仿單適應症：CAP、HAP（非 VAP）；CrCl >150 延長輸注至 4 h",src:["BPR_LABEL"]},
   ipm:{d:"imipenem",r:"IV",b:[[90,"500 mg IV q6h（或 1 g q8h）"],[60,"400 mg IV q6h（或 500 mg q6h）"],[30,"300 mg IV q6h（或 500 mg q8h）"],[15,"200 mg IV q6h（或 500 mg q12h）"],[0,"不建議，除非 48 小時內開始透析"]],...DIAL("依 CrCl 15–29 劑量（200 mg q6h），透析後給","資料有限，請會診藥師","500 mg IV q6–8h（資料有限）"),note:"括號為 1 g q8h 方案（PsA 等）；癲癇風險較高",src:["IPM_LABEL"]},
-  dap6:{d:"dapto",r:"IV",b:[[30,"6 mg/kg IV q24h{KG:6}"],[0,"6 mg/kg IV q48h{KG:6}"]],...DIAL("6 mg/kg IV q48h（透析後）{KG:6}","6 mg/kg IV q48h{KG:6}","資料有限：常用 8 mg/kg q48h，請會診藥師{KG:8}"),note:"菌血症／心內膜炎常用 8–10 mg/kg，VRE 8–12 mg/kg；不可用於肺炎；每週驗 CK",src:["LABEL","IDSA_MRSA11"]},
-  tgc:{d:"tige",r:"IV",...SAME("首劑 100 mg IV，之後 50 mg IV q12h"),note:"無需腎調整；Child-Pugh C 維持 25 mg q12h；不用於菌血症、UTI",src:["LABEL"]},
+  dap6:{d:"dapto",r:"IV",b:[[30,"6 mg/kg IV q24h{KG:6}"],[0,"6 mg/kg IV q48h{KG:6}"]],...DIAL("6 mg/kg IV q48h（透析後）{KG:6}","6 mg/kg IV q48h{KG:6}","資料有限：常用 8 mg/kg q48h，請會診藥師{KG:8}"),note:"菌血症／心內膜炎常用 8–10 mg/kg，VRE 8–12 mg/kg；不可用於肺炎；每週驗 CK",src:["DAP_LABEL","IDSA_MRSA11"]},
+  tgc:{d:"tige",r:"IV",...SAME("首劑 100 mg IV，之後 50 mg IV q12h"),note:"無需腎調整；Child-Pugh C 維持 25 mg q12h；不用於菌血症、UTI",src:["TIGE_LABEL"]},
   fus:{d:"fusidic",r:"PO",...SAME("500 mg PO q8h"),note:"無需腎調整；需合併用藥避免抗藥；肝毒性",src:["LABEL"]},
   col:{d:"colistin",r:"IV",b:COLT.map(([c,mg])=>[c,`首劑 300 mg CBA（≈9 MIU），12–24 h 後 ${mg/2} mg CBA（≈${(mg/2*0.0303).toFixed(1)} MIU）q12h`]),hd:"首劑 300 mg CBA；非透析日 130 mg CBA/day 分 q12h，透析日於透析後加 40 mg（3 h）或 50 mg（4 h）",pd:"資料有限：首劑 300 mg CBA，之後約 130 mg CBA/day（會診藥師）",crrt:"首劑 300 mg CBA，之後 220 mg CBA（≈6.65 MIU）q12h",note:"CBA = colistin base activity；需合併其他藥；腎毒性、神經毒性",src:["POLY19"]},
   rif:{d:"rifampin",r:"PO/IV",...SAME("600 mg q24h（S. aureus 輔助：300–450 mg q12h）"),note:"不可單用；強力 CYP3A4 誘導",src:["LABEL","IDSA_MRSA11"]},
@@ -1584,9 +1605,9 @@ Object.assign(REG,{
   mica:{d:"mica",r:"IV",...SAME("100 mg IV q24h"),note:"無需腎、肝調整；尿中濃度低",src:["IDSA_CAND16"]},
   caspo:{d:"caspo",r:"IV",...SAME("首劑 70 mg IV，之後 50 mg IV q24h"),note:"無需腎調整；Child-Pugh B 維持 35 mg",src:["IDSA_CAND16"]},
   anid:{d:"anid",r:"IV",...SAME("首劑 200 mg IV，之後 100 mg IV q24h"),note:"無需腎、肝調整",src:["IDSA_CAND16"]},
-  fluco:{d:"fluco",r:"PO/IV",b:[[50.01,"首劑 800 mg（12 mg/kg），之後 400 mg（6 mg/kg）q24h"],[0,"首劑 800 mg，之後 200 mg q24h（減半）"]],...DIAL("首劑 800 mg，之後每次透析後 400 mg","首劑 800 mg，之後 200 mg q24h","首劑 800 mg，之後 400–800 mg q24h（CRRT 清除高，勿減量）"),note:"Candidemia 劑量；首劑不依腎功能減量",src:["IDSA_CAND16","LABEL"]},
-  vori:{d:"vori",r:"PO/IV",b:[[50,"IV 首日 6 mg/kg q12h ×2，之後 4 mg/kg q12h{KG:4}；PO 200 mg q12h（重症 300 mg）"],[0,"建議改 PO 200 mg q12h（IV 載體 SBECD 會蓄積）；需 IV 時評估效益"]],...DIAL("建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h；IV 時會診藥師"),note:"TDM trough 1–5.5 mg/L；Child-Pugh A/B 維持劑量減半",src:["IDSA_ASP16","LABEL"]},
-  posa:{d:"posa",r:"PO/IV",b:[[50,"300 mg q12h ×1 天，之後 300 mg q24h（DR 錠或 IV）"],[0,"DR 錠 300 mg q12h ×1 天，之後 300 mg q24h（IV 載體 SBECD 會蓄積，盡量口服）"]],...DIAL("DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）"),note:"TDM：治療 trough >1 mg/L；DR 錠隨餐",src:["IDSA_ASP16","LABEL"]},
+  fluco:{d:"fluco",r:"PO/IV",b:[[50.01,"首劑 800 mg（12 mg/kg），之後 400 mg（6 mg/kg）q24h"],[0,"首劑 800 mg，之後 200 mg q24h（減半）"]],...DIAL("首劑 800 mg，之後每次透析後 400 mg","首劑 800 mg，之後 200 mg q24h","首劑 800 mg，之後 400–800 mg q24h（CRRT 清除高，勿減量）"),note:"Candidemia 劑量；首劑不依腎功能減量",src:["IDSA_CAND16","FLU_LABEL"]},
+  vori:{d:"vori",r:"PO/IV",b:[[50,"IV 首日 6 mg/kg q12h ×2，之後 4 mg/kg q12h{KG:4}；PO 200 mg q12h（重症 300 mg）"],[0,"建議改 PO 200 mg q12h（IV 載體 SBECD 會蓄積）；需 IV 時評估效益"]],...DIAL("建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h（IV 載體蓄積）","建議 PO 200 mg q12h；IV 時會診藥師"),note:"TDM trough 1–5.5 mg/L；Child-Pugh A/B 維持劑量減半",src:["IDSA_ASP16","VORI_SPC"]},
+  posa:{d:"posa",r:"PO/IV",b:[[50,"300 mg q12h ×1 天，之後 300 mg q24h（DR 錠或 IV）"],[0,"DR 錠 300 mg q12h ×1 天，之後 300 mg q24h（IV 載體 SBECD 會蓄積，盡量口服）"]],...DIAL("DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）","DR 錠 300 mg q24h（首日 q12h）"),note:"TDM：治療 trough >1 mg/L；DR 錠隨餐",src:["IDSA_ASP16","POSA_LABEL"]},
   itra:{d:"itra",r:"PO",...SAME("200 mg PO q8h ×3 天，之後 200 mg PO q12h"),note:"無需腎調整；膠囊隨餐、口服液空腹；TDM >1 mg/L；心衰竭禁用",src:["IDSA_HISTO07","LABEL"]}
 });
 INTER.push(
@@ -1595,6 +1616,7 @@ INTER.push(
   {d:["vori","posa","itra"],w:"Tacrolimus／cyclosporine／sirolimus、simvastatin、midazolam、vincristine",lv:"x",fx:"CYP3A4 抑制，併用藥濃度大增",m:"調整劑量、監測濃度或避免"},
   {d:["fluco"],w:"Warfarin、sulfonylurea、phenytoin",lv:"h",fx:"CYP2C9 抑制，濃度上升",m:"監測 INR、血糖、phenytoin 濃度"},
   {d:["dapto"],w:"Statin",lv:"m",fx:"CK 上升、肌病變",m:"考慮暫停 statin，每週驗 CK"},
+  {d:["metro"],w:"酒精、disulfiram",lv:"h",fx:"Disulfiram 樣反應；與 disulfiram 併用可致精神病反應",m:"治療期間與停藥後 3 天內禁酒；2 週內用過 disulfiram 者不用"},
   {d:["cps"],w:"酒精、warfarin",lv:"m",fx:"Disulfiram 樣反應；vitamin K 缺乏致出血",m:"避免飲酒；監測 PT／INR"}
 );
 INTER.find(x=>x.fx.startsWith("VPA")).d.push("imipenem");
@@ -1630,7 +1652,7 @@ const SCORR = [
   ["lvx",0,3,"Levofloxacin 750 mg 為呼吸道 FQ",["ATS19"]],["lvx",5,1,"台灣 E. coli FQ 抗藥率高",["TSAR"]],["lvx",8,1,"CRAB 多對 FQ 抗藥",["IDSA_AMR24"]],
   ["mxf",0,3,"呼吸道 FQ",["ATS19"]],["mxf",4,0,"E. faecium 多抗藥",["MANDELL"]],["mxf",5,1,"台灣 E. coli FQ 抗藥率高；尿中濃度低",["TSAR"]],["mxf",8,1,"CRAB 多對 FQ 抗藥",["IDSA_AMR24"]],["mxf",9,1,"B. fragilis 抗藥上升",["MANDELL"]],
   ["cli",0,1,"GAS 多感受；台灣肺炎鏈球菌抗藥高",["TW_SPN"]],
-  ["fos",1,1,"S. aureus 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]],["fos",2,1,"MRSA 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]]
+  ["fos",1,1,"S. aureus 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]],["gen",7,0,"CLSI 2023：gentamicin 不再是 P. aeruginosa 的治療選項（判讀標準已移除）",["CLSI23"]],["amk",7,1,"CLSI 2023：amikacin 對 P. aeruginosa 的判讀標準只適用泌尿道來源",["CLSI23"]],["fos",2,1,"MRSA 只作合併用藥（IV 劑型）；口服劑型僅用於膀胱炎",["MANDELL"]]
 ];
 function specV(){ const V={}; for(const k in SPEC_ORIG) V[k]=SPEC_ORIG[k].split("").map(Number); SCORR.forEach(([k,c,to])=>{V[k][c]=to;}); return V; }
 const SPV = specV();
@@ -1679,7 +1701,7 @@ const DNOTE = {
   col:"CRAB、CRE、DTR-PA 的最後選擇，需合併治療；腎毒性、神經毒性。Proteus、Serratia、Providencia 天生抗藥。",
   sxt:"PJP、S. maltophilia、Nocardia、MRSA SSTI 口服；台灣 E. coli 抗藥率高；注意高血鉀。",
   gen:"G(−) 與 Enterococcus 心內膜炎協同治療；單用只適合 UTI；腎毒、耳毒。",
-  amk:"對 gentamicin 抗藥的 G(−)、PsA 常仍有效；也用於結核與 NTM。",
+  amk:"對 gentamicin 抗藥的 G(−) 常仍有效；P. aeruginosa 只限泌尿道來源（CLSI 2023）；也用於結核與 NTM。",
   cli:"GAS 壞死性感染抑制毒素、口腔厭氧菌、MSSA；B. fragilis 抗藥上升；C. difficile 風險高。",
   mtz:"厭氧菌（含 B. fragilis）、C. difficile、Trichomonas、阿米巴。",
   azm:"非典型菌（合併 β-lactam 治療 CAP）；台灣肺炎鏈球菌抗藥 >80%，不可單用。",
@@ -2016,7 +2038,7 @@ Object.assign(D,{
 });
 Object.assign(REG,{
   cro2q12:{d:"ceftriaxone",r:"IV",...SAME("2 g IV q12h"),note:"腦膜炎、腦膿瘍、E. faecalis IE 劑量；無需腎調整",src:["IDSA_MEN04"]},
-  memMen:{d:"meropenem",r:"IV",b:[[50.01,"2 g IV q8h"],[26,"2 g IV q12h"],[10,"1 g IV q12h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","1 g IV q24h","2 g IV q12h"),note:"CNS 劑量；延長輸注依院內規範",src:["LABEL","IDSA_VENT17"]},
+  memMen:{d:"meropenem",r:"IV",b:[[50.01,"2 g IV q8h"],[26,"2 g IV q12h"],[10,"1 g IV q12h"],[0,"1 g IV q24h"]],...DIAL("1 g IV q24h（透析日於透析後）","1 g IV q24h","2 g IV q12h"),note:"CNS 劑量；延長輸注依院內規範",src:["MEM_LABEL","IDSA_VENT17"]},
   ampMen:{d:"ampicillin",r:"IV",b:[[50.01,"2 g IV q4h"],[10,"2 g IV q6–8h"],[0,"2 g IV q8–12h"]],...DIAL("2 g IV q12h（透析日於透析後）","2 g IV q12h","2 g IV q6h"),note:"腦膜炎（Listeria）、IE 劑量",src:["IDSA_MEN04","ESC_IE23"]},
   dap10:{d:"dapto",r:"IV",b:[[30,"10 mg/kg IV q24h{KG:10}"],[0,"10 mg/kg IV q48h{KG:10}"]],...DIAL("10 mg/kg IV q48h（透析後）{KG:10}","10 mg/kg IV q48h{KG:10}","資料有限，請會診藥師"),note:"IE、MRSA／VRE 菌血症高劑量；每週驗 CK",src:["ESC_IE23"]},
   gentIE:{d:"gent",r:"IV",b:[[60,"3 mg/kg IV q24h{AG:3}"],[30,"3 mg/kg IV q36–48h，依濃度{AG:3}"],[0,"依濃度給藥（會診藥師）"]],...DIAL("1–1.5 mg/kg 每次透析後，依濃度{AG:1.5}","依濃度給藥（會診藥師）","依濃度給藥（會診藥師）"),note:"協同劑量；目標 trough <1 mg/L；監測腎功能與聽力",src:["ESC_IE23"]},
@@ -2024,7 +2046,7 @@ Object.assign(REG,{
   samHD:{d:"ampsulb",r:"IV",b:[[50.01,"9 g（sulbactam 3 g）IV q8h，輸注 4 h"],[0,"腎功能不全：依 sulbactam 劑量調整，請會診藥師"]],...DIAL("請會診藥師","請會診藥師","請會診藥師"),note:"CRAB 高劑量 sulbactam 方案，需合併第二個藥",src:["IDSA_AMR24"]},
   tmpHD:{d:"tmpsmx",r:"IV/PO",b:[[30.01,"TMP 4 mg/kg q8h（8–12 mg/kg/day，以 TMP 計）{KG:4}"],[15,"TMP 4 mg/kg q12h（減半）{KG:4}"],[0,"不建議；必要時會診藥師"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","會診藥師"),note:"S. maltophilia、Listeria、Nocardia 高劑量；監測 K、Cr、血球",src:["IDSA_AMR24"]},
   mino:{d:"mino",r:"PO/IV",...SAME("200 mg PO/IV q12h"),note:"無需腎調整；CRAB、S. maltophilia 合併用藥；IV 劑型台灣供應有限",src:["IDSA_AMR24"]},
-  lexSSTI:{d:"cephalexin",r:"PO",b:[[60,"500 mg PO q6h"],[30,"500 mg PO q12h（每日上限 1 g）"],[15,"250 mg PO q8–12h"],[0,"250 mg PO q24h"]],...DIAL("250 mg PO q24h（透析日於透析後）","250 mg PO q24h","500 mg PO q12h"),src:["LABEL","IDSA_SSTI14"]},
+  lexSSTI:{d:"cephalexin",r:"PO",b:[[60,"500 mg PO q6h"],[30,"500 mg PO q12h（每日上限 1 g）"],[15,"250 mg PO q8–12h"],[5,"250 mg PO q24h"],[0,"250 mg PO q48–60h"]],...DIAL("仿單無透析資料；常用 250 mg PO q24h（透析日於透析後）","仿單無資料；常用 250 mg PO q24h","500 mg PO q12h（仿單無資料）"),src:["LEX_LABEL","IDSA_SSTI14"]},
   clindaPO:{d:"clinda",r:"PO",...SAME("300–450 mg PO q6–8h"),note:"無需腎調整；C. difficile 風險高",src:["IDSA_SSTI14"]},
   vpo125:{d:"vancoPO",r:"PO",...SAME("125 mg PO q6h ×10 天"),note:"口服不吸收，無需腎調整",src:["IDSA_CDI21"]},
   vpo500:{d:"vancoPO",r:"PO/NG",...SAME("500 mg PO／NG q6h（腸阻塞加 vancomycin 灌腸）"),note:"猛爆型劑量",src:["IDSA_CDI21"]},
@@ -2033,7 +2055,7 @@ Object.assign(REG,{
   fidaxEP:{d:"fidax",r:"PO",...SAME("200 mg PO q12h ×5 天，之後 200 mg 隔日一次（第 7–25 天）"),note:"延長間歇方案",src:["IDSA_CDI21"]},
   metroCDI:{d:"metro",r:"PO",...SAME("500 mg PO q8h ×10–14 天"),note:"僅在無 fidaxomicin、口服 vancomycin 時用於非重症",src:["IDSA_CDI21"]},
   isavu:{d:"isavu",r:"PO/IV",...SAME("200 mg q8h ×6 劑，之後 200 mg q24h"),note:"無需腎調整（IV 無 SBECD）；QT 縮短",src:["IDSA_ASP16","MUCOR19"]},
-  ciproPO750:{d:"cipro",r:"PO",b:[[50.01,"750 mg PO q12h"],[30,"500 mg PO q12h"],[0,"500 mg PO q18–24h"]],...DIAL("500 mg PO q24h（透析後）","500 mg PO q24h","750 mg PO q12h"),note:"P. aeruginosa 全身性感染劑量",src:["LABEL","IDSA_AMR24"]},
+  ciproPO750:{d:"cipro",r:"PO",b:[[50.01,"750 mg PO q12h"],[30,"500 mg PO q12h"],[0,"500 mg PO q18–24h"]],...DIAL("500 mg PO q24h（透析後）","500 mg PO q24h","750 mg PO q12h"),note:"P. aeruginosa 全身性感染劑量",src:["CIP_LABEL","IDSA_AMR24"]},
   flu400:{d:"fluco",r:"PO",b:[[50.01,"200–400 mg PO q24h ×14 天"],[0,"100–200 mg PO q24h ×14 天（減半）"]],...DIAL("200–400 mg 每次透析後","100–200 mg PO q24h","200–400 mg PO q24h"),note:"念珠菌腎盂腎炎",src:["IDSA_CAND16"]},
   ambLow:{d:"amb",r:"IV",...SAME("0.3–0.6 mg/kg IV q24h ×1–7 天{KG:0.5}"),note:"Fluconazole 抗藥之念珠菌 UTI；或 50 mg/L 膀胱灌洗",src:["IDSA_CAND16"]},
   flu200:{d:"fluco",r:"PO",b:[[50.01,"200 mg PO q24h ×14 天"],[0,"100 mg PO q24h ×14 天（減半）"]],...DIAL("200 mg 每次透析後","100 mg PO q24h","200 mg PO q24h"),note:"念珠菌 UTI；腎功能差時尿中濃度下降",src:["IDSA_CAND16"]}
@@ -2495,7 +2517,7 @@ D.cps.brand="Brosym";
 
 /* ================= 口服降階 ================= */
 Object.assign(REG,{
-  amxIE:{d:"amoxicillin",r:"PO",b:[[30,"1 g PO q6h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析後補一劑","500 mg PO q24h","1 g PO q8h"),note:"POET 試驗劑量",src:["POET19"]},
+  amxIE:{d:"amoxicillin",r:"PO",b:[[30,"1 g PO q6h"],[10,"500 mg PO q12h"],[0,"500 mg PO q24h"]],...DIAL("500 mg PO q24h，透析中與透析後各補一劑","500 mg PO q24h","1 g PO q8h"),note:"POET 試驗劑量",src:["POET19"]},
   fluSD:{d:"fluco",r:"PO",b:[[50.01,"400 mg（6 mg/kg）PO q24h"],[0,"200 mg（3 mg/kg）PO q24h（減半）"]],...DIAL("400 mg 每次透析後","200 mg PO q24h","400–800 mg PO q24h（CRRT 清除高，勿減量）"),note:"從 echinocandin 降階，不需負荷劑量",src:["IDSA_CAND16"]},
   flu800:{d:"fluco",r:"PO",b:[[50.01,"800 mg（12 mg/kg）PO q24h"],[0,"400 mg（6 mg/kg）PO q24h（減半）"]],...DIAL("800 mg 每次透析後","400 mg PO q24h","800 mg PO q24h"),note:"C. glabrata 需高劑量，且須確認感受",src:["IDSA_CAND16"]},
   tmpDS2:{d:"tmpsmx",r:"PO",b:[[30.01,"2 DS 錠（320/1600 mg）PO q12h"],[15,"1 DS 錠 PO q12h（減半）"],[0,"不建議（CrCl <15）"]],...DIAL("不建議；必要時會診藥師","不建議；必要時會診藥師","會診藥師"),note:"全身性 S. aureus、骨關節、類鼻疽根除期（>60 kg）常用劑量；監測 K、Cr、血球",src:["IDSA_MRSA11","MELIO"]}
