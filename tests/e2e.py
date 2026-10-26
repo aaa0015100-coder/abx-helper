@@ -104,6 +104,20 @@ with sync_playwright() as p:
             pg.locator("[data-act=drug][data-v=caspo]").click(); pg.wait_for_timeout(30)
             if "目前 Child-Pugh B" not in pg.inner_text("#main"): issues.append(f"{W}: 藥物頁未顯示目前 Child-Pugh")
             check(pg, W, "藥物頁肝功能")
+            # v0.16：藥物頁「加入比較」→ 比較表；點格子看說明；只看差異
+            pg.locator("[data-act=cmp-go]").click(); pg.wait_for_timeout(30)
+            pg.locator("[data-act=cmp-add][data-v=fluco]").click(); pg.wait_for_timeout(30)
+            if pg.locator("#main [data-act=cmp-cell]").count()!=2*pg.evaluate("FROWS.length"): issues.append(f"{W}: 黴菌比較表格數錯")
+            pg.locator("[data-act=cmp-t][data-v=bac]").click()
+            for k in ["mem","tzp","fep"]:
+                if pg.locator(f"[data-act=cmp-add][data-v={k}]").count()==0: pg.locator("[data-act=cmp-pick]").click()
+                pg.locator(f"[data-act=cmp-add][data-v={k}]").click(); pg.wait_for_timeout(20)
+            if pg.locator("#main [data-act=cmp-cell]").count()!=3*13: issues.append(f"{W}: 細菌比較表格數錯")
+            pg.locator("[data-act=cmp-cell][data-v='ESBL|tzp']").click(); pg.wait_for_timeout(30)
+            if "cUTI" not in pg.inner_text("#specAdv"): issues.append(f"{W}: 比較格子說明未顯示")
+            pg.locator("input[data-act=cmp-diff]").check(); pg.wait_for_timeout(30)
+            if pg.locator("#main [data-act=cmp-cell]").count()>=3*13: issues.append(f"{W}: 只看差異未隱藏相同列")
+            check(pg, W, "抗菌譜比較")
             if W <= 920 and pg.locator("#ptBody").is_hidden(): pg.locator("#ptBar").click()
             pg.fill("#age","50"); pg.locator("#pf5").check(force=True) if pg.locator("#pf5").is_visible() else None
             pg.locator("[data-act=clear-all]").click(); pg.wait_for_timeout(50)

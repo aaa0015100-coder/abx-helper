@@ -1,4 +1,4 @@
-// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp（預設全部）
+// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp cmp（預設全部）
 const {load,mk}=require('./harness');
 const {A}=load(process.argv.find(a=>a.endsWith('.html')));
 const set=mk(A);
@@ -131,6 +131,38 @@ if(on("emp")) for(const [sk,sy] of Object.entries(A.SYS)) for(const u of sy.subs
     if(!path&&/經驗性治療（未知菌種時）/.test(t)) return "未選菌卻出現收合區";
     return "";
   });
+
+if(on("cmp")){
+  // v0.16 比較：所有兩兩組合（細菌、黴菌）＋ 3、4 個藥抽樣；每格說明與出處；摘要與表格一致
+  const BK=A.SPEC_ROWS.map(r=>r[0]), FK=A.FCOLS.map(c=>c[0]);
+  for(const r of ["ESBL","CRE"]) for(const k of BK){ n++; const v=A.cmpV(k,r); if(![0,1,2,3].includes(v)) fails.push(["cmp-x",{r,k},"值錯 "+v]);
+    const x=A.XROWS[r].v[k]; if(x){ if(!x[1]||!x[2]) fails.push(["cmp-x",{r,k},"缺說明或出處"]); if(A.SPV[k][5]===0&&x[0]>0) fails.push(["cmp-x",{r,k},"G(−) 無效卻有 ESBL／CRE 值"]); } }
+  // 臨床一致性：CRE 不應有 ≥ +；carbapenem ESBL ++；ESBL ≤ 一般 G(−)
+  for(const k of BK){ n++; if(A.cmpV(k,"CRE")>=2) fails.push(["cmp-c",{k},"CRE ≥ +"]); if(A.cmpV(k,"ESBL")>A.SPV[k][5]) fails.push(["cmp-c",{k},"ESBL 高於一般 G(−)"]); }
+  for(const k of ["etp","ipm","mem"]){ n++; if(A.cmpV(k,"ESBL")!==3) fails.push(["cmp-c",{k},"carbapenem ESBL 非 ++"]); if(A.cmpV(k,"CRE")!==0) fails.push(["cmp-c",{k},"carbapenem CRE 非 −"]); }
+  const chk=(t,h,keys,fun)=>{
+    const nm=fun?keys.map(k=>A.FCOLS.find(c=>c[0]===k)[1]):keys.map(k=>{const r=A.SPEC_ROWS.find(x=>x[0]===k);return r[4]||A.D[r[1]].n;});
+    if(!nm.every(x=>t.includes(x))) return "缺藥名";
+    const rows=fun?A.FROWS.length:A.CMP_ROWS.length;
+    if((h.match(/data-act="cmp-cell"/g)||[]).length!==rows*keys.length) return "格數錯";
+    if(!/只有|都不涵蓋|完全相同|差別在強度/.test(t)) return "缺摘要";
+    return "";
+  };
+  for(let i=0;i<BK.length;i++) for(let j=i+1;j<BK.length;j++){ const keys=[BK[i],BK[j]];
+    run("cmp2",{tab:"spec",spec:{view:"cmp",cmpt:"bac",cmp:keys}},()=>A.render("spec"),(t,h)=>chk(t,h,keys,false)); }
+  for(let i=0;i<FK.length;i++) for(let j=i+1;j<FK.length;j++){ const keys=[FK[i],FK[j]];
+    run("cmpf",{tab:"spec",spec:{view:"cmp",cmpt:"fun",cmpf:keys}},()=>A.render("spec"),(t,h)=>chk(t,h,keys,true)); }
+  for(let s=0;s<60;s++){ const m=3+(s%2), keys=[]; for(let q=0;keys.length<m;q++){ const k=BK[(s*7+q*11)%BK.length]; if(!keys.includes(k)) keys.push(k); }
+    run("cmp34",{tab:"spec",spec:{view:"cmp",cmp:keys}},()=>A.render("spec"),(t,h)=>chk(t,h,keys,false)); }
+  // 每一格的說明都有內容
+  for(const k of BK) for(const r of A.CMP_ROWS) run("cmp-cell",{tab:"spec",spec:{view:"cmp",cmp:[k,BK[0]===k?BK[1]:BK[0]],cell:[String(r),k]}},()=>A.render("spec"),t=>/×.*：[−±+]/.test(t)?"":"格子說明未顯示");
+  for(const k of FK) for(let r=0;r<A.FROWS.length;r++) run("cmp-fcell",{tab:"spec",spec:{view:"cmp",cmpt:"fun",cmpf:[k,FK[0]===k?FK[1]:FK[0]],cell:[String(r),k]}},()=>A.render("spec"),t=>/×.*：[−±+]/.test(t)?"":"格子說明未顯示");
+  // 只看差異：相同藥兩欄應全隱藏；選 0、1 個藥不出表
+  run("cmp-diff",{tab:"spec",spec:{view:"cmp",cmp:["mem","ipm"],diff:true}},()=>A.render("spec"),(t,h)=>{ const nd=A.CMP_ROWS.filter(r=>A.cmpV("mem",r)!==A.cmpV("ipm",r)).length; return (h.match(/data-act="cmp-cell"/g)||[]).length===nd*2?"":"差異列數錯"; });
+  for(const c of [[],["mem"]]) run("cmp-few",{tab:"spec",spec:{view:"cmp",cmp:c}},()=>A.render("spec"),(t,h)=>/data-act="cmp-cell"/.test(h)?"少於 2 個藥仍出表":"");
+  // 藥物頁：有抗菌譜資料的藥才有「加入比較」
+  for(const k of Object.keys(A.D)) run("cmp-btn",{tab:"drug",drug:k},()=>A.render("drug"),(t,h)=>{ const has=/data-act="cmp-go"/.test(h); return has===!!A.cmpKeyOf(k)?"":"加入比較按鈕不一致"; });
+}
 
 const by={}; for(const f of fails){const k=f[0].split("#")[0]+" | "+f[2].slice(0,90);(by[k]=by[k]||[]).push(f[1]);}
 console.log("FUZZ TOTAL",n,"FAILS",fails.length);

@@ -6,7 +6,7 @@ function load(file){
   const ctx={console,setTimeout,clearTimeout}; vm.createContext(ctx);
   vm.runInContext(js+`
 ;this.__api={S,UI,REF,DGRP,GLOSS,AGX,HEP,cpScore,hepHTML,SYS,SUBDEF,REG,D,PL,PATH,PROC,TABS,pfScore,pfHTML,searchHits,agCalc,drugUse,
-  getRenal,hasSev,
+  getRenal,hasSev,SPEC_ROWS,FCOLS,FROWS,FV,SPV,XROWS,CMP_ROWS,cmpV,cmpKeyOf,
   setR(){R=getRenal();},
   render(tab){R=getRenal(); return ({spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef})[tab]();}
 };`,ctx);

@@ -193,6 +193,12 @@ table.grid thead th.stick{z-index:3}
 table.grid tr.gap td{height:8px;padding:0}
 table.grid tr.sel th,table.grid tr.sel td{background:var(--accent-weak)}
 table.grid td.hl{background:var(--accent-weak)}
+table.grid.cmp th.cmph{font-size:.72rem;font-weight:600;white-space:normal;min-width:58px;max-width:90px;line-height:1.25;vertical-align:bottom}
+table.grid.cmp tbody th{vertical-align:middle}
+table.grid.cmp tr.xrow th,table.grid.cmp tr.xrow td{border-top:1px dashed var(--line)}
+.cellbtn{background:none;border:0;padding:2px;cursor:pointer;border-radius:50%;line-height:0}
+.cellbtn[aria-pressed="true"] .dot{outline:2px solid var(--accent);outline-offset:2px}
+.cmpsum div+div{margin-top:4px}
 .colbtn,.rowbtn{background:none;border:0;cursor:pointer;font:inherit;color:var(--ink)}
 .colbtn{font-size:.72rem;padding:4px 3px;border-radius:6px;white-space:nowrap}
 .colbtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
@@ -387,9 +393,9 @@ details.pf>summary{font-size:.86rem}
 
 <script>
 "use strict";
-const VERIFIED = "2026-10-25";
-const VERSION = "v0.15";
-const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防";
+const VERIFIED = "2026-10-26";
+const VERSION = "v0.16";
+const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
@@ -793,11 +799,11 @@ const S = {
   sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
   cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,org:"",ph:"",sus:{}},
   drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false}, cp:{mode:"calc",bili:null,alb:null,inr:null,asc:"1",enc:"1",cls:""},
-  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null}
+  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null,cmpt:"bac",cmp:[],cmpf:[],cell:null,diff:false}
 };
 let R = null;
 /* 介面狀態（只影響顯示，不影響建議內容） */
-const UI = {edit:"sys", pt:null, mMore:false, more:false, dpick:false, pxpick:true};
+const UI = {edit:"sys", pt:null, mMore:false, more:false, dpick:false, pxpick:true, cmpPick:true};
 
 /* ---------------- 計算 ---------------- */
 const num = v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
@@ -1812,14 +1818,140 @@ function fungalAdvice(){
   const r=FROWS[sp.frow]; const order=FCOLS.map((c,ci)=>[c,FV[sp.frow][ci]]).filter(x=>x[1]>=2).sort((a,b)=>b[1]-a[1]);
   return `<div class="note">${r[2]}${srcTags(r[3])}</div><div class="opt primary"><div class="opt-head"><span class="tier primary"><i>${r[0]}</i>：可用藥物（強效在前）</span></div>${order.map(([c,v])=>`<div class="pick">${SYM[v]}</div>${c[2].map(rxRow).join("")}`).join("")}</div>`;
 }
+/* ================= v0.16 抗菌譜比較（2–4 個藥並列） ================= */
+// ESBL、CRE 兩列只出現在比較表。數值代表 IDSA 2026 下的臨床角色（不只看體外活性）：++ 首選、± 限特定部位或依藥敏、− 不建議或無效
+const XROWS = {
+  ESBL:{n:"ESBL",full:"ESBL 腸道菌（E. coli、Klebsiella）",
+    note:"泌尿道外：carbapenem 首選，cefepime-enmetazobactam 替代。cUTI：感受時 TMP-SMX、ciprofloxacin、levofloxacin 首選；不能用時 carbapenem 或 cefepime-enmetazobactam；替代：IV fosfomycin、aminoglycoside、piperacillin-tazobactam。",src:["IDSA_AMR24"],
+    u:"IDSA 2026：新增 cefepime-enmetazobactam 的角色；piperacillin-tazobactam 改列為 cUTI 替代藥；E. coli、Klebsiella 的 ceftriaxone MIC ≥4 µg/mL 即推定為 ESBL。",
+    v:{
+      amp:[0,"ESBL 水解 penicillin",["MANDELL"]],sam:[0,"Sulbactam 無法可靠抑制 ESBL",["MANDELL"]],
+      tzp:[1,"cUTI：替代藥。泌尿道外不建議（MERINO 試驗死亡率較 meropenem 高）",["IDSA_AMR24"],"IDSA 2026 新增：piperacillin-tazobactam 列為 ESBL cUTI 替代藥"],
+      cfz:[0,"ESBL 水解 cephalosporin",["MANDELL"]],cxm:[0,"ESBL 水解 cephalosporin",["MANDELL"]],
+      cro:[0,"ESBL 水解 3rd-gen cephalosporin；ceftriaxone MIC ≥4 µg/mL 即推定為 ESBL",["IDSA_AMR24"]],caz:[0,"ESBL 水解 3rd-gen cephalosporin",["IDSA_AMR24"]],
+      cmz:[1,"IDSA 2024 不建議 cephamycin（臨床資料不足），2026 版請確認；台灣有用於非重症 UTI 的 PK/PD 與觀察性資料",["IDSA_AMR24V","HAMADA22"]],
+      fmx:[1,"IDSA 2024 不建議 cephamycin（臨床資料不足），2026 版請確認；台灣有用於非重症 UTI 的 PK/PD 與觀察性資料",["IDSA_AMR24V","HAMADA22"]],
+      cps:[1,"IDSA 未列入；依藥敏，請確認",["IDSA_AMR24"]],
+      fep:[0,"IDSA 2024：即使感受也不建議單用 cefepime（cefepime-enmetazobactam 不在此限）",["IDSA_AMR24V"]],
+      bpr:[0,"會被 ESBL 水解",["BPR_LABEL"]],
+      etp:[3,"泌尿道外首選；cUTI 在 TMP-SMX、FQ 不能用時首選",["IDSA_AMR24"]],ipm:[3,"泌尿道外首選；cUTI 在 TMP-SMX、FQ 不能用時首選",["IDSA_AMR24"]],mem:[3,"泌尿道外首選；cUTI 在 TMP-SMX、FQ 不能用時首選",["IDSA_AMR24"]],
+      cip:[1,"感受時：cUTI 首選、膀胱炎可用。台灣 ESBL 菌 FQ 抗藥率高，需藥敏",["IDSA_AMR24","TSAR"]],lvx:[1,"感受時：cUTI 首選、膀胱炎可用。台灣 ESBL 菌 FQ 抗藥率高，需藥敏",["IDSA_AMR24","TSAR"]],
+      mxf:[1,"尿中濃度低，不用於 UTI；依藥敏",["MANDELL"]],
+      sxt:[1,"感受時：cUTI 首選、膀胱炎首選之一；需藥敏",["IDSA_AMR24"]],
+      gen:[1,"膀胱炎單劑；cUTI 替代藥（每日一次）；注意腎毒性",["IDSA_AMR24"]],amk:[1,"膀胱炎單劑；cUTI 替代藥（每日一次）；注意腎毒性",["IDSA_AMR24"]],
+      fos:[1,"口服：膀胱炎（限 E. coli）；IV：cUTI 替代藥（台灣 IV 劑型供應請確認）",["IDSA_AMR24"],"IDSA 2026 新增 IV fosfomycin 資料"],
+      col:[1,"體外多有效；毒性高，非 ESBL 常規用藥",["MANDELL"]],
+      tgc:[1,"體外有效；不用於 UTI、菌血症（血中、尿中濃度低）",["IDSA_AMR24"]]
+    }},
+  CRE:{n:"CRE",full:"CRE（KPC、OXA-48、NDM 等 carbapenemase）",
+    note:"首選為新型 β-lactam（不在比較表）：KPC：meropenem-vaborbactam（稍優先）、ceftazidime-avibactam、imipenem-relebactam；OXA-48-like：ceftazidime-avibactam；NDM：aztreonam-avibactam 或 cefiderocol（無 aztreonam-avibactam 時，ceftazidime-avibactam ＋ aztreonam 同時使用）。確定有效的 β-lactam 後不常規合併用藥。台灣供應品項請確認；會診感染科。",src:["IDSA_AMR24"],
+    u:"IDSA 2026：KPC 稍優先 meropenem-vaborbactam（ceftazidime-avibactam 治療中出現抗藥約 10%，其他兩者 <3%）；NDM 新增 aztreonam-avibactam。",
+    v:{
+      etp:[0,"定義上對 carbapenem 抗藥",["IDSA_AMR24"]],ipm:[0,"定義上對 carbapenem 抗藥",["IDSA_AMR24"]],mem:[0,"定義上對 carbapenem 抗藥",["IDSA_AMR24"]],
+      cip:[1,"感受時：膀胱炎首選、cUTI 首選；CRE 感受率低，需藥敏",["IDSA_AMR24"]],lvx:[1,"感受時：膀胱炎首選、cUTI 首選；CRE 感受率低，需藥敏",["IDSA_AMR24"]],
+      mxf:[1,"不用於 UTI；依藥敏",["MANDELL"]],
+      sxt:[1,"感受時：膀胱炎首選、cUTI 首選；需藥敏",["IDSA_AMR24"]],
+      gen:[1,"膀胱炎單劑首選；cUTI 替代藥（每日一次）；注意腎毒性",["IDSA_AMR24"]],amk:[1,"膀胱炎單劑首選；cUTI 替代藥（每日一次）；注意腎毒性",["IDSA_AMR24"]],
+      col:[1,"膀胱炎替代藥；短療程腎毒性仍約 30%",["IDSA_AMR24"]],
+      fos:[1,"口服：膀胱炎替代（限 E. coli）；IV：cUTI 替代",["IDSA_AMR24"],"IDSA 2026 新增 IV fosfomycin 資料"],
+      tgc:[1,"不用於 UTI、菌血症；泌尿道外的替代角色請確認 IDSA 2026 原文",["IDSA_AMR24"]]
+    }}
+};
+const BL_KEYS = ["pen","oxa","amp","sam","tzp","cfz","cxm","cmz","cro","caz","fmx","cps","fep","bpr"];
+// 比較列：一般 11 欄，ESBL、CRE 插在一般腸道 G(−) 之後
+const CMP_ROWS = [0,1,2,3,4,5,"ESBL","CRE",6,7,8,9,10];
+function xval(r,k){
+  const x=XROWS[r].v[k]; if(x) return x;
+  if(SPV[k][5]===0) return [0,"不涵蓋 G(−) 腸道菌",[]];
+  if(r==="CRE"&&BL_KEYS.includes(k)) return [0,"Carbapenemase 會水解 penicillin 與 cephalosporin",["IDSA_AMR24"]];
+  return [0,"",[]];
+}
+const cmpV = (k,r)=>typeof r==="number"?SPV[k][r]:xval(r,k)[0];
+const cmpLab = r=>typeof r==="number"?SPC[r]:XROWS[r].n;
+const cmpFull = r=>typeof r==="number"?SPC_FULL[r]:XROWS[r].full;
+const specName = k=>rowLabel(SPEC_ROWS.find(r=>r[0]===k));
+const fIdx = k=>FCOLS.findIndex(c=>c[0]===k);
+// 摘要：「涵蓋」= + 以上
+function cmpSummary(keys,rows,val,lab,name){
+  if(keys.length<2) return [];
+  const only={}, none=[];
+  rows.forEach(r=>{ const cov=keys.filter(k=>val(k,r)>=2); if(!cov.length) none.push(lab(r)); else if(cov.length===1) (only[cov[0]]=only[cov[0]]||[]).push(lab(r)); });
+  const out=[];
+  if(rows.every(r=>keys.every(k=>val(k,r)===val(keys[0],r)))) out.push("各列強度完全相同");
+  keys.forEach(k=>{ if(only[k]) out.push(`只有 <b>${name(k)}</b> 涵蓋：${only[k].join("、")}`); });
+  if(none.length) out.push(`${keys.length>2?"全部":"兩者"}都不涵蓋：${none.join("、")}`);
+  if(out.length===0) out.push("涵蓋範圍相同，差別在強度（見表）");
+  return out;
+}
+function cmpCellNote(){
+  const sp=S.spec, c=sp.cell; if(!c) return "";
+  if(sp.cmpt==="fun"){
+    const ri=+c[0], ci=fIdx(c[1]); if(ci<0||!FROWS[ri]) return "";
+    const v=FV[ri][ci], fc=FCORR.find(y=>y[0]===ri&&y[1]===ci);
+    return `<div class="note"><b>${FCOLS[ci][1]} × <i>${FROWS[ri][0]}</i>：${SYM[v]}</b>${fc?`<div class="mt">${fc[3]}</div>${srcTags(fc[4])}`:""}<div class="mt">${FROWS[ri][2]}</div>${srcTags(FROWS[ri][3])}<div class="hint">${FNOTE[c[1]]}</div></div>`;
+  }
+  const r=/^\d+$/.test(c[0])?+c[0]:c[0], k=c[1]; if(!SPV[k]) return "";
+  const v=cmpV(k,r);
+  let body="";
+  if(typeof r==="number"){
+    const co=corrOf(k,r);
+    if(co) body+=`<div class="mt">${co[3]}</div>${srcTags(co[4])}`;
+    body+=`<div class="mt">${COLNOTE[r][0]}</div>${srcTags(COLNOTE[r][1])}`;
+  } else {
+    const x=xval(r,k);
+    if(x[1]) body+=`<div class="mt">${x[3]?updB(x[3])+" ":""}${x[1]}</div>${srcTags(x[2])}`;
+    body+=`<div class="mt">${updB(XROWS[r].u)} ${XROWS[r].note}</div>${srcTags(XROWS[r].src)}`;
+  }
+  return `<div class="note"><b>${specName(k)} × ${cmpFull(r)}：${SYM[v]}</b>${body}<div class="hint">${DNOTE[k]||""}</div></div>`;
+}
+function cmpTable(keys,rows,val,lab,full,name,cellV){
+  const diff=S.spec.diff, c=S.spec.cell;
+  const vis=rows.filter(r=>!diff||!keys.every(k=>val(k,r)===val(keys[0],r)));
+  let h=`<div class="tbl-wrap spec"><table class="grid cmp"><thead><tr><th class="stick">菌種</th>${keys.map(k=>`<th class="cmph">${name(k).replace(/-/g,"-<wbr>")}</th>`).join("")}</tr></thead><tbody>`;
+  vis.forEach(r=>{
+    const isX=typeof r==="string";
+    h+=`<tr${isX?' class="xrow"':""}><th class="stick" title="${full(r)}">${lab(r)}</th>${keys.map(k=>{const sel=c&&String(c[0])===String(cellV(r))&&c[1]===k;return `<td><button type="button" class="cellbtn" data-act="cmp-cell" data-v="${cellV(r)}|${k}" aria-pressed="${!!sel}" aria-label="${name(k)}：${full(r)}">${dot(val(k,r))}</button></td>`;}).join("")}</tr>`;
+  });
+  if(!vis.length) h+=`<tr><td colspan="${keys.length+1}" class="hint">各列強度完全相同</td></tr>`;
+  return h+`</tbody></table></div>`;
+}
+function renderCmp(){
+  const sp=S.spec, fun=sp.cmpt==="fun", keys=fun?sp.cmpf:sp.cmp, n=keys.length;
+  const name=fun?(k=>FCOLS[fIdx(k)][1]):specName;
+  let h=`<div class="chips" role="group" aria-label="比較類別">${[["bac","抗細菌"],["fun","抗黴菌"]].map(([k,t])=>`<button class="chip" type="button" data-act="cmp-t" data-v="${k}" aria-pressed="${sp.cmpt===k}">${t}</button>`).join("")}</div>`;
+  h+=`<div class="picked mt"><span class="q">已選 ${n}/4</span>${n?keys.map(k=>`<button class="chip" type="button" data-act="cmp-rm" data-v="${k}" aria-label="移除 ${name(k)}">${name(k)} ×</button>`).join(""):'<span class="hint" style="margin:0">尚未選藥</span>'}${n&&!(UI.cmpPick||n<2)?`<button class="linkbtn" type="button" data-act="cmp-pick">${n<4?"加藥／更改":"更改"}</button>`:""}${n?`<button class="linkbtn" type="button" data-act="cmp-clear">清除</button>`:""}</div>`;
+  if(UI.cmpPick||n<2){
+    const chip=(k,lab)=>{ const on=keys.includes(k); return `<button class="chip" type="button" data-act="cmp-add" data-v="${k}" aria-pressed="${on}"${!on&&n>=4?" disabled":""}>${lab}</button>`; };
+    const pool=fun?FCOLS.map(c=>c[2][0]):SPEC_ROWS.map(r=>r[1]);
+    const toSpec=dk=>fun?FCOLS.find(c=>c[2][0]===dk):SPEC_ROWS.find(r=>r[1]===dk);
+    h+=`<div class="step"><h3>選 2–4 個藥${n>=4?"（已達上限，先移除再加）":""}</h3>${drugChips(pool,dk=>{const s=toSpec(dk);return chip(s[0],fun?s[1]:rowLabel(s));})}${n>=2?`<div class="srcs"><button class="btn" type="button" data-act="cmp-pick">完成</button></div>`:""}</div>`;
+  }
+  if(n<2) return h+`<div class="note mt">選兩個以上的藥後顯示比較表。也可以在「藥物」頁按「加入比較」。</div>`;
+  const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
+  const rows=fun?FROWS.map((r,i)=>i):CMP_ROWS;
+  const val=fun?((k,ri)=>FV[ri][fIdx(k)]):cmpV;
+  const lab=fun?(ri=>`<i>${FROWS[ri][0]}</i>`):cmpLab;
+  const full=fun?(ri=>FROWS[ri][0]):cmpFull;
+  const sum=cmpSummary(keys,rows,val,fun?(ri=>FROWS[ri][0]):cmpLab,name);
+  h+=`<div class="note mt cmpsum">${sum.map(s=>`<div>${s}</div>`).join("")}</div>`;
+  h+=`${legend}<label class="chk mt"><input type="checkbox" data-act="cmp-diff"${sp.diff?" checked":""}><span>只看有差異的列</span></label><div class="hint">點圓點看說明與出處。${fun?"":"ESBL、CRE 兩列依 IDSA 2026 的臨床角色標示。"}</div>`;
+  h+=cmpTable(keys,rows,val,lab,full,name,r=>r);
+  h+=`<div id="specAdv" class="res mt">${cmpCellNote()}</div>`;
+  if(!fun) h+=`<div class="hint">抗菌譜只是第一步，仍需考慮感染部位的藥物濃度（如 daptomycin 不用於肺炎、tigecycline 不用於菌血症）。</div>`;
+  return h;
+}
+// 藥物頁「加入比較」：回傳比較用的鍵與類別
+function cmpKeyOf(dk){ const r=SPEC_ROWS.find(x=>x[1]===dk); if(r) return ["bac",r[0]]; const f=FCOLS.find(c=>c[2].includes(dk)); return f?["fun",f[0]]:null; }
 function renderSpec(){
   const sp=S.spec;
-  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
+  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["fun","抗黴菌"],["cmp","比較"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
   const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
   if(sp.view==="bac"){
     h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
   } else if(sp.view==="fun"){
     h+=`${renalBar()}${legend}<div class="hint">點菌種或藥名。</div>${fungalGrid()}<div id="specAdv" class="res mt">${fungalAdvice()}</div>`;
+  } else if(sp.view==="cmp"){
+    h+=renderCmp();
   } else if(sp.view==="pk"){
     h+=`<div class="tbl-wrap"><table><thead><tr><th>藥物類別</th><th>PK/PD 指標</th><th>殺菌／抑菌</th><th>臨床應用</th></tr></thead><tbody>${PKPD.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table></div>${srcTags(["MANDELL","VANCO20"])}`;
   } else if(sp.view==="mdr"){
@@ -2858,8 +2990,8 @@ function renderDrug(){
   h+=`<div class="note"><b>懷孕：</b>${d.preg||"app 未標示特別禁忌；請依仿單"}</div>`;
   h+=hepHTML(k);
   if(ix.length) h+=`<div class="note"><b>交互作用（${ix.length}）</b><ul class="ixl">${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></div>`;
-  const sp=spectrumOf(k);
-  if(sp.length) h+=`<div class="note"><b>主要涵蓋（抗菌譜 ++／+）</b><div class="chips mt">${sp.map(([n,v])=>`<span class="chip static">${n}<span class="n" style="margin:0 0 0 6px">${SYM[v]}</span></span>`).join("")}</div></div>`;
+  const sp=spectrumOf(k), ck=cmpKeyOf(k);
+  if(sp.length||ck) h+=`<div class="note"><b>${sp.length?"主要涵蓋（抗菌譜 ++／+）":"抗菌譜"}</b>${sp.length?`<div class="chips mt">${sp.map(([n,v])=>`<span class="chip static">${n}<span class="n" style="margin:0 0 0 6px">${SYM[v]}</span></span>`).join("")}</div>`:""}${ck?`<div class="srcs"><button class="btn" type="button" data-act="cmp-go" data-v="${k}">加入比較</button></div>`:""}</div>`;
   const use=[...((drugUse()[k])||[])];
   if(use.length) h+=`<div class="note"><b>app 內出現的經驗性情境（${use.length}）</b><div class="chips mt">${use.map(id=>`<button class="chip" type="button" data-act="go-sub" data-v="${id}">${SUBDEF[id].n.includes(SYS[subSys(id)].n)?"":SYS[subSys(id)].n+"・"}${SUBDEF[id].n}</button>`).join("")}</div></div>`;
   h+=`</div></div>`;
@@ -3178,6 +3310,7 @@ if(typeof document!=="undefined"){
   $("main").addEventListener("change",e=>{
     const a=e.target.dataset.act; if(!a) return;
     if(a==="mdr"){ const v=e.target.dataset.v; S.mdr=e.target.checked?[...S.mdr,v]:S.mdr.filter(x=>x!==v); renderMain(); }
+    else if(a==="cmp-diff"){ S.spec.diff=e.target.checked; renderMain(); }
     else if(a==="cur-day"){ S.cur.day=Math.max(0,num(e.target.value)||0); renderMain(); }
     else if(a==="cur-flag"){ S.cur[e.target.dataset.v]=e.target.checked; renderMain(); }
     else if(a==="o-day"){ S.oral.day=Math.max(0,num(e.target.value)||0); renderMain(); }
@@ -3234,6 +3367,18 @@ if(typeof document!=="undefined"){
     else if(a==="spec-col"){ const i=+v, c=S.spec.cols; S.spec.cols=c.includes(i)?c.filter(x=>x!==i):[...c,i]; S.spec.drug=null; }
     else if(a==="spec-drug"){ S.spec.drug=S.spec.drug===v?null:v; S.spec.cols=[]; jump=true; }
     else if(a==="spec-clear"){ S.spec.cols=[]; S.spec.drug=null; }
+    else if(a==="cmp-t"){ S.spec.cmpt=v; S.spec.cell=null; }
+    else if(a==="cmp-add"){ const L=S.spec.cmpt==="fun"?"cmpf":"cmp", c=S.spec[L];
+      if(c.includes(v)) S.spec[L]=c.filter(x=>x!==v); else if(c.length<4){ S.spec[L]=[...c,v]; const m=S.spec[L].length; if(m===4||(m===2&&UI.cmpPick)) UI.cmpPick=false; }
+      S.spec.cell=null; }
+    else if(a==="cmp-rm"){ const L=S.spec.cmpt==="fun"?"cmpf":"cmp"; S.spec[L]=S.spec[L].filter(x=>x!==v); S.spec.cell=null; }
+    else if(a==="cmp-clear"){ S.spec[S.spec.cmpt==="fun"?"cmpf":"cmp"]=[]; S.spec.cell=null; UI.cmpPick=true; }
+    else if(a==="cmp-pick") UI.cmpPick=!UI.cmpPick;
+    else if(a==="cmp-cell"){ const [r,k]=v.split("|"); const c=S.spec.cell; S.spec.cell=c&&String(c[0])===r&&c[1]===k?null:[r,k]; jump=!!S.spec.cell; }
+    else if(a==="cmp-go"){ const ck=cmpKeyOf(v); if(!ck) return; const L=ck[0]==="fun"?"cmpf":"cmp";
+      S.tab="spec"; S.spec.view="cmp"; S.spec.cmpt=ck[0]; S.spec.cell=null;
+      if(!S.spec[L].includes(ck[1])){ if(S.spec[L].length>=4) S.spec[L]=S.spec[L].slice(0,3); S.spec[L]=[...S.spec[L],ck[1]]; }
+      UI.cmpPick=S.spec[L].length<2; toast(S.spec[L].length<2?"已加入比較，再選一個藥":"已加入比較"); scrollTo(0,0); }
     else if(a==="f-row"){ S.spec.frow=S.spec.frow===+v?null:+v; S.spec.fdrug=null; jump=true; }
     else if(a==="f-drug"){ S.spec.fdrug=S.spec.fdrug===v?null:v; S.spec.frow=null; jump=true; }
     else if(a==="spec-go"){ S.tab="spec"; S.spec.view="bac"; S.spec.cols=[+v]; S.spec.drug=null; jump=true; }
