@@ -124,7 +124,7 @@ with sync_playwright() as p:
             # v1.1：CZA／CTZ 四藥比較、表頭商品名、CRE 格說明、抗菌譜逐欄依據
             if pg.locator("input[data-act=cmp-diff]").is_checked(): pg.locator("input[data-act=cmp-diff]").uncheck()
             if pg.locator("[data-act=cmp-clear]").count(): pg.locator("[data-act=cmp-clear]").click()
-            else: pg.evaluate("S.spec.cmp=[];UI.cmpPick=true;render()")
+            else: pg.evaluate("S.spec.cmp=[];UI.cmpPick=true;renderMain()")
             for k in ["cza","ctz","mem","tzp"]:
                 if pg.locator(f"[data-act=cmp-add][data-v={k}]").count()==0: pg.locator("[data-act=cmp-pick]").click()
                 pg.locator(f"[data-act=cmp-add][data-v={k}]").click(); pg.wait_for_timeout(20)
@@ -140,6 +140,27 @@ with sync_playwright() as p:
             pg.locator("#specAdv details summary").first.click(); pg.wait_for_timeout(20)
             if "AmpC 菌 ±" not in pg.inner_text("#specAdv"): issues.append(f"{W}: CTZ 逐欄依據未顯示")
             check(pg, W, "CTZ 抗菌譜")
+            # v1.2 比較入口：抗菌譜藥卡加入比較 → 底部已選列 → 比較表
+            pg.evaluate("S.spec.cmp=[];S.spec.drug=null;S.spec.cols=[];renderMain()"); pg.wait_for_timeout(20)
+            for k in ["fep","mem"]:
+                pg.locator(f"[data-act=spec-drug][data-v={k}]").click(); pg.wait_for_timeout(30)
+                pg.locator(f"[data-act=cmp-tog][data-v={k}]").click(); pg.wait_for_timeout(30)
+            tray = pg.locator(".fixbar [data-act=cmp-open]")
+            if tray.count()==0 or "2" not in tray.inner_text(): issues.append(f"{W}: 底部已選列未顯示 2 個藥")
+            else:
+                if tray.bounding_box()["x"] < 0: issues.append(f"{W}: 底部已選列超出畫面")
+                tray.click(); pg.wait_for_timeout(30)
+                if pg.locator("#main [data-act=cmp-cell]").count()!=2*13: issues.append(f"{W}: 已選列開啟的比較表格數錯")
+            check(pg, W, "已選列 → 比較")
+            # 經驗性治療方案卡「比較這 N 個藥」
+            go_tab(pg, "emp"); pg.evaluate("S.sys='gu';S.sub='cauti';S.sev='none';S.path=null;UI.edit=null;renderMain()"); pg.wait_for_timeout(30)
+            cl = pg.locator("#main [data-act=cmp-set]").first
+            if cl.count()==0: issues.append(f"{W}: 方案卡沒有比較連結")
+            else:
+                nn = int(re.search(r"(\d) 個藥", cl.inner_text()).group(1))
+                cl.click(); pg.wait_for_timeout(50)
+                if pg.locator("#main [data-act=cmp-cell]").count()!=nn*13: issues.append(f"{W}: 方案卡比較格數錯")
+            check(pg, W, "方案卡 → 比較")
             if W <= 920 and pg.locator("#ptBody").is_hidden(): pg.locator("#ptBar").click()
             pg.fill("#age","50"); pg.locator("#pf5").check(force=True) if pg.locator("#pf5").is_visible() else None
             pg.locator("[data-act=clear-all]").click(); pg.wait_for_timeout(50)

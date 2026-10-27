@@ -179,6 +179,25 @@ if(on("cmp")){
   for(const k of Object.keys(A.D)) run("cmp-btn",{tab:"drug",drug:k},()=>A.render("drug"),(t,h)=>{ const has=/data-act="cmp-go"/.test(h); return has===!!A.cmpKeyOf(k)?"":"加入比較按鈕不一致"; });
 }
 
+if(on("cmpentry")){
+  // v1.2 比較入口：方案卡「比較這 N 個藥」、抗菌譜藥卡加入比較（搜尋比較已取消）
+  const BK=A.SPEC_ROWS.map(r=>r[0]);
+  for(const q of ["比較","compare","cefepime meropenem","mica fluco"]){ n++; if(A.searchHits(q).some(x=>x.t==="比較")) fails.push(["cmp-search",{q},"搜尋不應出現比較（使用者 v1.2 取消）"]); }
+  // 方案卡連結：鍵存在、2–4 個、同類、每個藥都在同一張卡內、數字一致
+  const chkCards=(label,o,tab)=>run(label,o,()=>A.render(tab),(t,h)=>{
+    for(const seg of h.split('<div class="opt').slice(1)){
+      const m=seg.match(/data-act="cmp-set" data-v="(bac|fun)\|([^"]+)">比較(這|其中) (\d) 個藥/); if(!m) continue;
+      const ks=m[2].split(","); if(ks.length<2||ks.length>4||+m[4]!==ks.length) return "連結藥數錯 "+m[0];
+      for(const k of ks){ const nm=m[1]==="bac"?(A.SPEC_ROWS.find(r=>r[0]===k)||[])[1]:k; if(!nm) return "連結鍵不存在 "+k;
+        const names=m[1]==="bac"?[A.D[nm].n]:A.FCOLS.find(c=>c[0]===k)[2].map(r=>A.D[A.REG[r].d].n); if(!names.some(dn=>seg.includes(dn)||seg.includes(dn.replace(/（.*?）/,"")))) return "連結的藥不在卡內 "+names[0]; }
+    } return ""; });
+  for(const [sk,sy] of Object.entries(A.SYS)) for(const u of sy.subs){
+    for(const sev of (A.hasSev(u.id)?["none","sepsis","shock"]:["none"])) for(const al of ["none","pen_ana"]) chkCards("cmp-card",{tab:"emp",sys:sk,sub:u.id,sev,allergy:al},"emp");
+    for(const p of (A.PL[u.id]||[])) chkCards("cmp-card",{tab:"emp",sys:sk,sub:u.id,path:p},"emp"); }
+  // 抗菌譜藥卡：加入比較按鈕狀態
+  for(const k of BK) for(const inC of [false,true]) run("cmp-tog",{tab:"spec",spec:{view:"bac",drug:k,cmp:inC?[k]:[]}},()=>A.render("spec"),(t,h)=>{ const m=h.match(/data-act="cmp-tog" data-v="([^"]+)" aria-pressed="(true|false)"/); return !m||m[1]!==k||(m[2]==="true")!==inC?"加入比較按鈕狀態錯":""; });
+}
+
 const by={}; for(const f of fails){const k=f[0].split("#")[0]+" | "+f[2].slice(0,90);(by[k]=by[k]||[]).push(f[1]);}
 console.log("FUZZ TOTAL",n,"FAILS",fails.length);
 for(const [k,v] of Object.entries(by)) console.log(v.length+"× "+k+"\n  e.g. "+JSON.stringify(v[0]).slice(0,240));

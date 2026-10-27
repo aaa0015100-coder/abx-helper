@@ -206,6 +206,10 @@ table.grid.cmp tr.xrow th,table.grid.cmp tr.xrow td{border-top:1px dashed var(--
 .rowbtn:hover,.colbtn:hover{text-decoration:underline}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.82rem;margin:10px 0 4px}
 .legend .dot{width:22px;height:22px;margin-right:2px}
+.fixbar{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100vw - 32px)}
+.fixbar .btn{box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.fixbar .jump{position:static}
+.fixpad{height:64px}
 .jump{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;z-index:20}
 .muted{color:var(--muted)}
@@ -394,7 +398,7 @@ details.pf>summary{font-size:.86rem}
 <script>
 "use strict";
 const VERIFIED = "2026-10-27";
-const VERSION = "v1.1";
+const VERSION = "v1.2";
 const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較";
 
 /* ---------------- 出處 ---------------- */
@@ -1135,6 +1139,17 @@ function rxRow(id){
 }
 const shortN = id=>D[REG[id].d].n.replace(/（.*?）/,"");
 function groupTxt(regs,alt){ const ns=regs.map(shortN); if(ns.length===1) return ns[0]; return alt?`（${ns.join(" 或 ")}，擇一）`:ns.join(" ＋ "); }
+// v1.2：方案卡內「擇一」的藥 ≥2 個且都在抗菌譜（同為細菌或同為黴菌）→ 回傳 [類別, 比較鍵（最多 4）, 總數]
+function cmpLinkOf(o){
+  const groups=[{regs:o.regs,alt:o.alt}].concat(o.add||[]);
+  for(const g of groups){
+    if(!g.alt||!g.regs||g.regs.length<2) continue;
+    const ks=[], ds=new Set(); let t=null;
+    for(const r of g.regs){ const d=(REG[r]&&REG[r].d)||r; ds.add(d); const ck=cmpKeyOf(d); if(!ck||(t&&ck[0]!==t)) continue; t=ck[0]; if(!ks.includes(ck[1])) ks.push(ck[1]); }
+    if(ks.length>=2) return [t,ks.slice(0,4),ds.size];
+  }
+  return null;
+}
 function optCard(o){
   const groups=[{regs:o.regs,alt:o.alt}].concat(o.add||[]);
   const nDrugs=groups.reduce((s,g)=>s+(g.alt?1:g.regs.length),0)+(o.plus?1:0);
@@ -1151,12 +1166,13 @@ function optCard(o){
     return h;
   }).join("");
   if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
-  const cls=tierCls(o.tier);
+  const cls=tierCls(o.tier), cl=cmpLinkOf(o);
+  const cmpBtn=cl?`<button class="linkbtn" type="button" data-act="cmp-set" data-v="${cl[0]}|${cl[1].join(",")}">${cl[2]>cl[1].length?`比較其中 ${cl[1].length} 個藥`:`比較這 ${cl[1].length} 個藥`} ›</button>`:"";
   return `<div class="opt${cls==="primary"?" primary":""}">
     <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${updOf(o.upd)}</div>
     ${formula}${body}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
-    ${o.note||(o.src&&o.src.length)?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}</div>`:""}
+    ${o.note||(o.src&&o.src.length)||cmpBtn?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}${cmpBtn}</div>`:""}
     ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
   </div>`;
 }
@@ -1807,6 +1823,8 @@ function specGrid(){
   });
   return h+`</tbody></table></div>`;
 }
+// v1.2：抗菌譜藥卡「加入比較」（留在原畫面，底部顯示已選列）
+function cmpTogBtn(k){ const on=S.spec.cmp.includes(k); return `<div class="srcs"><button class="btn" type="button" data-act="cmp-tog" data-v="${k}" aria-pressed="${on}">${on?"已加入比較（再點移除）":"＋ 加入比較"}</button></div>`; }
 function regsOf(key){ const r=SPEC_ROWS.find(x=>x[0]===key); return r?r[2]:[]; }
 function specAdvice(){
   const sp=S.spec;
@@ -1817,7 +1835,7 @@ function specAdvice(){
     const basis=cn?`<details class="mt"><summary>逐欄依據</summary><ul class="reflist">${Object.keys(cn).map(c=>`<li><b>${SPC[c]} ${SYM[v[c]]}</b> ${cn[c][0]}${srcTags(cn[c][1])}</li>`).join("")}</ul></details>`:"";
     return `<div class="opt primary"><div class="opt-head"><span class="tier primary">${rowLabel(r)}</span>${d.brand?`<span class="brand">商品名：${d.brand}</span>`:""}${d.restrict?`<span class="flag info">管制抗生素・會診感染科</span>`:""}</div>
       <dl class="kv"><dt>++ 強</dt><dd>${by(3)}</dd><dt>+ 可用</dt><dd>${by(2)}</dd><dt>± 不穩定</dt><dd>${by(1)}</dd><dt>− 無效</dt><dd>${by(0)}</dd></dl>
-      <div class="onote">${DNOTE[sp.drug]||""}</div>${basis}${r[2].map(rxRow).join("")}</div>`;
+      <div class="onote">${DNOTE[sp.drug]||""}</div>${basis}${r[2].map(rxRow).join("")}${cmpTogBtn(sp.drug)}</div>`;
   }
   if(!sp.cols.length) return `<div class="note">點上方欄位（菌種，可複選）看哪些藥可用；點左側藥名看這個藥的強弱項與劑量。</div>`;
   if(sp.cols.length===1){
@@ -2003,10 +2021,10 @@ function renderCmp(){
 function cmpKeyOf(dk){ const r=SPEC_ROWS.find(x=>x[1]===dk); if(r) return ["bac",r[0]]; const f=FCOLS.find(c=>c[2].includes(dk)); return f?["fun",f[0]]:null; }
 function renderSpec(){
   const sp=S.spec;
-  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["fun","抗黴菌"],["cmp","比較"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
+  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["cmp","比較"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
   const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
   if(sp.view==="bac"){
-    h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
+    h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。要並列 2–4 個藥：<button class="linkbtn" type="button" data-act="spec-view" data-v="cmp">比較 ›</button>${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
   } else if(sp.view==="fun"){
     h+=`${renalBar()}${legend}<div class="hint">點菌種或藥名。</div>${fungalGrid()}<div id="specAdv" class="res mt">${fungalAdvice()}</div>`;
   } else if(sp.view==="cmp"){
@@ -2796,6 +2814,7 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
+    <div class="note">2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。</div>
     <div class="note">2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。</div>
     <div class="note">2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。</div>
     <div class="note">2026-10-24 新增並查證：藥物查詢與搜尋、TDM（aminoglycoside 每日一次與兩點濃度藥動計算）、PEN-FAST、泌尿手術預防（EAU 2026、AUA Table V、AWMF、SIR 2018、AUA 輸精管結紮 2026）。Aminoglycoside 劑量細節目前只找到院內規範（Stanford、Hamilton、UCSF）與 Nicolau 1995，已標「請以原文確認」；app 不內建 Hartford nomogram 曲線。</div>
@@ -2975,6 +2994,7 @@ function renderQ(q){
   QH.forEach((x,i)=>{ if(x.t!==lastT){ h+=`<div class="qcat">${x.t}</div>`; lastT=x.t; } h+=`<button type="button" class="qitem" data-act="go" data-i="${i}"><span>${x.n}</span>${x.sub?`<span class="qsub">${x.sub}</span>`:""}</button>`; });
   box.innerHTML=h;
 }
+function cmpSet(t,keys){ S.tab="spec"; S.spec.view="cmp"; S.spec.cmpt=t; S.spec[t==="fun"?"cmpf":"cmp"]=keys.slice(0,4); S.spec.cell=null; S.spec.diff=false; UI.cmpPick=keys.length<2; }
 function goHit(x){
   const g=x.go; let jump=false;
   S.tab=g.tab;
@@ -3262,7 +3282,10 @@ function renderMain(){
   const tm=$("tabmenu"); tm.hidden=!UI.more;
   tm.innerHTML=xt.map(([k,n])=>`<button class="chip" type="button" data-act="tab" data-v="${k}" aria-pressed="${S.tab===k}">${n}</button>`).join("");
   const f={spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab]||renderEmp;
-  $("main").innerHTML=f()+(S.tab==="spec"&&S.spec.view==="bac"&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"");
+  const onBac=S.tab==="spec"&&S.spec.view==="bac", nc=S.spec.cmp.length;
+  const tray=onBac&&nc?`<button class="btn${nc>=2?" solid":""}" type="button" data-act="cmp-open">${nc>=2?`比較已選 ${nc} 個藥 ›`:"已選 1 個藥・再選一個"}</button>`:"";
+  const jmp=onBac&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"";
+  $("main").innerHTML=f()+(tray||jmp?`<div class="fixpad" aria-hidden="true"></div><div class="fixbar">${tray}${jmp}</div>`:"");
   markGloss($("main"));
 }
 const narrow=()=>typeof matchMedia!=="undefined"&&matchMedia("(max-width:920px)").matches;
@@ -3435,6 +3458,12 @@ if(typeof document!=="undefined"){
     else if(a==="cmp-clear"){ S.spec[S.spec.cmpt==="fun"?"cmpf":"cmp"]=[]; S.spec.cell=null; UI.cmpPick=true; }
     else if(a==="cmp-pick") UI.cmpPick=!UI.cmpPick;
     else if(a==="cmp-cell"){ const [r,k]=v.split("|"); const c=S.spec.cell; S.spec.cell=c&&String(c[0])===r&&c[1]===k?null:[r,k]; jump=!!S.spec.cell; }
+    else if(a==="cmp-set"){ const [t,ks]=v.split("|"); cmpSet(t,ks.split(",")); UI.more=false; scrollTo(0,0); }
+    else if(a==="cmp-open"){ S.spec.view="cmp"; S.spec.cmpt="bac"; S.spec.cell=null; UI.cmpPick=S.spec.cmp.length<2; scrollTo(0,0); }
+    else if(a==="cmp-tog"){ const L=S.spec.cmp, i=L.indexOf(v);
+      if(i>=0){ L.splice(i,1); toast("已從比較移除"); }
+      else if(L.length>=4){ toast("比較最多 4 個藥，先移除一個"); return; }
+      else { L.push(v); toast(L.length<2?"已加入比較，再選一個藥":`已加入比較（共 ${L.length} 個）`); } }
     else if(a==="cmp-go"){ const ck=cmpKeyOf(v); if(!ck) return; const L=ck[0]==="fun"?"cmpf":"cmp";
       S.tab="spec"; S.spec.view="cmp"; S.spec.cmpt=ck[0]; S.spec.cell=null;
       if(!S.spec[L].includes(ck[1])){ if(S.spec[L].length>=4) S.spec[L]=S.spec[L].slice(0,3); S.spec[L]=[...S.spec[L],ck[1]]; }
