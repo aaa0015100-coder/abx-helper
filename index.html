@@ -210,6 +210,12 @@ table.grid.cmp tr.xrow th,table.grid.cmp tr.xrow td{border-top:1px dashed var(--
 .fixbar .btn{box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .fixbar .jump{position:static}
 .fixpad{height:64px}
+.abgv{font-family:var(--f-mono);font-weight:600}
+.abgv.hi{color:var(--ok)}
+.abgv.mid{color:var(--warn)}
+.abgv.lo{color:var(--danger)}
+.rx-meta.abg{font-size:.78rem}
+.cond.abgw{font-size:.82rem}
 .jump{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;z-index:20}
 .muted{color:var(--muted)}
@@ -397,9 +403,9 @@ details.pf>summary{font-size:.86rem}
 
 <script>
 "use strict";
-const VERIFIED = "2026-10-27";
-const VERSION = "v1.2";
-const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較";
+const VERIFIED = "2026-11-05";
+const VERSION = "v1.3";
+const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較＋院內 antibiogram";
 
 /* ---------------- 出處 ---------------- */
 const REF = {
@@ -803,7 +809,7 @@ const S = {
   sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
   cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,org:"",ph:"",sus:{}},
   drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false}, cp:{mode:"calc",bili:null,alb:null,inr:null,asc:"1",enc:"1",cls:""},
-  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null,cmpt:"bac",cmp:[],cmpf:[],cell:null,diff:false}
+  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, oral:{ivs:[],day:3,org:"",ph:"",sus:{},afeb:false,stable:false,po:false,src:false}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null,cmpt:"bac",cmp:[],cmpf:[],cell:null,diff:false,abg:"Escherichia coli"}
 };
 let R = null;
 /* 介面狀態（只影響顯示，不影響建議內容） */
@@ -1131,7 +1137,7 @@ function rxRow(id){
   return `<div class="rx${al&&al.lvl==="danger"?" blocked":""}">
     <div class="rx-head">${nameHTML(g.d,null,more.length)}<span class="route">${g.r}</span>${S.tab==="oral"&&/PO/.test(g.r)?bioFlag(g.d):""}${fl.join("")}</div>
     <div class="rx-dose">${ds.html}</div>
-    ${band?`<div class="rx-meta">${band}</div>`:""}
+    ${band?`<div class="rx-meta">${band}</div>`:""}${ABGX?abgLine(g.d):""}
     ${more.length?`<div class="rx-more" hidden>${more.join("")}</div>`:""}
     ${ix.length&&S.tab!=="drug"?`<details class="ix"><summary>交互作用 ${ix.length} 項</summary><ul>${ix.map(x=>`<li><span class="sev ${x.lv}">${{x:"禁忌",h:"高",m:"中"}[x.lv]}</span> ${x.w}：${x.fx}。${x.m}</li>`).join("")}</ul></details>`:""}
     <button class="copy" type="button" data-act="copy" data-txt="${encodeURIComponent(copyTxt)}">複製</button>
@@ -1158,6 +1164,7 @@ function optCard(o){
   if(nDrugs>1) formula=`<div class="formula"><b>用法：</b>${groups.map(g=>groupTxt(g.regs,g.alt)).join(" ＋ ")}${o.plus?" ＋ "+o.plus:""}<span class="fhint">（${nDrugs} 種藥同時使用${isAdd?"，再加到上方方案":""}）</span></div>`;
   else if(o.regs.length>1) formula=`<div class="formula"><b>用法：</b>以下 ${o.regs.length} 種${isAdd?"擇一，加到上方的方案":"擇一使用，單用即可"}</div>`;
   else if(isAdd) formula=`<div class="formula"><b>用法：</b>加到上方的方案</div>`;
+  const skip0=ABGX&&ABGX.skip; if(ABGX) ABGX.skip=/^加上|另加/.test(o.tier);   // 「加上」卡針對特定菌，不列診斷常見菌的 %S
   let body=groups.map((g,gi)=>{
     let h="";
     if(gi>0) h+=`<div class="plus">＋ 再加上${g.alt&&g.regs.length>1?"（以下擇一）":""}</div>`;
@@ -1165,12 +1172,13 @@ function optCard(o){
     h+=g.regs.map((r,ri)=>(ri>0?`<div class="sep">${g.alt?"或":"＋ 同時給"}</div>`:"")+rxRow(r)).join("");
     return h;
   }).join("");
+  if(ABGX) ABGX.skip=skip0;
   if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
   const cls=tierCls(o.tier), cl=cmpLinkOf(o);
   const cmpBtn=cl?`<button class="linkbtn" type="button" data-act="cmp-set" data-v="${cl[0]}|${cl[1].join(",")}">${cl[2]>cl[1].length?`比較其中 ${cl[1].length} 個藥`:`比較這 ${cl[1].length} 個藥`} ›</button>`:"";
   return `<div class="opt${cls==="primary"?" primary":""}">
     <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${updOf(o.upd)}</div>
-    ${formula}${body}
+    ${formula}${body}${ABGX?abgWarn(o):""}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
     ${o.note||(o.src&&o.src.length)||cmpBtn?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}${cmpBtn}</div>`:""}
     ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
@@ -1200,7 +1208,7 @@ function renalBar(){
 
 function ctxNote(){
   if(CTX2[S.sys]) return `<div class="ctx"><b>重點：</b>${CTX2[S.sys][0]}${srcTags(CTX2[S.sys][1])}</div>`;
-  if(S.sys==="gu") return `<div class="ctx"><b>台灣抗藥性：</b>社區 E. coli 對 FQ 與 TMP-SMX 不感受比例高，3rd-gen ceph 不感受與 ESBL 逐年上升。優先參考院內 antibiogram：sepsis 時排除抗藥率 >20% 的藥，septic shock 排除 >10%。${UPD}${srcTags(["TSAR","IDSA_cUTI25"])}</div>`;
+  if(S.sys==="gu") return `<div class="ctx"><b>台灣抗藥性：</b>社區 E. coli 對 FQ 與 TMP-SMX 不感受比例高，3rd-gen ceph 不感受與 ESBL 逐年上升。優先參考院內 antibiogram：sepsis 時排除抗藥率 >20% 的藥，septic shock 排除 >10%。${abgCtxUTI()}${UPD}${srcTags(["TSAR","IDSA_cUTI25","ABG_SH"])}</div>`;
   return `<div class="ctx"><b>台灣抗藥性：</b>肺炎鏈球菌 macrolide 抗藥率歷年監測超過 80%，macrolide 只作合併用藥；結核盛行，FQ 單用前先排除 TB。台灣 CAP 常見菌依序為 S. pneumoniae、M. pneumoniae、C. pneumoniae、H. influenzae、K. pneumoniae。${srcTags(["TW_SPN","IDST_CAP"])}</div>`;
 }
 
@@ -1262,12 +1270,17 @@ function renderEmp(){
   if(pl.length) h+=`<details class="more pathsel"${S.path?" open":""}><summary>${S.path?`已知菌種：<i>${PATH[S.path].n}</i>・點選可更換，再點一次取消`:`已知菌種？點選看標靶治療（${pl.length}）`}</summary><div class="paths">${pl.map((p,i)=>`<button class="chip" type="button" data-act="path" data-v="${p}" aria-pressed="${S.path===p}"><span class="n">${i+1}</span><i>${PATH[p].n}</i></button>`).join("")}</div></details>`;
   // 04：（標靶治療）→ 方案卡 → 療程 → 需立即處理的提醒；其餘（台灣抗藥性、一般提醒）收合
   h+=`<div class="step"><h3><span class="k">04</span>${S.path?"標靶治療":"建議"}<button class="linkbtn act" type="button" data-act="fav-save">☆ 收藏</button></h3>${renalBar()}<div class="res">`;
-  const al=genAllergy(S.sub,c);
-  const emp=(al?optCard(al):"")+r.o.map(optCard).join("");
-  if(S.path) h+=targetPanel(S.path,S.ph,siteClass(S.sub));
-  else h+=emp;
+  const al=genAllergy(S.sub,c), men=/^men_/.test(S.sub);
+  let emp="";
+  try{
+    ABGX={orgs:abgOrgs(pl,true),max:3,men,sub:S.sub,sev:c.sev};
+    emp=(al?optCard(al):"")+r.o.map(optCard).join("");
+    if(S.path){ ABGX=null; h+=targetPanel(S.path,S.ph,siteClass(S.sub)); }
+    else h+=emp;
+  } finally { ABGX=null; }
   h+=`<div class="dur"><span class="k">療程</span><span class="v">${r.dur.t}</span>${r.dur.upd?UPD:""}${srcTags(r.dur.src)}</div>`;
-  const key=r.n.filter(n=>n.lvl==="danger"||n.lvl==="warn"), rest=r.n.filter(n=>!(n.lvl==="danger"||n.lvl==="warn"));
+  const hn=S.sys==="hap"?abgHapNote(S.sub):null, rn=hn?[...r.n,hn]:r.n;
+  const key=rn.filter(n=>n.lvl==="danger"||n.lvl==="warn"), rest=rn.filter(n=>!(n.lvl==="danger"||n.lvl==="warn"));
   if(key.length) h+=`<div class="notes">${key.map(noteBlock).join("")}</div>`;
   if(S.path) h+=`<details class="more"><summary>經驗性治療（未知菌種時）</summary><div class="res mt">${emp}</div></details>`;
   h+=`<details class="more"><summary>其他提醒（${rest.length+2}）</summary>${ctxNote()}<div class="notes">${rest.map(noteBlock).join("")}<div class="note">IV 轉口服條件：退燒 ≥24–48 小時、血行動力學穩定、臨床改善、可進食且腸胃吸收正常，並有感受的口服藥。${srcTags(["IDSA_cUTI25","ATS19"])}</div></div></details>`;
@@ -1285,7 +1298,7 @@ function targetPanel(pid,ph,sc){
     const m=r=>EAU_MAP[r]||r, chg=o=>o.regs.some(r=>EAU_MAP[r])||(o.add||[]).some(g=>g.regs.some(r=>EAU_MAP[r]));
     list=list.map(o=>chg(o)?Object.assign({},o,{regs:o.regs.map(m),add:(o.add||[]).map(g=>Object.assign({},g,{regs:g.regs.map(m)})),upd:o.upd||"EAU_DOSE",src:[...(o.src||[]),"EAU_UI26"]}):o);
   }
-  let h=`<div class="tgt"><h3>${p.n}</h3><div class="pnote">${p.note||""}</div>`;
+  let h=`<div class="tgt"><h3>${p.n}</h3><div class="pnote">${p.note||""}</div>${abgTgtNote(pid,/^men_/.test(S.sub))}`;
   if(PCOL[pid]!==undefined) h+=`<div style="margin:-4px 0 10px"><button class="linkbtn" type="button" data-act="spec-go" data-v="${pid==="saur"&&cur==="MRSA"?2:PCOL[pid]}">在抗菌譜查看所有可用藥物</button></div>`;
   if(PHL[g]) h+=`<div class="lbl">藥敏表現型</div><div class="chips" style="margin-bottom:10px">${phs.map(k=>`<button class="chip" type="button" data-act="ph" data-v="${k}" aria-pressed="${cur===k}">${PHL[g][k]}</button>`).join("")}</div>`;
   if(list.length) h+=`<div class="res">${list.map(optCard).join("")}</div>`;
@@ -2014,14 +2027,263 @@ function renderCmp(){
   h+=`${legend}<label class="chk mt"><input type="checkbox" data-act="cmp-diff"${sp.diff?" checked":""}><span>只看有差異的列</span></label><div class="hint">點圓點看說明與出處。${fun?"":"ESBL、CRE 兩列依 IDSA 2026 的臨床角色標示。"}</div>`;
   h+=cmpTable(keys,rows,val,lab,full,name,r=>r);
   h+=`<div id="specAdv" class="res mt">${cmpCellNote()}</div>`;
+  if(!fun) h+=abgCmpBlock(keys);
   if(!fun) h+=`<div class="hint">抗菌譜只是第一步，仍需考慮感染部位的藥物濃度（如 daptomycin 不用於肺炎、tigecycline 不用於菌血症）。</div>`;
   return h;
 }
 // 藥物頁「加入比較」：回傳比較用的鍵與類別
 function cmpKeyOf(dk){ const r=SPEC_ROWS.find(x=>x[1]===dk); if(r) return ["bac",r[0]]; const f=FCOLS.find(c=>c[2].includes(dk)); return f?["fun",f[0]]:null; }
+/* ================= v1.3 院內 antibiogram（雙和 115 年第一季，全院） ================= */
+const ABG = {per:"115 年第一季（2026-01～03）", short:"115Q1", end:"2026-03-31"};
+const ABG_ROWS=[
+  ["Escherichia coli","gn",1058,"CREC 1.9%",{AMP:22.7,SAM:43.9,TZP:95.1,CZO:60.1,CXM:63.3,FOX:82.6,CAZ:74.2,CRO:68.7,CTX:0,FEP:87,CZA:99.9,AMK:97.4,GEN:74.7,ETP:98.1,IPM:98.6,MEM:99.1,CIP:47.3,LVX:0,MNO:82.5,TGC:99.6,COL:99.2,SXT:53.7}],
+  ["Klebsiella pneumoniae","gn",419,"CRKP 25.1%",{AMP:0,SAM:52.5,TZP:74.7,CZO:55.8,CXM:55.6,FOX:61.6,CAZ:59.7,CRO:69,CTX:100,FEP:75.2,CZA:95.4,AMK:96.4,GEN:75.9,ETP:74.9,IPM:76.1,MEM:84.7,CIP:56.8,LVX:100,MNO:75.4,TGC:88.5,COL:94.4,SXT:65.9}],
+  ["Pseudomonas aeruginosa","gn",264,"CRPA 15.5%",{TZP:81.8,CAZ:77.3,FEP:83,CZA:97.6,AMK:98.5,GEN:90.5,IPM:86,MEM:84.5,CIP:74.2,LVX:67,COL:96.7}],
+  ["Proteus mirabilis","gn",203,"CRPM 1.5%",{AMP:42.4,SAM:65,TZP:98.5,CXM:79.8,FOX:84.2,CAZ:85.7,CRO:86.2,FEP:97.5,CZA:100,AMK:60.6,GEN:58.1,ETP:98.5,MEM:99,CIP:61.6,MNO:0,COL:0,SXT:44.8}],
+  ["Stenotrophomonas maltophilia","gn",92,"",{CAZ:22.6,LVX:63,MNO:89.1,SXT:78.3}],
+  ["Acinetobacter baumannii","gn",73,"CRAB 74.0%",{SAM:23.3,TZP:21.9,CAZ:21.9,CSL:35.6,FEP:23.3,AMK:35.6,GEN:27.4,IPM:26,MEM:27.4,CIP:21.9,LVX:24.7,MNO:67.6,TGC:37,COL:98.6,SXT:26.8}],
+  ["Serratia marcescens","gn",71,"CRE 18.3%",{AMP:0,SAM:0,TZP:88.7,CZO:0,CXM:0,FOX:0,CAZ:73.2,CRO:64.8,FEP:77.5,CZA:85.9,AMK:78.9,GEN:78.9,ETP:85.9,IPM:81.7,MEM:88.7,CIP:62,MNO:46.5,TGC:60.6,COL:0,SXT:87.3}],
+  ["Morganella morganii","gn",56,"CRE 1.8%",{AMP:0,SAM:23.2,TZP:92.9,CXM:0,FOX:64.3,CAZ:85.7,CRO:89.3,FEP:96.4,CZA:100,AMK:94.6,GEN:75,ETP:98.2,MEM:98.2,CIP:50,MNO:32.1,COL:0,SXT:62.5}],
+  ["Citrobacter koseri","gn",47,"CRE 10.6%",{AMP:0,SAM:83,TZP:85.1,CZO:83,CXM:85.1,FOX:91.5,CAZ:89.4,CRO:89.4,FEP:95.7,CZA:100,AMK:100,GEN:93.6,ETP:89.4,IPM:91.5,MEM:95.7,CIP:95.7,MNO:93.6,TGC:97.9,COL:100,SXT:91.5}],
+  ["Klebsiella aerogenes","gn",41,"CRE 7.3%",{AMP:0,SAM:0,TZP:39,CZO:0,CXM:24.4,FOX:0,CAZ:36.6,CRO:36.6,FEP:95.1,CZA:97.6,AMK:100,GEN:95.1,ETP:92.7,IPM:92.7,MEM:92.7,CIP:80.5,MNO:75.6,TGC:92.7,COL:100,SXT:92.7}],
+  ["Enterobacter hormaechei","gn",36,"CRE 54.4%",{AMP:0,SAM:0,TZP:44.4,CZO:0,CXM:11.1,FOX:0,CAZ:36.1,CRO:30.6,FEP:61.1,CZA:77.8,AMK:100,GEN:69.4,ETP:55.6,IPM:77.8,MEM:83.3,CIP:55.6,MNO:66.7,TGC:88.9,COL:100,SXT:61.1}],
+  ["Haemophilus influenzae","gn",35,"",{AMP:42.9,SAM:82.9,CXM:80,CRO:100,CTX:100,MEM:94.3,CIP:85.7,SXT:54.3}],
+  ["Citrobacter freundii","gn",23,"",{AMP:0,SAM:0,TZP:78.3,CZO:0,CXM:0,FOX:0,CAZ:65.2,CRO:69.6,FEP:87,CZA:95.7,AMK:100,GEN:91.3,ETP:78.3,IPM:78.3,MEM:78.3,CIP:78.3,MNO:82.6,TGC:95.7,COL:100,SXT:78.3}],
+  ["Enterobacter cloacae","gn",23,"",{AMP:0,SAM:0,TZP:65.2,CZO:0,CXM:47.8,FOX:0,CAZ:60.9,CRO:60.9,FEP:95.7,CZA:95.7,AMK:100,GEN:91.3,ETP:87,IPM:91.3,MEM:95.7,CIP:87,MNO:78.3,TGC:95.7,COL:100,SXT:82.6}],
+  ["Chryseobacterium indologenes","gn",23,"",{TZP:34.8,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,CIP:30.4,LVX:30.4,MNO:100,SXT:60.9}],
+  ["Klebsiella oxytoca","gn",22,"",{AMP:0,SAM:40.9,TZP:77.3,CZO:9.1,CXM:68.2,FOX:81.8,CAZ:81.8,CRO:68.2,FEP:81.8,CZA:86.4,AMK:86.4,GEN:81.8,ETP:86.4,IPM:86.4,MEM:86.4,CIP:77.3,MNO:68.2,TGC:100,COL:100,SXT:77.3}],
+  ["Acinetobacter nosocomialis","gn",20,"",{SAM:85,TZP:65,CAZ:85,CSL:90,FEP:90,AMK:85,GEN:45,IPM:65,MEM:60,CIP:65,LVX:75,MNO:95,TGC:72.7,COL:100,SXT:65}],
+  ["Salmonella Group D","gn",18,"",{AMP:94.4,SAM:92.3,CXM:0,FOX:0,CAZ:100,CRO:100,CTX:100,FEP:100,CZA:100,ETP:100,IPM:100,MEM:100,CIP:94.4,MNO:100,TGC:100,COL:100,SXT:100}],
+  ["Moraxella (Branh.) catarrhalis","gn",17,"",{ERY:94.1,SXT:76.5,TCY:82.4}],
+  ["Klebsiella variicola","gn",15,"",{AMP:0,SAM:93.3,TZP:100,CZO:93.3,CXM:93.3,FOX:93.3,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:93.3,MNO:100,TGC:100,COL:100,SXT:93.3}],
+  ["Acinetobacter calcoaceticus-baumannii complex","gn",14,"",{SAM:28.6,TZP:21.4,CAZ:35.7,CSL:35.7,FEP:35.7,AMK:42.9,GEN:21.4,IPM:21.4,MEM:21.4,CIP:21.4,LVX:21.4,MNO:71.4,TGC:16.7,COL:92.9,SXT:35.7}],
+  ["Achromobacter xylosoxidans","gn",14,"",{TZP:92.9,CAZ:64.3,CRO:0,FEP:7.1,AMK:0,GEN:0,IPM:71.4,CIP:14.3,LVX:28.6,SXT:85.7}],
+  ["Providencia stuartii","gn",14,"",{AMP:0,SAM:28.6,TZP:100,CXM:50,FOX:78.6,CAZ:71.4,CRO:64.3,FEP:100,CZA:100,AMK:64.3,GEN:0,ETP:92.9,MEM:100,CIP:50,MNO:0,COL:0,SXT:42.9}],
+  ["Neisseria gonorrhoeae","gn",13,"",{PEN:0,CRO:100,CIP:0,TCY:15.4}],
+  ["Providencia rettgeri","gn",13,"",{AMP:0,SAM:23.1,TZP:92.3,CXM:61.5,FOX:84.6,CAZ:76.9,CRO:76.9,FEP:100,AMK:92.3,GEN:69.2,ETP:92.3,MEM:92.3,CIP:53.8,MNO:0,COL:0,SXT:61.5}],
+  ["Aeromonas veronii","gn",11,"",{TZP:81.8,CAZ:90.9,CRO:90.9,FEP:100,AMK:100,GEN:100,ETP:100,IPM:80,MEM:100,CIP:100,LVX:100,SXT:100}],
+  ["Acinetobacter sp.","gn",9,"",{SAM:55.6,TZP:44.4,CAZ:11.1,CSL:66.7,FEP:22.2,AMK:55.6,GEN:55.6,IPM:33.3,MEM:33.3,CIP:77.8,LVX:88.9,MNO:100,TGC:100,COL:100,SXT:75}],
+  ["Aeromonas hydrophila","gn",8,"",{TZP:87.5,CAZ:87.5,CRO:87.5,FEP:87.5,AMK:100,GEN:87.5,ETP:62.5,IPM:62.5,MEM:100,CIP:75,LVX:100,SXT:100}],
+  ["Aeromonas caviae","gn",7,"",{TZP:85.7,CAZ:71.4,CRO:71.4,CTX:100,FEP:71.4,AMK:100,GEN:71.4,ETP:85.7,IPM:85.7,MEM:85.7,CIP:100,LVX:100,SXT:71.4}],
+  ["Acinetobacter bereziniae","gn",7,"",{SAM:100,TZP:100,CAZ:71.4,CSL:100,FEP:85.7,AMK:100,GEN:100,IPM:85.7,MEM:85.7,CIP:71.4,LVX:100,MNO:100,TGC:100,COL:100,SXT:85.7}],
+  ["Acinetobacter ursingii","gn",7,"",{SAM:100,TZP:85.7,CAZ:28.6,CSL:100,FEP:57.1,AMK:100,GEN:100,IPM:100,MEM:100,CIP:100,LVX:100,MNO:100,TGC:100,COL:80,SXT:42.9}],
+  ["Enterobacter kobei","gn",7,"",{AMP:0,SAM:14.3,TZP:100,CZO:0,CXM:57.1,FOX:0,CAZ:71.4,CRO:71.4,CTX:100,FEP:85.7,CZA:100,AMK:100,GEN:85.7,ETP:85.7,IPM:85.7,MEM:100,CIP:71.4,LVX:100,MNO:66.7,TGC:100,COL:100,SXT:71.4}],
+  ["Proteus hauseri","gn",7,"",{AMP:0,SAM:57.1,TZP:100,CXM:0,FOX:100,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:71.4,ETP:100,MEM:100,CIP:85.7,MNO:57.1,COL:0,SXT:85.7}],
+  ["Proteus vulgaris","gn",7,"",{AMP:0,SAM:57.1,TZP:100,CXM:0,FOX:85.7,CAZ:85.7,CRO:42.9,FEP:85.7,CZA:100,AMK:85.7,GEN:71.4,ETP:100,MEM:100,CIP:85.7,MNO:0,COL:0,SXT:71.4}],
+  ["Burkholderia cepacia complex","gn",6,"",{CAZ:66.7,MEM:100,LVX:100,MNO:83.3,SXT:83.3}],
+  ["Burkholderia cenocepacia","gn",6,"",{CAZ:83.3,MEM:83.3,LVX:66.7,MNO:33.3,SXT:66.7}],
+  ["Pseudomonas putida","gn",6,"",{TZP:100,CAZ:100,FEP:83.3,AMK:100,GEN:100,IPM:100,MEM:83.3,CIP:83.3,LVX:83.3,MNO:100,SXT:16.7}],
+  ["Elizabethkingia anophelis","gn",5,"",{TZP:0,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,CIP:80,LVX:80,MNO:100,SXT:100}],
+  ["Salmonella Group C","gn",5,"",{AMP:40,SAM:50,CXM:0,FOX:0,CAZ:0,CRO:100,CTX:100,FEP:100,CZA:100,ETP:100,IPM:100,MEM:100,CIP:60,MNO:100,TGC:100,COL:100,SXT:60}],
+  ["Burkholderia multivorans","gn",4,"",{CAZ:100,MEM:50,LVX:75,MNO:100,SXT:100}],
+  ["Elizabethkingia sp.","gn",4,"",{TZP:25,CAZ:0,CRO:0,FEP:0,AMK:75,GEN:100,CIP:75,LVX:100,MNO:100,SXT:100}],
+  ["Salmonella Group B","gn",4,"",{AMP:0,SAM:25,CXM:0,FOX:0,CAZ:0,CRO:25,CTX:50,FEP:0,CZA:100,ETP:100,IPM:100,MEM:100,CIP:25,MNO:0,TGC:100,COL:100,SXT:25,TCY:0}],
+  ["Haemophilus parainfluenzae","gn",4,"",{AMP:75,SAM:75,CXM:75,CRO:100,CTX:100,MEM:100,CIP:75,SXT:75}],
+  ["Myroides sp.","gn",4,"",{TZP:50,CAZ:0,FEP:0,AMK:0,GEN:0,IPM:100,CIP:0,LVX:0,MNO:100,SXT:0}],
+  ["Elizabethkingia meningoseptica","gn",3,"",{TZP:0,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,CIP:100,LVX:100,MNO:100,SXT:100}],
+  ["Myroides odoratus","gn",3,"",{TZP:0,CAZ:0,FEP:0,AMK:0,GEN:0,CIP:66.7,LVX:66.7,MNO:100,SXT:66.7}],
+  ["Shigella flexneri","gn",3,"",{AMP:0,SAM:100,CRO:100,CTX:66.7,CIP:0,SXT:33.3}],
+  ["Sphingomonas paucimobilis","gn",3,"",{TZP:0,CAZ:0,FEP:0,AMK:33.3,GEN:33.3,IPM:100,CIP:33.3,LVX:33.3,MNO:100,SXT:66.7}],
+  ["Alcaligenes faecalis","gn",2,"",{TZP:100,CAZ:50,CRO:100,FEP:50,AMK:100,GEN:50,IPM:100,CIP:0,LVX:50,SXT:0}],
+  ["Acinetobacter junii","gn",2,"",{SAM:100,TZP:100,CAZ:50,CSL:100,FEP:50,AMK:100,GEN:50,IPM:100,MEM:100,CIP:100,LVX:100,MNO:100,TGC:100,COL:100,SXT:50}],
+  ["Acinetobacter pittii","gn",2,"",{SAM:100,TZP:100,CAZ:100,CSL:100,FEP:100,AMK:100,GEN:100,IPM:100,MEM:100,CIP:100,LVX:100,MNO:100,TGC:100,COL:100,SXT:100}],
+  ["Acinetobacter radioresistens","gn",2,"",{SAM:100,TZP:100,CAZ:100,CSL:100,FEP:100,AMK:100,GEN:50,IPM:100,MEM:100,CIP:100,LVX:100,MNO:50,TGC:100,COL:100,SXT:50}],
+  ["Delftia acidovorans","gn",2,"",{TZP:100,CAZ:50,FEP:0,AMK:0,GEN:0,IPM:100,CIP:50,LVX:50,MNO:100,SXT:100}],
+  ["Chryseobacterium sp.","gn",2,"",{TZP:100,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,IPM:0,CIP:50,LVX:50,MNO:100,SXT:100}],
+  ["Raoultella ornithinolytica","gn",2,"",{AMP:0,SAM:100,TZP:100,CZO:100,CXM:100,FOX:100,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:50,MNO:50,TGC:100,COL:100,SXT:50}],
+  ["Neisseria meningitidis","gn",2,"",{PEN:50,CRO:100,MEM:100,CIP:0}],
+  ["Providencia sp.","gn",2,"",{AMP:0,SAM:50,TZP:100,CXM:0,FOX:50,CAZ:50,CRO:50,FEP:100,AMK:50,GEN:50,ETP:50,MEM:100,CIP:50,MNO:0,SXT:100}],
+  ["Pseudomonas sp.","gn",2,"",{TZP:50,CAZ:50,FEP:0,AMK:100,GEN:50,IPM:100,MEM:0,CIP:0,LVX:0,SXT:50}],
+  ["Ralstonia sp.","gn",2,"",{TZP:0,CAZ:0,CRO:100,AMK:50,GEN:0,CIP:100,LVX:100,MNO:100,SXT:100}],
+  ["Acinetobacter johnsonii","gn",1,"",{SAM:100,TZP:100,CAZ:100,CSL:100,FEP:100,AMK:100,GEN:100,IPM:100,MEM:100,CIP:100,LVX:100,TGC:100}],
+  ["Aeromonas sobria","gn",1,"",{TZP:100,CAZ:100,CRO:100,FEP:100,AMK:100,GEN:100,ETP:100,IPM:0,MEM:100,CIP:100,LVX:100,SXT:100}],
+  ["Campylobacter jejuni","gn",1,"",{CIP:0,ERY:100,TCY:0}],
+  ["Campylobacter sp.","gn",1,"",{SAM:100,TZP:100,MTR:100,CLI:0,CMZ:100}],
+  ["Citrobacter braakii","gn",1,"",{AMP:0,SAM:100,TZP:100,CZO:0,CXM:100,FOX:0,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:100,MNO:100,TGC:100,COL:100,SXT:0}],
+  ["Campylobacter coli","gn",1,"",{CIP:0,ERY:0,TCY:0}],
+  ["Citrobacter sp.","gn",1,"",{AMP:0,SAM:100,TZP:100,CZO:0,CXM:100,FOX:0,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:100,MNO:100,TGC:100,SXT:100}],
+  ["Cronobacter sp.","gn",1,"",{AMP:100,SAM:100,TZP:100,CZO:0,CXM:100,FOX:100,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:100,MNO:100,TGC:100,COL:100,SXT:100}],
+  ["Chryseobacterium arthrosphaerae","gn",1,"",{TZP:100,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,CIP:0,LVX:100,SXT:100}],
+  ["Enterobacter gergoviae","gn",1,"",{AMP:100,SAM:100,TZP:100,CZO:100,CXM:100,FOX:100,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:100,MNO:100,TGC:100,SXT:100}],
+  ["Chryseobacterium gleum","gn",1,"",{TZP:100,CAZ:0,CRO:0,FEP:0,AMK:0,GEN:0,CIP:100,LVX:100,MNO:100,SXT:100}],
+  ["Salmonella Group E","gn",1,"",{AMP:0,SAM:0,CXM:0,FOX:0,CAZ:0,CRO:100,FEP:100,CZA:100,ETP:100,IPM:100,MEM:100,CIP:0,MNO:100,TGC:100,SXT:0}],
+  ["Leclercia adecarboxylata","gn",1,"",{AMP:100,SAM:100,TZP:100,CZO:100,CXM:100,FOX:100,CAZ:100,CRO:100,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,IPM:100,MEM:100,CIP:100,MNO:100,TGC:100,SXT:100}],
+  ["Brevundimonas diminuta","gn",1,"",{TZP:0,CAZ:0,FEP:0,AMK:100,GEN:100,CIP:0,LVX:0,SXT:100}],
+  ["Pseudomonas fluorescens","gn",1,"",{TZP:0,CAZ:0,FEP:0,AMK:100,GEN:0,MEM:100,CIP:0,LVX:0,MNO:0,SXT:0}],
+  ["Proteus penneri","gn",1,"",{AMP:0,SAM:0,TZP:100,CXM:0,FOX:100,CAZ:100,CRO:0,FEP:100,CZA:100,AMK:100,GEN:100,ETP:100,MEM:100,CIP:100,MNO:0,SXT:100}],
+  ["Pseudomonas stutzeri","gn",1,"",{TZP:100,CAZ:100,CRO:100,FEP:100,AMK:100,GEN:100,IPM:100,MEM:100,CIP:100,LVX:100,MNO:100,SXT:100}],
+  ["Salmonella sp.","gn",1,"",{AMP:0,CRO:100,CTX:100,CIP:0,SXT:0}],
+  ["Shigella sonnei","gn",1,"",{AMP:100,SAM:100,CRO:100,CTX:100,CIP:100,SXT:0}],
+  ["Shewanella sp.","gn",1,"",{TZP:100,CAZ:100,CRO:100,FEP:100,AMK:100,GEN:100,CIP:100,LVX:100,SXT:100}],
+  ["Staphylococcus aureus","gp",410,"MRSA 50.5%",{AMP:0,OXA:49.5,PEN:0,GEN:69.3,MNO:98.4,TCY:63.9,CIP:62,LVX:65.9,TEC:99.3,VAN:100,CLI:73.8,DAP:100,DOX:98,ERY:39.6,FUS:83.9,LNZ:100,SXT:95.1}],
+  ["Enterococcus faecalis","gp",252,"VREfc 0.8%",{AMP:99.6,PEN:97.2,GEH:57.1,MNO:11.6,TCY:6.2,CIP:61.1,LVX:83.7,TEC:99.2,VAN:99.2,DAP:80.3,ERY:0,LNZ:98}],
+  ["Streptococcus agalactiae","gp",190,"",{AMP:100,PEN:100,CRO:99.5,CTX:100,FEP:100,TCY:17.9,LVX:90.4,VAN:100,CLI:46,CHL:96.8,ERY:49}],
+  ["Staphylococcus epidermidis","gp",153,"",{OXA:30.7,PEN:0,GEN:48,MNO:99.1,TCY:67.5,CIP:63.2,LVX:66.4,TEC:97.3,VAN:100,CLI:37.5,DAP:100,DOX:83.3,ERY:37.5,FUS:50.3,LNZ:100,SXT:67.3}],
+  ["Streptococcus anginosus","gp",150,"",{AMP:93.9,PEN:100,CRO:99.3,CTX:100,FEP:95.2,LVX:100,VAN:100,CLI:78.1,CHL:94.4,ERY:78.1}],
+  ["Enterococcus faecium","gp",139,"VREfm 58.3%",{AMP:8.6,PEN:9.4,GEH:64,MNO:48,TCY:39.2,CIP:12.4,LVX:20,TEC:43.9,VAN:41.7,DAP:95.6,ERY:4.9,LNZ:100,SXT:0}],
+  ["Staphylococcus capitis","gp",93,"",{OXA:36.6,GEN:30.1,MNO:80.5,TCY:67.7,CIP:58.1,LVX:62.4,TEC:88.2,VAN:100,CLI:54,DAP:100,DOX:75.3,ERY:54,FUS:36.6,LNZ:100,SXT:82.8}],
+  ["Streptococcus viridans","gp",76,"",{AMP:52.9,PEN:55.6,CRO:88.2,CTX:87,FEP:66.7,LVX:77.8,VAN:100,CLI:73.3,CHL:90,ERY:47.8}],
+  ["Staphylococcus caprae","gp",48,"",{OXA:43.8,GEN:33.3,MNO:95.5,TCY:87.5,CIP:43.8,LVX:41.7,TEC:97.9,VAN:100,CLI:50,DAP:100,DOX:97.9,ERY:43.2,FUS:37.5,LNZ:100,SXT:70.8}],
+  ["Streptococcus constellatus","gp",41,"",{AMP:84.6,PEN:93.3,CRO:100,CTX:100,FEP:100,LVX:95.7,VAN:100,CLI:78.8,CHL:100,ERY:87.9}],
+  ["Staphylococcus lugdunensis","gp",41,"",{OXA:73.2,GEN:70.7,MNO:97.1,TCY:75.6,CIP:92.7,LVX:95.1,TEC:95.1,VAN:100,CLI:74.3,DAP:100,DOX:100,ERY:77.1,FUS:82.9,LNZ:100,SXT:97.6}],
+  ["Staphylococcus haemolyticus","gp",37,"",{OXA:8.1,GEN:29.7,MNO:85.7,TCY:45.9,CIP:48.6,LVX:51.4,TEC:91.9,VAN:100,CLI:28.6,DAP:100,DOX:73,ERY:28.6,FUS:54.1,LNZ:100,SXT:67.6}],
+  ["Staphylococcus sp.","gp",24,"",{OXA:50,GEN:87.5,MNO:100,TCY:91.7,CIP:70.8,LVX:66.7,TEC:95.8,VAN:100,CLI:50,DAP:100,DOX:100,ERY:45.5,FUS:52.2,LNZ:100,SXT:87.5}],
+  ["Staphylococcus hominis","gp",23,"",{OXA:30.4,GEN:87,MNO:91.3,TCY:56.5,CIP:60.9,LVX:65.2,TEC:100,VAN:100,CLI:43.5,DAP:100,DOX:91.3,ERY:39.1,FUS:43.5,LNZ:100,SXT:52.2}],
+  ["Staphylococcus warneri","gp",17,"",{OXA:70.6,GEN:41.2,MNO:100,TCY:70.6,CIP:100,LVX:100,TEC:94.1,VAN:100,CLI:64.7,DAP:100,DOX:100,ERY:52.9,FUS:94.1,LNZ:100,SXT:100}],
+  ["Streptococcus dysgalactiae","gp",15,"",{AMP:100,PEN:100,CRO:100,CTX:100,FEP:100,TCY:20,LVX:77.8,VAN:100,CLI:66.7,CHL:100,ERY:58.3}],
+  ["Streptococcus gallolyticus","gp",12,"",{AMP:100,PEN:100,CRO:100,CTX:100,FEP:100,LVX:100,VAN:100,CLI:0,ERY:0}],
+  ["Staphylococcus saprophyticus","gp",11,"",{OXA:72.7,GEN:63.6,MNO:100,TCY:72.7,CIP:90.9,LVX:100,TEC:100,VAN:100,CLI:66.7,DAP:100,DOX:90,ERY:33.3,FUS:0,LNZ:100,SXT:81.8}],
+  ["Enterococcus avium","gp",8,"",{AMP:62.5,PEN:50,GEH:87.5,MNO:0,TCY:50,CIP:50,LVX:100,TEC:100,VAN:100,LNZ:100}],
+  ["Streptococcus salivarius","gp",8,"",{AMP:66.7,PEN:0,CRO:100,CTX:100,FEP:100,LVX:100,VAN:100,CLI:62.5,CHL:100,ERY:62.5}],
+  ["Streptococcus pyogenes","gp",7,"",{AMP:100,PEN:100,CRO:100,CTX:100,FEP:100,TCY:0,LVX:83.3,VAN:100,CLI:50,CHL:100,ERY:33.3}],
+  ["Staphylococcus simulans","gp",7,"",{OXA:57.1,GEN:100,MNO:100,TCY:71.4,CIP:100,LVX:100,TEC:100,VAN:100,CLI:100,DAP:100,DOX:100,ERY:100,FUS:100,LNZ:100,SXT:100}],
+  ["Enterococcus gallinarum","gp",6,"",{AMP:100,PEN:83.3,GEH:83.3,MNO:0,TCY:33.3,CIP:50,TEC:100,VAN:0,DAP:75,ERY:100,LNZ:83.3}],
+  ["Enterococcus raffinosus","gp",6,"",{AMP:50,PEN:33.3,GEH:100,MNO:33.3,TCY:0,CIP:100,LVX:100,TEC:100,VAN:100,DAP:100,ERY:66.7,LNZ:100}],
+  ["Streptococcus parasanguinis","gp",6,"",{AMP:20,PEN:40,CRO:100,CTX:100,FEP:100,LVX:80,VAN:100,CLI:60,CHL:100,ERY:20}],
+  ["Streptococcus sanguinis","gp",6,"",{AMP:66.7,PEN:75,CRO:100,CTX:100,FEP:100,LVX:100,VAN:100,CLI:66.7,CHL:100,ERY:33.3}],
+  ["Streptococcus vestibularis","gp",6,"",{AMP:100,PEN:100,CRO:100,CTX:100,FEP:100,VAN:100,CLI:0,CHL:100,ERY:0}],
+  ["Streptococcus intermedius","gp",5,"",{AMP:100,PEN:100,CRO:100,CTX:100,FEP:100,LVX:100,VAN:100,CLI:80,CHL:100,ERY:80}],
+  ["Staphylococcus, coagulase negative","gp",4,"CONS",{OXA:25,GEN:100,MNO:100,TCY:75,CIP:100,LVX:75,TEC:100,VAN:100,CLI:0,DAP:100,DOX:100,ERY:0,FUS:100,LNZ:100,SXT:25}],
+  ["Streptococcus gordonii","gp",4,"",{AMP:100,PEN:100,CRO:100,CTX:100,VAN:100,CLI:100,CHL:100,ERY:100}],
+  ["Staphylococcus sciuri","gp",4,"",{OXA:25,GEN:75,MNO:100,TCY:100,CIP:100,LVX:100,TEC:100,VAN:100,CLI:0,DAP:100,DOX:100,ERY:75,FUS:0,LNZ:100,SXT:100}],
+  ["Staphylococcus cohnii","gp",3,"",{OXA:0,GEN:100,MNO:100,TCY:100,CIP:100,LVX:100,TEC:100,VAN:100,CLI:33.3,DAP:100,DOX:100,ERY:0,FUS:66.7,LNZ:100,SXT:100}],
+  ["Enterococcus casseliflavus","gp",2,"",{AMP:100,PEN:100,GEH:100,TCY:0,TEC:100,VAN:0,DAP:100,ERY:100,LNZ:100}],
+  ["Enterococcus hirae","gp",2,"",{AMP:100,PEN:100,GEH:100,TCY:0,CIP:100,TEC:100,VAN:100,DAP:50,LNZ:100}],
+  ["Streptococcus sp.","gp",2,"",{PEN:100,CRO:100,CTX:100,VAN:100,CLI:50,CHL:100,ERY:50}],
+  ["Streptococcus alactolyticus","gp",1,"",{AMP:0,PEN:0,CRO:0,CTX:0,FEP:100,LVX:100,VAN:100,CLI:0,CHL:100,ERY:100}],
+  ["Streptococcus pneumoniae","gp",14,"",{PEN:92.9,PENm:28.6,CRO:100,CROm:100,CTX:100,CTXm:100,FEP:81.8,FEPm:54.5,TCY:14.3,LVX:85.7,VAN:100,CLI:53.8,CHL:92.3,ERY:38.5,SXT:71.4}]
+];
+const ABG_CODE = {AMP:"Ampicillin",PEN:"Penicillin",SAM:"Ampicillin-sulbactam",TZP:"Piperacillin-tazobactam",CZO:"Cefazolin",CXM:"Cefuroxime",FOX:"Cefoxitin",CAZ:"Ceftazidime",CRO:"Ceftriaxone",CTX:"Cefotaxime",CSL:"Cefoperazone-sulbactam",FEP:"Cefepime",CZA:"Ceftazidime-avibactam",AMK:"Amikacin",GEN:"Gentamicin",ETP:"Ertapenem",IPM:"Imipenem",MEM:"Meropenem",CIP:"Ciprofloxacin",LVX:"Levofloxacin",MNO:"Minocycline",TGC:"Tigecycline",COL:"Colistin",ERY:"Erythromycin",SXT:"TMP-SMX",TCY:"Tetracycline",MTR:"Metronidazole",CLI:"Clindamycin",CMZ:"Cefmetazole",OXA:"Oxacillin",GEH:"Gentamicin 高濃度（協同）",TEC:"Teicoplanin",VAN:"Vancomycin",CHL:"Chloramphenicol",DAP:"Daptomycin",DOX:"Doxycycline",FUS:"Fusidic acid",LNZ:"Linezolid"};
+// 原表數值異常（自動藥敏套組無 cefotaxime；其他腸道菌 levofloxacin 皆未報）→ 不採用，請檢驗科確認
+const ABG_BAD = {"Escherichia coli":["CTX","LVX"],"Klebsiella pneumoniae":["CTX","LVX"]};
+const ABG_MIN = 30;   // CLSI M39：≥30 株才列入判讀
+// app 菌種 → 院內表菌名（第一個為代表菌）
+const ABG_PATH = {ecoli:["Escherichia coli"],kpn:["Klebsiella pneumoniae"],pmir:["Proteus mirabilis"],psa:["Pseudomonas aeruginosa"],
+  ampc:["Klebsiella aerogenes","Enterobacter hormaechei","Enterobacter cloacae","Citrobacter freundii"],efae:["Enterococcus faecalis","Enterococcus faecium"],
+  saur:["Staphylococcus aureus"],ssap:["Staphylococcus saprophyticus"],spn:["Streptococcus pneumoniae"],gas:["Streptococcus pyogenes"],gbs:["Streptococcus agalactiae"],
+  vgs:["Streptococcus anginosus","Streptococcus viridans","Streptococcus constellatus"],cons:["Staphylococcus epidermidis","Staphylococcus capitis","Staphylococcus haemolyticus"],
+  hflu:["Haemophilus influenzae"],ngon:["Neisseria gonorrhoeae"],nmen:["Neisseria meningitidis"],abau:["Acinetobacter baumannii"],smalt:["Stenotrophomonas maltophilia"],aero:["Aeromonas veronii","Aeromonas hydrophila","Aeromonas caviae"]};
+// app 藥物 → 院內表代碼（直接對應）；替代推估另見 abgVal
+const ABG_DRUG = {ampicillin:"AMP",penG:"PEN",ampsulb:"SAM",piptazo:"TZP",cefazolin:"CZO",cefuroxime:"CXM",caz:"CAZ",ceftriaxone:"CRO",cps:"CSL",cefepime:"FEP",cza:"CZA",
+  amikacin:"AMK",gent:"GEN",ertapenem:"ETP",imipenem:"IPM",meropenem:"MEM",cipro:"CIP",levo:"LVX",mino:"MNO",tige:"TGC",colistin:"COL",tmpsmx:"SXT",
+  vanco:"VAN",teico:"TEC",dapto:"DAP",linezolid:"LNZ",clinda:"CLI",fusidic:"FUS",doxy:"DOX",oxa:"OXA"};
+let ABG_NOW = ()=>new Date();
+const abgStale = ()=> (ABG_NOW()-new Date(ABG.end+"T23:59:59+08:00"))/864e5 > 365;   // IDSA cUTI 2025：近 12 個月
+const abgRow = n=>ABG_ROWS.find(r=>r[0]===n);
+const abgShort = n=>/coagulase/.test(n)?"CoNS":n.replace(/^(\w)\w+ /,"$1. ");
+const abgCls = v=>v>=90?"hi":v>=80?"mid":"lo";
+const abgFmt = v=>Number(v).toFixed(1).replace(/\.0$/,"");
+// 回傳 {v, code, sur（推估說明）, i（colistin 為 %I）, men（腦膜炎判讀）, bad（數值異常）} 或 null
+function abgVal(name,dk,men){
+  const r=abgRow(name); if(!r) return null;
+  const V=r[4], bad=ABG_BAD[name]||[];
+  const get=(c,sur)=>{ if(bad.includes(c)) return {v:null,code:c,bad:true}; const k=men&&V[c+"m"]!==undefined?c+"m":c; if(V[k]===undefined) return null; return {v:V[k],code:c,sur:sur||"",i:c==="COL",men:k!==c}; };
+  if(dk==="gent"&&/^Enterococcus/.test(name)) return get("GEH","高濃度協同篩檢");
+  const x=ABG_DRUG[dk]?get(ABG_DRUG[dk]):null; if(x) return x;
+  if(/^Staphylococcus/.test(name)&&["cefazolin","cephalexin"].includes(dk)) return get("OXA","依 oxacillin");
+  if(dk==="amoxicillin") return get("AMP","依 ampicillin");
+  if(dk==="doxy") return get("TCY","依 tetracycline");
+  if(dk==="azithro"&&/^Streptococcus/.test(name)) return get("ERY","依 erythromycin");
+  return null;
+}
+function abgOrgs(pids,firstOnly){
+  const out=[];
+  pids.forEach(p=>{ for(const n of (ABG_PATH[p]||[])){ const r=abgRow(n); if(r&&r[2]>=ABG_MIN&&!out.includes(n)){ out.push(n); if(firstOnly) break; } } });
+  return out;
+}
+let ABGX = null;   // 經驗性／標靶方案卡的院內資料情境：{orgs,max,men,one,sub,sev}
+function abgLine(dk){
+  const X=ABGX; if(!X||X.skip||!X.orgs.length) return "";
+  const it=[];
+  for(const n of X.orgs){ const x=abgVal(n,dk,X.men); if(!x||x.bad) continue;
+    it.push(`<i>${abgShort(n)}</i> <b class="abgv ${abgCls(x.v)}">${abgFmt(x.v)}</b>${x.i?`<span class="muted">（%I）</span>`:""}${x.sur?`<span class="muted">（${x.sur}）</span>`:""}`);
+    if(it.length>=X.max) break; }
+  if(!it.length) return "";
+  return `<div class="rx-meta abg"><button class="linkbtn" type="button" data-act="abg-go" data-v="${X.orgs[0]}">院內 %S</button> ${it.join("・")}</div>`;
+}
+// 指引門檻（只用於經驗性方案卡；標靶治療依該菌株藥敏，不套用）
+const ABG_UTI = ["pyelo","cuti","cauti","abp","uti_unk"], ABG_IAI = ["ciai_mild","ciai_sev","biliary","iai_unk"];
+function abgWarn(o){
+  const X=ABGX; if(!X||X.one||abgStale()) return "";
+  if(/^加上|另加|^升階/.test(o.tier)) return "";
+  const ds=[...new Set((o.regs||[]).map(r=>REG[r]&&REG[r].d).filter(Boolean))];
+  const EC="Escherichia coli", KP="Klebsiella pneumoniae", out=[];
+  const val=(n,dk)=>{ const x=abgVal(n,dk); return x&&!x.bad?x.v:null; };
+  const nm=dk=>abgLc(D[dk].n), seen=new Set(), push=(k,x)=>{ if(!seen.has(k)){ seen.add(k); out.push(x); } };
+  for(const dk of ds){
+    if(X.sub==="cys"&&dk==="tmpsmx"){ const v=val(EC,dk); if(v!==null&&100-v>20) push("sxt",[`院內 E. coli 對 TMP-SMX 感受 ${abgFmt(v)}%（不感受 ${abgFmt(100-v)}%）。IDSA/ESCMID 2010 Rec 2：當地抗藥率不超過 20% 才適合經驗使用（A-I）。`,["IDSA_cys10","ABG_SH"]]); }
+    if(X.sub==="pyelo"&&X.sev==="none"&&["cipro","levo"].includes(dk)){ const v=val(EC,"cipro"); if(v!==null&&100-v>10) push("fq",[`院內 E. coli 對 ciprofloxacin 感受 ${abgFmt(v)}%（不感受 ${abgFmt(100-v)}%${ds.includes("levo")?"；院內無腸道菌 levofloxacin 資料，以 ciprofloxacin 計":""}）。IDSA/ESCMID 2010 Rec 9：FQ 抗藥率超過 10% 時，先給一劑 IV ceftriaxone 1 g 或 24 小時劑量 aminoglycoside（B-III）。`,["IDSA_cys10","ABG_SH"]]); }
+    if(ABG_UTI.includes(X.sub)&&(X.sev==="sepsis"||X.sev==="shock")&&(o.regs||[]).some(r=>REG[r]&&REG[r].d===dk&&/IV/.test(REG[r].r))){
+      const T=X.sev==="shock"?90:80, low=[EC,KP].map(n=>[n,val(n,dk)]).filter(([,v])=>v!==null&&v<T);
+      if(low.length) out.push([`院內 ${low.map(([n,v])=>`${abgShort(n)} 對 ${nm(dk)} 感受 ${abgFmt(v)}%`).join("、")}，低於 IDSA cUTI 2025 的${X.sev==="shock"?"休克 ≥90%":"敗血症（無休克）≥80%"}選藥門檻（conditional，very low certainty）。`,["IDSA_cUTI25","ABG_SH"]]);
+    }
+    if(ABG_IAI.includes(X.sub)&&["cipro","levo","moxi"].includes(dk)){ const v=val(EC,"cipro"); if(v!==null&&v<=90) push("fqiai",[`院內 E. coli 對 ciprofloxacin 感受 ${abgFmt(v)}%。SIS/IDSA 2010：醫院資料顯示 E. coli 對 quinolone 感受 >90% 才使用。`,["IDSA_IAI10","ABG_SH"]]); }
+  }
+  return out.map(([t,s])=>`<div class="cond abgw">${t}${srcTags(s)}</div>`).join("");
+}
+// HAP／VAP：院內 MRSA 比例與 P. aeruginosa 單一藥抗藥率，對照 IDSA/ATS 2016 門檻（不改建議）
+function abgHapNote(sub){
+  if(abgStale()) return null;
+  const sa=abgVal("Staphylococcus aureus","oxa"), pa=n=>abgVal("Pseudomonas aeruginosa",n);
+  const mr=sa?100-sa.v:null, vap=sub==="vap", hap=sub==="hap"||sub==="hap_hr";
+  const ps=["piptazo","cefepime","meropenem","caz"].map(k=>[k,pa(k)]).filter(([,x])=>x);
+  let t=`院內（全院）S. aureus 中 MRSA ${abgFmt(mr)}%：`;
+  t+=vap?"VAP 在 MRSA >10–20% 時經驗性涵蓋 MRSA。":hap?"HAP 在所屬單位 MRSA >20% 時視為 MRSA 危險因子。":"VAP 門檻 >10–20%；HAP 為所屬單位 >20%。";
+  if(!hap) t+=` P. aeruginosa 感受：${ps.map(([k,x])=>`${abgLc(D[k].n)} ${abgFmt(x.v)}%`).join("、")}；VAP 在單一藥抗藥 >10% 時考慮兩種不同類 anti-pseudomonal。`;
+  t+=" 指引建議以單位別（如 ICU）資料為準，院內表為全院累積。";
+  return {lvl:"warn",t,src:["IDSA_HAP16","ABG_SH"]};
+}
+// 標靶面板頂端：全院此菌所有菌株（不分表現型）的關鍵藥物 %S，用來估計表現型機率；逐藥 %S 會與所選表現型矛盾，故不放在方案卡
+const ABG_PHK = {ent:["ceftriaxone","ertapenem"],ampc:["ceftriaxone","cefepime"],psa:["piptazo","cefepime","meropenem"],entc:["ampicillin","vanco"],sa:["oxa"],hflu:["ampicillin"],spn:["penG","ceftriaxone"],
+  strep:["penG","ceftriaxone","clinda"],gas:["penG","clinda"],cons:["oxa","vanco"],ssap:["oxa","tmpsmx"],ab:["meropenem","ampsulb","colistin"],smalt:["tmpsmx","levo","mino"],ng:["ceftriaxone","cipro"],aero:["ceftriaxone","cipro"]};
+const abgLc = n=>n.replace(/^([A-Z])(?=[a-z])/,c=>c.toLowerCase());
+function abgTgtNote(pid,men){
+  const p=PATH[pid], ks=ABG_PHK[p.g]||[];
+  const orgs=(ABG_PATH[pid]||[]).map(abgRow).filter(r=>r&&r[2]>=ABG_MIN).slice(0,3);
+  if(!orgs.length) return "";
+  const one=r=>{ const vs=ks.map(k=>[k,abgVal(r[0],k,men)]).filter(([,x])=>x&&!x.bad);
+    return `<i>${abgShort(r[0])}</i>（n=${r[2].toLocaleString("en-US")}${r[3]&&!/CONS/.test(r[3])?`・${r[3]}`:""}）${vs.length?"："+vs.map(([k,x])=>`${abgLc(D[k].n)} ${abgFmt(x.v)}%${x.i?"（%I）":""}${x.sur?`（${x.sur}）`:""}`).join("、"):""}`; };
+  return `<div class="note mt" style="margin-bottom:10px"><b>院內 %S（${ABG.short}）</b>${orgs.map(one).join("；")}。全院累積、不分表現型，用來估計抗藥機率；確定治療依本菌株藥敏。${abgStale()?"<b>資料已超過 12 個月。</b>":""} <button class="linkbtn" type="button" data-act="abg-go" data-v="${orgs[0][0]}">完整 %S ›</button>${srcTags(["ABG_SH"])}</div>`;
+}
+function abgCtxUTI(){
+  const r=abgRow("Escherichia coli"); if(!r) return "";
+  const ks=[["ceftriaxone","CRO"],["cefazolin","CZO"],["cipro","CIP"],["tmpsmx","SXT"],["piptazo","TZP"],["ertapenem","ETP"],["amikacin","AMK"]];
+  return ` 院內（${ABG.short}，全院）E. coli 感受：${ks.map(([k,c])=>`${abgLc(D[k].n)} ${abgFmt(r[4][c])}%`).join("、")}（n=${r[2].toLocaleString("en-US")}）。`;
+}
+function renderAbg(){
+  const sp=S.spec, cur=abgRow(sp.abg)||ABG_ROWS[0], st=abgStale();
+  const chip=r=>`<button class="chip" type="button" data-act="abg-org" data-v="${r[0]}" aria-pressed="${r[0]===cur[0]}"><i>${r[2]>=ABG_MIN?abgShort(r[0]):r[0]}</i><span class="n" style="margin:0 0 0 6px">${r[2]}</span></button>`;
+  const big=g=>ABG_ROWS.filter(r=>r[1]===g&&r[2]>=ABG_MIN), small=ABG_ROWS.filter(r=>r[2]<ABG_MIN);
+  let h=`<div class="note${st?" warn":""}"><b>院內 antibiogram：${ABG.per}</b>${st?"　<b>資料已超過 12 個月，可能過期。</b>":""}<div class="mt">全院累積、以病人數計；未分檢體、病房與門急住，社區感染的菌株通常較感受。判讀依 CLSI M100-Ed35。株數 &lt;30 不列入判讀（CLSI M39）。顏色 ≥90%、80–89%、&lt;80% 為介面分級，不是指引門檻。</div>${srcTags(["ABG_SH","M39"])}</div>`;
+  h+=`<div class="step mt"><h3>革蘭氏陰性菌</h3><div class="chips">${big("gn").map(chip).join("")}</div></div>`;
+  h+=`<div class="step"><h3>革蘭氏陽性菌</h3><div class="chips">${big("gp").map(chip).join("")}</div>
+    <details class="more"${cur[2]<ABG_MIN?" open":""}><summary>株數 &lt;30 的菌種（${small.length}）</summary><div class="chips mt">${small.map(chip).join("")}</div></details></div>`;
+  const V=cur[4], bad=ABG_BAD[cur[0]]||[], spn=V.PENm!==undefined;
+  const codes=Object.keys(ABG_CODE).filter(c=>V[c]!==undefined);
+  const cell=(v,c)=>`<b class="abgv ${abgCls(v)}">${abgFmt(v)}</b>${c==="COL"?` <span class="muted">%I</span>`:""}`;
+  const rows=codes.map(c=>`<tr><td>${ABG_CODE[c]}</td><td>${bad.includes(c)?`<span class="flag warn">數值異常・請確認</span>`:spn&&V[c+"m"]!==undefined?`非腦膜炎 ${cell(V[c],c)}　腦膜炎 ${cell(V[c+"m"],c)}`:cell(V[c],c)}</td></tr>`).join("");
+  h+=`<div id="specAdv" class="opt primary"><div class="opt-head"><span class="tier primary"><i>${cur[0]}</i></span><span class="flag info">n=${cur[2].toLocaleString("en-US")}</span>${cur[3]?`<span class="flag warn">${cur[3]}</span>`:""}${cur[2]<ABG_MIN?`<span class="flag warn">株數 &lt;30，數字不穩定</span>`:""}</div>
+    <div class="tbl-wrap"><table><thead><tr><th>藥物</th><th>%S</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${V.COL!==undefined?`<div class="onote">Colistin 只報 %I：CLSI 認為 colistin 的 S 判讀不可靠。</div>`:""}
+    ${bad.length?`<div class="onote">${bad.map(c=>ABG_CODE[c]).join("、")}：原表為 ${bad.map(c=>abgFmt(V[c])+"%").join("、")}，與其他腸道菌不一致（自動藥敏套組無 cefotaxime），app 不採用。</div>`:""}
+    ${spn?`<div class="onote">S. pneumoniae 的 penicillin、ceftriaxone、cefotaxime、cefepime 依腦膜炎與非腦膜炎分開判讀。</div>`:""}
+  </div>`;
+  h+=`<div class="hint">院內表沒有：nitrofurantoin、fosfomycin、flomoxef、cefmetazole、ceftolozane-tazobactam、moxifloxacin、metronidazole（厭氧菌未列）。Staphylococcus 的 cefazolin、cephalexin 依 oxacillin；amoxicillin 依 ampicillin；doxycycline 未測時依 tetracycline（CLSI M100）。</div>`;
+  return h;
+}
+function abgCmpBlock(keys){
+  const ds=keys.map(k=>(SPEC_ROWS.find(r=>r[0]===k)||[])[1]).filter(Boolean);
+  const rows=ABG_ROWS.filter(r=>r[2]>=ABG_MIN&&ds.some(dk=>{ const x=abgVal(r[0],dk); return x&&!x.bad; }));
+  if(!rows.length) return "";
+  const td=(n,dk)=>{ const x=abgVal(n,dk); return `<td>${!x||x.bad?`<span class="muted">–</span>`:`<b class="abgv ${abgCls(x.v)}">${abgFmt(x.v)}</b>${x.i?`<span class="muted">%I</span>`:""}`}</td>`; };
+  return `<details class="more mt"><summary>院內感受率（${ABG.short}，全院 %S）</summary>
+    <div class="tbl-wrap mt"><table><thead><tr><th>菌種（n）</th>${ds.map(dk=>`<th>${D[dk].n}</th>`).join("")}</tr></thead><tbody>
+    ${rows.map(r=>`<tr><td><i>${abgShort(r[0])}</i> <span class="muted">${r[2]}</span></td>${ds.map(dk=>td(r[0],dk)).join("")}</tr>`).join("")}
+    </tbody></table></div><div class="hint">– 為未測、不適用或數值異常。只列 ≥30 株的菌種。<button class="linkbtn" type="button" data-act="spec-view" data-v="abg">院內 antibiogram ›</button></div></details>`;
+}
 function renderSpec(){
   const sp=S.spec;
-  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["cmp","比較"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
+  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["cmp","比較"],["abg","院內"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"],["corr","校正紀錄"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
   const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
   if(sp.view==="bac"){
     h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。要並列 2–4 個藥：<button class="linkbtn" type="button" data-act="spec-view" data-v="cmp">比較 ›</button>${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
@@ -2029,6 +2291,8 @@ function renderSpec(){
     h+=`${renalBar()}${legend}<div class="hint">點菌種或藥名。</div>${fungalGrid()}<div id="specAdv" class="res mt">${fungalAdvice()}</div>`;
   } else if(sp.view==="cmp"){
     h+=renderCmp();
+  } else if(sp.view==="abg"){
+    h+=renderAbg();
   } else if(sp.view==="pk"){
     h+=`<div class="tbl-wrap"><table><thead><tr><th>藥物類別</th><th>PK/PD 指標</th><th>殺菌／抑菌</th><th>臨床應用</th></tr></thead><tbody>${PKPD.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table></div>${srcTags(["MANDELL","VANCO20"])}`;
   } else if(sp.view==="mdr"){
@@ -2081,6 +2345,8 @@ Object.assign(REF,{
   AGA_CDI26:{s:"AGA CDI 2026",f:"American Gastroenterological Association. Management of Clostridioides difficile Infection in Adults（2026-06-30）。依 Guideline Central 摘要核對：首次非猛爆型 fidaxomicin 優先、vancomycin 可接受；metronidazole 不用於非猛爆型；第一次復發 vancomycin 遞減或 fidaxomicin；第二次復發後糞便微菌叢治療。"},
   IDSA_CDI21:{s:"IDSA/SHEA CDI 2021",f:"Johnson S, et al. Clinical Practice Guideline by IDSA and SHEA: 2021 Focused Update Guidelines on Management of Clostridioides difficile Infection in Adults. Clin Infect Dis 2021;73:e1029-44."},
   BEZLO:{s:"Bezlotoxumab 下市",f:"Merck 於 2025 年初將 bezlotoxumab（ZINPLAVA）自全球市場撤出。"},
+  ABG_SH:{s:"院內 antibiogram 115Q1",f:"衛生福利部雙和醫院（委託臺北醫學大學興建經營）全院常見菌種抗生素敏感試驗表，115 年第一季（2026-01～03），革蘭氏陰性菌與革蘭氏陽性菌兩表。依 CLSI M100-Ed35（2025）判讀；以病人數計；全院累積，未分檢體與病房。Colistin 只報 %I。E. coli、K. pneumoniae 的 cefotaxime 與 levofloxacin 原表為 0% 與 100%，與其他腸道菌不一致（自動藥敏套組無 cefotaxime），app 未採用，請向檢驗科確認。Staphylococcus 的 cefazolin、cephalexin 依 oxacillin，amoxicillin 依 ampicillin，doxycycline 未測時依 tetracycline，azithromycin 依 erythromycin（革蘭氏陽性菌），依 CLSI M100 的替代藥原則。"},
+  M39:{s:"CLSI M39",f:"CLSI M39 Analysis and Presentation of Cumulative Antimicrobial Susceptibility Test Data（5th ed）：只列入分析期間 ≥30 株的菌種，每位病人每期取第一株。依 Tran C, et al. Estimated Impact of Low Isolate Numbers on the Reliability of Cumulative Antibiogram Data. Microbiol Spectr 2023;11:e03939-22 引述。"},
   IDSA_HAP16:{s:"IDSA/ATS HAP/VAP 2016",f:"Kalil AC, et al. Management of Adults With Hospital-acquired and Ventilator-associated Pneumonia: 2016 Clinical Practice Guidelines by IDSA and ATS. Clin Infect Dis 2016;63:e61-111."},
   ERS_HAP17:{s:"ERS/ESICM HAP/VAP 2017",f:"Torres A, et al. International ERS/ESICM/ESCMID/ALAT guidelines for the management of HAP and VAP. Eur Respir J 2017;50:1700582."},
   ECMM_CAND25:{s:"ECMM Candida 2025",f:"Cornely OA, et al. Global guideline for the diagnosis and management of candidiasis: an initiative of ECMM in cooperation with ISHAM and ASM. Lancet Infect Dis 2025."}
@@ -2814,6 +3080,7 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
+    <div class="note">2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。</div>
     <div class="note">2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。</div>
     <div class="note">2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。</div>
     <div class="note">2026-10-25 全面查證：逐一確認出處有無新版；已改用 IDSA AMR 2026、SSC 2026、EAU 2026、IDSA/ESCMID SAB 2026、AGA CDI 2026、ECMM 隱球菌 2024、IDSA Histoplasma 2025，並列出 IDSA cIAI 2024 Part 1 與 SIS 2024（全文未核對）。其餘指引查無更新版本。</div>
@@ -3458,6 +3725,8 @@ if(typeof document!=="undefined"){
     else if(a==="cmp-clear"){ S.spec[S.spec.cmpt==="fun"?"cmpf":"cmp"]=[]; S.spec.cell=null; UI.cmpPick=true; }
     else if(a==="cmp-pick") UI.cmpPick=!UI.cmpPick;
     else if(a==="cmp-cell"){ const [r,k]=v.split("|"); const c=S.spec.cell; S.spec.cell=c&&String(c[0])===r&&c[1]===k?null:[r,k]; jump=!!S.spec.cell; }
+    else if(a==="abg-org"){ S.spec.abg=v; }
+    else if(a==="abg-go"){ S.tab="spec"; S.spec.view="abg"; S.spec.abg=v; UI.more=false; scrollTo(0,0); }
     else if(a==="cmp-set"){ const [t,ks]=v.split("|"); cmpSet(t,ks.split(",")); UI.more=false; scrollTo(0,0); }
     else if(a==="cmp-open"){ S.spec.view="cmp"; S.spec.cmpt="bac"; S.spec.cell=null; UI.cmpPick=S.spec.cmp.length<2; scrollTo(0,0); }
     else if(a==="cmp-tog"){ const L=S.spec.cmp, i=L.indexOf(v);

@@ -152,6 +152,24 @@ with sync_playwright() as p:
                 tray.click(); pg.wait_for_timeout(30)
                 if pg.locator("#main [data-act=cmp-cell]").count()!=2*13: issues.append(f"{W}: 已選列開啟的比較表格數錯")
             check(pg, W, "已選列 → 比較")
+            # v1.3 院內 antibiogram：抗菌譜「院內」、切換菌種、方案卡院內 %S、標靶摘要、比較表院內區塊
+            go_tab(pg, "spec"); pg.locator("button.chip[data-act=spec-view][data-v=abg]").click(); pg.wait_for_timeout(30)
+            if "115 年第一季" not in pg.inner_text("#main"): issues.append(f"{W}: 院內檢視未開啟")
+            for o in ["Klebsiella pneumoniae","Staphylococcus aureus","Streptococcus pneumoniae"]:
+                if o=="Streptococcus pneumoniae": pg.evaluate("document.querySelectorAll('#main details').forEach(d=>d.open=true)")
+                pg.locator(f"[data-act=abg-org][data-v='{o}']").click(); pg.wait_for_timeout(30)
+                if o not in pg.inner_text("#specAdv"): issues.append(f"{W}: 院內檢視切換 {o} 失敗")
+                check(pg, W, f"院內 {o}")
+            go_tab(pg, "emp"); pg.evaluate("S.sys='gu';S.sub='pyelo';S.sev='sepsis';S.path=null;UI.edit=null;renderMain()"); pg.wait_for_timeout(30)
+            if pg.locator("#main .rx-meta.abg").count()==0: issues.append(f"{W}: 方案卡沒有院內 %S")
+            if pg.locator("#main .cond.abgw").count()==0: issues.append(f"{W}: 敗血症缺院內門檻提示")
+            check(pg, W, "經驗性 院內 %S")
+            pg.locator("#main .rx-meta.abg [data-act=abg-go]").first.click(); pg.wait_for_timeout(30)
+            if "Escherichia coli" not in pg.inner_text("#specAdv"): issues.append(f"{W}: 院內 %S 連結未開院內檢視")
+            go_tab(pg, "emp"); pg.evaluate("S.sev='none';S.path='saur';S.ph='MSSA';renderMain()"); pg.wait_for_timeout(30)
+            if "院內 %S（115Q1）" not in pg.inner_text("#main"): issues.append(f"{W}: 標靶缺院內摘要")
+            check(pg, W, "標靶 院內摘要")
+            pg.evaluate("S.path=null;S.ph=null;renderMain()")
             # 經驗性治療方案卡「比較這 N 個藥」
             go_tab(pg, "emp"); pg.evaluate("S.sys='gu';S.sub='cauti';S.sev='none';S.path=null;UI.edit=null;renderMain()"); pg.wait_for_timeout(30)
             cl = pg.locator("#main [data-act=cmp-set]").first

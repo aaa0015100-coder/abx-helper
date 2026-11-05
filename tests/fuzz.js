@@ -1,4 +1,4 @@
-// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp cmp（預設全部）
+// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp cmp cmpentry abg（預設全部）
 const {load,mk}=require('./harness');
 const {A}=load(process.argv.find(a=>a.endsWith('.html')));
 const set=mk(A);
@@ -196,6 +196,72 @@ if(on("cmpentry")){
     for(const p of (A.PL[u.id]||[])) chkCards("cmp-card",{tab:"emp",sys:sk,sub:u.id,path:p},"emp"); }
   // 抗菌譜藥卡：加入比較按鈕狀態
   for(const k of BK) for(const inC of [false,true]) run("cmp-tog",{tab:"spec",spec:{view:"bac",drug:k,cmp:inC?[k]:[]}},()=>A.render("spec"),(t,h)=>{ const m=h.match(/data-act="cmp-tog" data-v="([^"]+)" aria-pressed="(true|false)"/); return !m||m[1]!==k||(m[2]==="true")!==inC?"加入比較按鈕狀態錯":""; });
+}
+
+if(on("abg")){
+  // v1.3 院內 antibiogram：資料完整、抽查原表、對應、提示邏輯、過期
+  const R=A.ABG_ROWS, nm=new Set();
+  n++; if(R.length!==116) fails.push(["abg-data",{},"列數 "+R.length+"（原表 79＋37）"]);
+  for(const r of R){ n++; if(nm.has(r[0])) fails.push(["abg-data",{o:r[0]},"菌名重複"]); nm.add(r[0]);
+    if(!(r[2]>0)||!["gn","gp"].includes(r[1])) fails.push(["abg-data",{o:r[0]},"n 或分組錯"]);
+    for(const [c,v] of Object.entries(r[4])) if(!(v>=0&&v<=100)||!/^[A-Z]{3}m?$/.test(c)) fails.push(["abg-data",{o:r[0],c},"值或代碼錯"]); }
+  for(const [p,ns] of Object.entries(A.ABG_PATH)) for(const x of ns){ n++; if(!nm.has(x)) fails.push(["abg-path",{p,x},"菌名不在院內表"]); if(!A.PATH[p]) fails.push(["abg-path",{p},"app 無此菌種"]); }
+  // 抽查原表（PDF 逐格對位）
+  const SPOT=[["Escherichia coli","n",1058],["Escherichia coli","CRO",68.7],["Escherichia coli","CIP",47.3],["Escherichia coli","SXT",53.7],["Escherichia coli","TZP",95.1],["Escherichia coli","ETP",98.1],
+    ["Klebsiella pneumoniae","ETP",74.9],["Klebsiella pneumoniae","CZA",95.4],["Pseudomonas aeruginosa","MEM",84.5],["Pseudomonas aeruginosa","LVX",67],["Acinetobacter baumannii","IPM",26],["Acinetobacter baumannii","COL",98.6],
+    ["Staphylococcus aureus","OXA",49.5],["Staphylococcus aureus","n",410],["Enterococcus faecium","VAN",41.7],["Enterococcus faecalis","AMP",99.6],["Streptococcus pneumoniae","PENm",28.6],["Streptococcus pneumoniae","PEN",92.9],["Shewanella sp.","n",1]];
+  for(const [o,c,v] of SPOT){ n++; const r=R.find(x=>x[0]===o); const got=r&&(c==="n"?r[2]:r[4][c]); if(got!==v) fails.push(["abg-spot",{o,c},"預期 "+v+" 得到 "+got]); }
+  // 對應與推估
+  const V=(o,d,m)=>A.abgVal(o,d,m);
+  const chk=[[V("Escherichia coli","levo"),x=>x&&x.bad,"E. coli levofloxacin 應標異常"],[V("Escherichia coli","cefazolin"),x=>x&&x.v===60.1&&!x.sur,"E. coli cefazolin"],
+    [V("Staphylococcus aureus","cefazolin"),x=>x&&x.v===49.5&&/oxacillin/.test(x.sur),"S. aureus cefazolin 依 oxacillin"],[V("Klebsiella pneumoniae","colistin"),x=>x&&x.i,"colistin 為 %I"],
+    [V("Enterococcus faecalis","gent"),x=>x&&x.code==="GEH","Enterococcus gentamicin 用高濃度"],[V("Staphylococcus aureus","azithro"),x=>x===null,"S. aureus 不以 erythromycin 推估 azithromycin"],
+    [V("Streptococcus pneumoniae","penG",true),x=>x&&x.v===28.6&&x.men,"腦膜炎判讀"],[V("Escherichia coli","nitrofurantoin"),x=>x===null,"nitrofurantoin 無資料"]];
+  chk.forEach(([x,ok,m])=>{ n++; if(!ok(x)) fails.push(["abg-val",{},m+" → "+JSON.stringify(x)]); });
+  // 經驗性情境：只列 ≥30 株；E. coli、K. pneumoniae 不顯示 levofloxacin；提示的數字低於門檻；標靶不放逐藥 %S 與提示
+  const short=o=>/coagulase/.test(o)?"CoNS":o.replace(/^(\w)\w+ /,"$1. "), big=new Set(R.filter(r=>r[2]>=30).map(r=>short(r[0])));
+  const UTI=["pyelo","cuti","cauti","abp","uti_unk"];
+  for(const [sk,sy] of Object.entries(A.SYS)) for(const u of sy.subs) for(const sev of (A.hasSev(u.id)?["none","sepsis","shock"]:["none"])) for(const al of ["none","pen_ana"]) for(const path of [null,...(A.PL[u.id]||[]).slice(0,3)])
+    run("abg-emp",{tab:"emp",sys:sk,sub:u.id,sev,allergy:al,path},()=>A.render("emp"),(t,h)=>{
+      for(const L of (h.match(/<div class="rx-meta abg">[\s\S]*?<\/div>/g)||[])) for(const m of L.matchAll(/<i>([^<]+)<\/i>/g)) if(!big.has(m[1])) return "列出 <30 株菌種 "+m[1];
+      for(const seg of h.split('<div class="rx').slice(1)) if(/>Levofloxacin</.test(seg)&&/rx-meta abg[^]*?<i>(E\. coli|K\. pneumoniae)<\/i>/.test(seg.split('<div class="rx')[0])) return "腸道菌 levofloxacin 顯示了異常值";
+      const W=(h.match(/<div class="cond abgw">[\s\S]*?<\/div>/g)||[]).map(x=>x.replace(/<[^>]+>/g,""));
+      if(path){ const tg=h.split("經驗性治療（未知菌種時）")[0]; if(/rx-meta abg|cond abgw/.test(tg)) return "標靶區出現逐藥 %S 或提示"; }
+      for(const w of W){
+        if(/IDSA cUTI 2025/.test(w)){ if(!UTI.includes(u.id)||sev==="none") return "非 cUTI 敗血症卻出現 cUTI 門檻"; const T=sev==="shock"?90:80; for(const m of w.matchAll(/感受 ([\d.]+)%/g)) if(+m[1]>=T) return "提示數字未低於門檻 "+m[1]; }
+        if(/Rec 2/.test(w)&&u.id!=="cys") return "非膀胱炎出現 TMP-SMX 門檻";
+        if(/Rec 9/.test(w)&&!(u.id==="pyelo"&&sev==="none")) return "Rec 9 出現在錯誤情境";
+        if(/SIS\/IDSA 2010/.test(w)&&!["ciai_mild","ciai_sev","biliary","iai_unk"].includes(u.id)) return "cIAI FQ 門檻出現在錯誤情境";
+      }
+      if(!path&&u.id==="cys"&&/>TMP-SMX</.test(h)&&!W.some(w=>/Rec 2/.test(w))) return "膀胱炎 TMP-SMX 缺門檻提示";
+      if(!path&&u.id==="pyelo"&&sev==="none"&&/>Ciprofloxacin</.test(h)&&!W.some(w=>/Rec 9/.test(w))) return "腎盂腎炎 FQ 缺門檻提示";
+      if(sk==="hap"&&!/院內（全院）S\. aureus 中 MRSA 50\.5%/.test(t)) return "HAP／VAP 缺院內 MRSA";
+      return ""; });
+  // 標靶摘要：有 ≥30 株代表菌才出現
+  for(const [p] of Object.entries(A.ABG_PATH)){ const sub=Object.values(A.SYS).flatMap(s=>s.subs).find(u=>(A.PL[u.id]||[]).includes(p)); if(!sub) continue;
+    const sk=Object.keys(A.SYS).find(k=>A.SYS[k].subs.includes(sub)), has=A.ABG_PATH[p].some(o=>R.find(r=>r[0]===o)[2]>=30);
+    run("abg-tgt",{tab:"emp",sys:sk,sub:sub.id,path:p},()=>A.render("emp"),t=>/院內 %S（115Q1）/.test(t)===has?"":"標靶摘要有無錯誤"); }
+  // 院內檢視：每個菌種都能開、異常值標示、腦膜炎
+  for(const r of R) run("abg-view",{tab:"spec",spec:{view:"abg",abg:r[0]}},()=>A.render("spec"),t=>{
+    if(!t.includes(r[0])) return "缺菌名"; if(A.ABG_BAD[r[0]]&&!/數值異常・請確認/.test(t)) return "異常值未標示";
+    if(r[2]<30&&!/株數 <30，數字不穩定/.test(t)) return "<30 株未標示"; if(r[4].PENm!==undefined&&!/腦膜炎/.test(t)) return "缺腦膜炎判讀"; return ""; });
+  // 比較表：院內區塊數值與資料一致
+  run("abg-cmp",{tab:"spec",spec:{view:"cmp",cmp:["cro","mem"]}},()=>A.render("spec"),t=>/院內感受率/.test(t)&&/E\. coli 1058 68\.7 99\.1/.test(t)?"":"比較表院內區塊錯");
+  // 門檻邊界（IDSA cUTI 2025：敗血症 ≥80%、休克 ≥90%；IDSA/ESCMID 2010：TMP-SMX 抗藥 ≤20%）——暫改資料測 ≥／<
+  const row=o=>R.find(r=>r[0]===o)[4], EC=row("Escherichia coli"), KP=row("Klebsiella pneumoniae"), keep={ec:{...EC},kp:{...KP}};
+  const hasW=(o,re)=>{ set(o); const h=A.render("emp"); return (h.match(/<div class="cond abgw">[\s\S]*?<\/div>/g)||[]).some(x=>re.test(x.replace(/<[^>]+>/g,""))); };
+  const B=[[()=>{EC.CRO=80;KP.CRO=80;},{sys:"gu",sub:"pyelo",sev:"sepsis"},/ceftriaxone/,false,"敗血症 80% 應不提示"],[()=>{EC.CRO=79.9;},{sys:"gu",sub:"pyelo",sev:"sepsis"},/ceftriaxone/,true,"敗血症 79.9% 應提示"],
+    [()=>{EC.MEM=90;KP.MEM=90;},{sys:"gu",sub:"pyelo",sev:"shock"},/meropenem/,false,"休克 90% 應不提示"],[()=>{KP.MEM=89.9;},{sys:"gu",sub:"pyelo",sev:"shock"},/meropenem/,true,"休克 89.9% 應提示"],
+    [()=>{EC.SXT=80;},{sys:"gu",sub:"cys"},/Rec 2/,false,"TMP-SMX 抗藥 20% 應不提示"],[()=>{EC.SXT=79.9;},{sys:"gu",sub:"cys"},/Rec 2/,true,"TMP-SMX 抗藥 20.1% 應提示"],
+    [()=>{EC.CIP=90;},{sys:"gu",sub:"pyelo",sev:"none"},/Rec 9/,false,"FQ 抗藥 10% 應不提示"],[()=>{EC.CIP=89.9;},{sys:"gu",sub:"pyelo",sev:"none"},/Rec 9/,true,"FQ 抗藥 10.1% 應提示"]];
+  for(const [mut,o,re,want,m] of B){ n++; mut(); const got=hasW(Object.assign({tab:"emp"},o),re); if(got!==want) fails.push(["abg-edge",o,m]); }
+  Object.assign(EC,keep.ec); Object.assign(KP,keep.kp);
+  // 過期：期末後 12 個月內不提示，超過則提示且不出門檻警示
+  A.setNow(()=>new Date("2027-03-30T12:00:00+08:00")); run("abg-stale",{tab:"spec",spec:{view:"abg"}},()=>A.render("spec"),t=>/可能過期/.test(t)?"12 個月內誤報過期":"");
+  A.setNow(()=>new Date("2027-04-02T12:00:00+08:00"));
+  run("abg-stale",{tab:"spec",spec:{view:"abg"}},()=>A.render("spec"),t=>/可能過期/.test(t)?"":"超過 12 個月未提示");
+  run("abg-stale",{tab:"emp",sys:"gu",sub:"cys"},()=>A.render("emp"),(t,h)=>/cond abgw/.test(h)?"過期仍出現門檻提示":"");
+  A.setNow(()=>new Date());
 }
 
 const by={}; for(const f of fails){const k=f[0].split("#")[0]+" | "+f[2].slice(0,90);(by[k]=by[k]||[]).push(f[1]);}
