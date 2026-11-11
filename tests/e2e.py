@@ -27,8 +27,12 @@ def click_all(pg, sel, W, where):
         if loc.is_visible():
             loc.click(); check(pg, W, f"{where} #{i}")
 
+GRP = {"emp":"tx","cur":"tx","oral":"tx","drug":"look","spec":"look","ix":"look","tdm":"tdm","px":"px"}
 def go_tab(pg, k):
-    pg.evaluate(f"document.querySelector('[data-act=tab][data-v={k}]').click()")
+    # v1.4：先點第一層分組，再點第二層；出處由頁尾進入
+    if k == "ref": pg.evaluate("document.querySelector('#foot [data-act=tab][data-v=ref]').click()"); return
+    pg.evaluate(f"document.querySelector('#tabs [data-g={GRP[k]}]').click()")
+    pg.evaluate(f"(document.querySelector('#subtabs [data-v={k}]')||{{click(){{}}}}).click()")
 
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -40,17 +44,22 @@ with sync_playwright() as p:
             pg.on("request", lambda r: net.append(r.url) if not r.url.startswith("file:") and not r.url.startswith("data:") else None)
             pg.goto(HTML); pg.wait_for_timeout(200)
             check(pg, W, "load")
-            tabs = pg.evaluate("[...document.querySelectorAll('#tabs [data-act=tab]')].map(e=>e.dataset.v)")
-            # 手機：更多選單可開關；寬螢幕：更多按鈕不顯示
-            mb = pg.locator("[data-act=more]")
+            tabs = ["emp","cur","oral","drug","spec","ix","tdm","px","ref"]
+            # v1.4：第一層 4 組；組內多個分頁才顯示第二層；沒有「更多」
+            if pg.locator("#tabs .tab").count()!=4: issues.append(f"{W}: 第一層分頁不是 4 個")
+            if pg.locator("#subtabs .stab:visible").count()!=3: issues.append(f"{W}: 治療組第二層不是 3 個")
+            if pg.locator("[data-act=more]").count(): issues.append(f"{W}: 仍有更多按鈕")
+            tb = pg.locator("#tabs").bounding_box()
+            if pg.evaluate("document.getElementById('tabs').scrollWidth") > tb["width"]+1: issues.append(f"{W}: 第一層分頁需橫捲")
+            pg.locator("#tabs [data-g=tdm]").click()
+            if pg.locator("#subtabs").is_visible(): issues.append(f"{W}: TDM 不應有第二層")
+            pg.locator("#tabs [data-g=look]").click(); pg.locator("#subtabs [data-v=spec]").click()
+            pg.locator("#tabs [data-g=tx]").click(); pg.locator("#tabs [data-g=look]").click()
+            if pg.evaluate("S.tab")!="spec": issues.append(f"{W}: 回到查藥組未記住上次的子分頁")
+            pg.evaluate("UI.last={};S.tab='emp';renderMain()")
             if W <= 920:
-                mb.click(); pg.wait_for_timeout(50)
-                if pg.locator("#tabmenu").is_hidden(): issues.append(f"{W}: 更多選單沒有展開")
-                pg.locator("#tabmenu [data-act=tab]").first.click()
-                if not pg.locator("#tabmenu").is_hidden(): issues.append(f"{W}: 選完分頁更多選單未收起")
                 if pg.locator("#ptBar").is_hidden(): issues.append(f"{W}: 手機病人摘要列未顯示")
             else:
-                if mb.is_visible(): issues.append(f"{W}: 寬螢幕仍顯示更多按鈕")
                 if pg.locator("#ptBody").is_hidden(): issues.append(f"{W}: 寬螢幕病人卡被收合")
             for k in tabs:
                 go_tab(pg, k); pg.wait_for_timeout(30)
@@ -99,7 +108,7 @@ with sync_playwright() as p:
             if W <= 920: pg.locator("#ptBar").click()
             pg.fill("#cpBili","2.5"); pg.fill("#cpAlb","3"); pg.fill("#cpInr","2"); pg.select_option("#cpAsc","2"); pg.wait_for_timeout(50)
             if "Child-Pugh B" not in pg.inner_text("#cpRes"): issues.append(f"{W}: Child-Pugh 未算出 B")
-            pg.evaluate("document.querySelector('[data-act=tab][data-v=drug]').click()"); pg.wait_for_timeout(30)
+            go_tab(pg, "drug"); pg.wait_for_timeout(30)
             if pg.locator("[data-act=dpick]").count(): pg.locator("[data-act=dpick]").click()
             pg.locator("[data-act=drug][data-v=caspo]").click(); pg.wait_for_timeout(30)
             if "目前 Child-Pugh B" not in pg.inner_text("#main"): issues.append(f"{W}: 藥物頁未顯示目前 Child-Pugh")
@@ -189,7 +198,14 @@ with sync_playwright() as p:
             # 出處／更新彈出層
             go_tab(pg, "emp"); pg.wait_for_timeout(30)
             pg.evaluate("document.querySelectorAll('#main details').forEach(d=>d.open=true)")
-            for sel in ["button.src", "button.upd"]:
+            pg.evaluate("S.sys='gu';S.sub='pyelo';S.sev='none';S.path=null;UI.edit=null;renderMain()")
+            st = pg.locator("#main [data-act=srcs-tog]").first
+            if st.count()==0: issues.append(f"{W}: 方案卡沒有「出處 N」")
+            else:
+                if pg.locator("#main .opt .srcs.fold:visible").count(): issues.append(f"{W}: 出處預設未收合")
+                st.click()
+                if st.get_attribute("aria-expanded")!="true" or pg.locator("#main .opt .srcs.fold:visible").count()!=1: issues.append(f"{W}: 出處 N 未展開")
+            for sel in ["button.src:visible", "button.upd:visible"]:
                 loc = pg.locator("#main " + sel).first
                 if loc.count():
                     loc.click()
@@ -220,6 +236,57 @@ with sync_playwright() as p:
                 pg.locator("input[name=method][value=hd]").check(force=True); pg.wait_for_timeout(50)
                 if "HD" not in pg.inner_text("#main") and "血液透析" not in pg.inner_text("#main"): issues.append(f"{W}: 選 HD 後建議未更新")
             check(pg, W, "病人資料後")
+            # v1.4 返回：跨頁跳轉 → 頁頂返回列 → 還原畫面；瀏覽器上一頁；手動切回；清除全部
+            pg.evaluate("S.sys='gu';S.sub='pyelo';S.sev='sepsis';S.path=null;S.ph=null;UI.edit=null;S.tab='emp';renderMain()")
+            if pg.locator(".backbar").count(): issues.append(f"{W}: 未跳轉就有返回列")
+            pg.evaluate("document.querySelector('#main [data-act=brand]').click()")
+            pg.evaluate("document.querySelector('#main [data-act=go-drug]').click()"); pg.wait_for_timeout(40)
+            bb = pg.locator(".backbar")
+            if bb.count()!=1 or "腎盂腎炎" not in bb.inner_text(): issues.append(f"{W}: 跳到藥物頁後沒有返回列／來源名稱")
+            if pg.evaluate("S.tab")!="drug": issues.append(f"{W}: go-drug 未到藥物頁")
+            check(pg, W, "返回列")
+            g = pg.locator("#main [data-act=go-sub]").first
+            if g.count():
+                g.click(); pg.wait_for_timeout(40)
+                if pg.evaluate("NAV.length")!=2: issues.append(f"{W}: 第二次跳轉未加入返回堆疊")
+                pg.locator(".backbar").click(); pg.wait_for_timeout(120)
+                if pg.evaluate("S.tab")!="drug": issues.append(f"{W}: 返回一層未回到藥物頁")
+            pg.locator(".backbar").click(); pg.wait_for_timeout(120)
+            if pg.evaluate("[S.tab,S.sub,S.sev,NAV.length].join()")!="emp,pyelo,sepsis,0": issues.append(f"{W}: 返回未還原經驗性治療情境 "+pg.evaluate("[S.tab,S.sub,S.sev,NAV.length].join()"))
+            if pg.locator(".backbar").count(): issues.append(f"{W}: 返回到底仍有返回列")
+            # 瀏覽器上一頁（＝手機返回手勢）
+            pg.locator("#main .rx-meta.abg [data-act=abg-go]").first.click(); pg.wait_for_timeout(40)
+            if pg.evaluate("S.tab+S.spec.view")!="specabg": issues.append(f"{W}: abg-go 未到院內檢視")
+            pg.go_back(); pg.wait_for_timeout(120)
+            if pg.evaluate("[S.tab,S.sub,NAV.length].join()")!="emp,pyelo,0": issues.append(f"{W}: 瀏覽器上一頁未返回")
+            if not pg.url.startswith("file:") or pg.locator("#main").count()==0: issues.append(f"{W}: 上一頁離開了 app")
+            # 手動切回來源分頁 → 返回列消失
+            pg.locator("#main .rx-meta.abg [data-act=abg-go]").first.click(); pg.wait_for_timeout(40)
+            go_tab(pg, "emp"); pg.wait_for_timeout(120)
+            if pg.evaluate("NAV.length")!=0 or pg.locator(".backbar").count(): issues.append(f"{W}: 手動切回來源分頁後返回列未消失")
+            # 頁尾出處 → 返回
+            go_tab(pg, "ref"); pg.wait_for_timeout(40)
+            if pg.evaluate("S.tab")!="ref" or pg.locator(".backbar").count()!=1: issues.append(f"{W}: 頁尾出處未開啟或沒有返回列")
+            if pg.locator("#tabs .tab[aria-selected=true]").count(): issues.append(f"{W}: 出處頁不應反白任何分組")
+            check(pg, W, "出處頁")
+            pg.locator(".backbar").click(); pg.wait_for_timeout(120)
+            if pg.evaluate("S.tab")!="emp": issues.append(f"{W}: 出處頁返回失敗")
+            # 比較清單在返回後保留；清除全部清空返回堆疊
+            pg.evaluate("S.sub='cauti';S.sev='none';renderMain()")
+            pg.locator("#main [data-act=cmp-set]").first.click(); pg.wait_for_timeout(40)
+            n1 = pg.evaluate("S.spec.cmp.length")
+            pg.locator(".backbar").click(); pg.wait_for_timeout(120)
+            if pg.evaluate("S.spec.cmp.length")!=n1 or n1<2: issues.append(f"{W}: 返回後比較清單被還原")
+            pg.locator("#main [data-act=cmp-set]").first.click(); pg.wait_for_timeout(40)
+            if W <= 920: pg.locator("#ptBar").click()
+            pg.locator("[data-act=clear-all]").click(); pg.wait_for_timeout(120)
+            if pg.evaluate("NAV.length")!=0 or pg.locator(".backbar").count(): issues.append(f"{W}: 清除全部後返回堆疊未清空")
+            if W <= 920 and pg.locator("#ptBody").is_visible(): pg.locator("[data-act=pt-close]").click()
+            # 超過 20 步只留最近 20 步
+            pg.evaluate("for(let i=0;i<25;i++){S.tab='emp';renderMain();document.querySelector('#foot [data-act=tab][data-v=ref]').click();}")
+            if pg.evaluate("NAV.length")!=20: issues.append(f"{W}: 返回堆疊未限制 20 步（"+str(pg.evaluate("NAV.length"))+"）")
+            pg.evaluate("S.tab='emp';renderMain()"); pg.locator("[data-act=clear-all]").click() if pg.locator("[data-act=clear-all]").is_visible() else pg.evaluate("document.querySelector('[data-act=clear-all]').click()"); pg.wait_for_timeout(150)
+            go_tab(pg, "emp")
             # 免責聲明收合
             pg.locator("[data-act=disc-ok]").click()
             if pg.locator("#footDisc").is_hidden(): issues.append(f"{W}: 免責聲明未移到頁尾")

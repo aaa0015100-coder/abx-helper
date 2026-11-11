@@ -185,7 +185,7 @@ if(on("cmpentry")){
   for(const q of ["比較","compare","cefepime meropenem","mica fluco"]){ n++; if(A.searchHits(q).some(x=>x.t==="比較")) fails.push(["cmp-search",{q},"搜尋不應出現比較（使用者 v1.2 取消）"]); }
   // 方案卡連結：鍵存在、2–4 個、同類、每個藥都在同一張卡內、數字一致
   const chkCards=(label,o,tab)=>run(label,o,()=>A.render(tab),(t,h)=>{
-    for(const seg of h.split('<div class="opt').slice(1)){
+    for(const seg of h.split(/<div class="opt(?: primary)?">/).slice(1)){
       const m=seg.match(/data-act="cmp-set" data-v="(bac|fun)\|([^"]+)">比較(這|其中) (\d) 個藥/); if(!m) continue;
       const ks=m[2].split(","); if(ks.length<2||ks.length>4||+m[4]!==ks.length) return "連結藥數錯 "+m[0];
       for(const k of ks){ const nm=m[1]==="bac"?(A.SPEC_ROWS.find(r=>r[0]===k)||[])[1]:k; if(!nm) return "連結鍵不存在 "+k;

@@ -214,7 +214,6 @@ table.grid.cmp tr.xrow th,table.grid.cmp tr.xrow td{border-top:1px dashed var(--
 .abgv.hi{color:var(--ok)}
 .abgv.mid{color:var(--warn)}
 .abgv.lo{color:var(--danger)}
-.rx-meta.abg{font-size:.78rem}
 .cond.abgw{font-size:.82rem}
 .jump{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;z-index:20}
@@ -258,13 +257,25 @@ button.src{font-family:var(--f-mono);font-size:.7rem;background:none;color:var(-
 button.upd{font-size:.7rem;font-weight:700;color:var(--ok);background:var(--ok-bg);border:0;border-radius:4px;padding:1px 6px;letter-spacing:.03em}
 .top .brand{background:none;color:inherit;padding:0;border-radius:0;font-size:inherit}
 @media (max-width:920px){.tab{padding:9px 8px}}
-.tab .ts{display:none}
-@media (max-width:420px){.tab .ts{display:inline}.tab .ts~.tl{display:none}}
-@media (max-width:359px){.tab{padding:9px 5px}.morebtn .mcur{display:none}.morebtn .mgen{display:inline}}
-.morebtn .mgen{display:none}
-.tab.xtra{display:none}
-@media (min-width:921px){.tab.xtra{display:inline-block}.tab.morebtn,.tabmenu{display:none!important}}
-.tabmenu{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 14px}
+/* v1.4 分頁分組（4 組＋第二層）、返回列、方案卡底列 */
+@media (max-width:920px){.tabs .tab{flex:1 1 0;text-align:center}}
+.tabs{margin-bottom:10px}
+.subtabs{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 14px}
+.stab{background:none;border:0;border-radius:8px;padding:5px 10px;font-size:.88rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+.stab[aria-selected="true"]{background:var(--accent-weak);color:var(--ink);font-weight:600}
+main>.subtabs[hidden]+#main{margin-top:6px}
+.backbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:12;display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;margin-bottom:12px;cursor:pointer;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.backbar .bk{flex:none;color:var(--accent);font-weight:600}
+.backbar .to{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.opt-foot{display:flex;flex-wrap:wrap;gap:2px 16px;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
+.opt-foot .linkbtn{font-size:.78rem;text-decoration:none;padding:3px 0}
+.opt-foot .linkbtn[aria-expanded]::after{content:" ▾"}
+.opt-foot .linkbtn[aria-expanded="true"]::after{content:" ▴"}
+.opt-foot .cmpl{margin-left:auto}
+.opt-foot button.src{margin:0}
+.rx-meta.abg{grid-column:1/-1;font-size:.7rem}
+.rx-meta.abg .linkbtn{font-size:.7rem}
+.foot .linkbtn{font-size:.8rem}
 .foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);display:grid;gap:4px}
 .foot .ver{font-size:.74rem}
 .ov{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center}
@@ -392,11 +403,11 @@ details.pf>summary{font-size:.86rem}
     <main>
       <div class="srch"><input id="q" type="search" placeholder="搜尋：藥名、商品名、診斷、菌種、手術" autocomplete="off" aria-label="搜尋" aria-controls="qres"><div id="qres" class="qres" hidden></div></div>
       <nav class="tabs" role="tablist" id="tabs"></nav>
-      <div id="tabmenu" class="tabmenu" hidden></div>
+      <div id="subtabs" class="subtabs" role="tablist" aria-label="子分頁" hidden></div>
       <div id="main"></div>
     </main>
   </div>
-  <footer class="foot" id="foot"><div id="footDisc" hidden><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</div><div class="ver" id="footVer"></div></footer>
+  <footer class="foot" id="foot"><div id="footDisc" hidden><b>僅供臨床參考。</b>最終處方以院內規範、院內 antibiogram、藥師與感染科意見為準。本頁不儲存任何病人資料。</div><div><button class="linkbtn" type="button" data-act="tab" data-v="ref">全部出處 ›</button></div><div class="ver" id="footVer"></div></footer>
 </div>
 <div id="ov" class="ov" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ovT"><h3 id="ovT"></h3><div id="ovB"></div><button class="btn" type="button" data-act="ov-close">關閉</button></div></div>
 <div id="toast" class="toast" hidden></div>
@@ -404,7 +415,7 @@ details.pf>summary{font-size:.86rem}
 <script>
 "use strict";
 const VERIFIED = "2026-11-05";
-const VERSION = "v1.3";
+const VERSION = "v1.4";
 const SCOPE = "12 個感染系統＋口服降階＋藥物查詢（含肝功能）＋TDM＋PEN-FAST＋泌尿手術預防＋抗菌譜比較＋院內 antibiogram";
 
 /* ---------------- 出處 ---------------- */
@@ -813,7 +824,7 @@ const S = {
 };
 let R = null;
 /* 介面狀態（只影響顯示，不影響建議內容） */
-const UI = {edit:"sys", pt:null, mMore:false, more:false, dpick:false, pxpick:true, cmpPick:true};
+const UI = {edit:"sys", pt:null, mMore:false, last:{}, dpick:false, pxpick:true, cmpPick:true};
 
 /* ---------------- 計算 ---------------- */
 const num = v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
@@ -1175,13 +1186,19 @@ function optCard(o){
   if(ABGX) ABGX.skip=skip0;
   if(o.plus) body+=`<div class="plus">＋ 再加上 ${o.plus}</div>`;
   const cls=tierCls(o.tier), cl=cmpLinkOf(o);
-  const cmpBtn=cl?`<button class="linkbtn" type="button" data-act="cmp-set" data-v="${cl[0]}|${cl[1].join(",")}">${cl[2]>cl[1].length?`比較其中 ${cl[1].length} 個藥`:`比較這 ${cl[1].length} 個藥`} ›</button>`:"";
+  // v1.4 卡片底列：說明、出處（≥2 筆收成「出處 N」）、比較連結；預設都收合
+  const sb=srcBtns(o.src), srcN=(sb.match(/data-ref=/g)||[]).length, foot=[];
+  if(o.note) foot.push(`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`);
+  if(srcN>1) foot.push(`<button class="linkbtn" type="button" data-act="srcs-tog" aria-expanded="false">出處 ${srcN}</button>`); else if(srcN) foot.push(sb);
+  const cmpBtn=cl?`<button class="linkbtn cmpl" type="button" data-act="cmp-set" data-v="${cl[0]}|${cl[1].join(",")}">${cl[2]>cl[1].length?`比較其中 ${cl[1].length} 個藥`:`比較這 ${cl[1].length} 個藥`} ›</button>`:"";
+  if(cmpBtn) foot.push(cmpBtn);
   return `<div class="opt${cls==="primary"?" primary":""}">
     <div class="opt-head"><span class="tier ${cls}">${o.tier}</span>${updOf(o.upd)}</div>
     ${formula}${body}${ABGX?abgWarn(o):""}
     ${o.cond?`<div class="cond">條件：${o.cond}</div>`:""}
-    ${o.note||(o.src&&o.src.length)||cmpBtn?`<div class="srcs">${srcBtns(o.src)}${o.note?`<button class="linkbtn" type="button" data-act="onote" aria-expanded="false">說明</button>`:""}${cmpBtn}</div>`:""}
-    ${o.note?`<div class="onote" hidden>${o.note}</div>`:""}
+    ${foot.length?`<div class="opt-foot">${foot.join("")}</div>`:""}
+    ${o.note?`<div class="onote fold" hidden>${o.note}</div>`:""}
+    ${srcN>1?`<div class="srcs fold" hidden>${sb}</div>`:""}
   </div>`;
 }
 const UPDN = {
@@ -3080,6 +3097,7 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
+    <div class="note">2026-11-12 v1.4：介面整理，臨床內容與建議排序未變。分頁由 9 個收成 4 組（治療／查藥／TDM／手術預防），出處改由頁尾進入；跨頁跳轉後頁頂顯示「返回」，支援手機返回手勢與瀏覽器上一頁（最多 20 步）；方案卡底列收合說明與出處（2 筆以上顯示「出處 N」），院內 %S 縮成一行。</div>
     <div class="note">2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。</div>
     <div class="note">2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。</div>
     <div class="note">2026-10-27 v1.1：抗菌譜與比較表加入 ceftazidime-avibactam、ceftolozane-tazobactam（逐欄依據見點藥名後的「逐欄依據」，依 IDSA AMR 2026 Q1.7、Q2.6 與仿單）；抗菌譜與比較表的藥名可看商品名；Enterococcus、S. saprophyticus、S. aureus 泌尿道與 VRE 標靶方案補出處（無指引直接建議者標「無指引直接建議」）。</div>
@@ -3538,21 +3556,44 @@ function renderCp(){
 }
 
 const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","目前用藥調整"],["oral","口服降階"],["drug","藥物"],["tdm","TDM"],["px","泌尿手術預防"],["ix","交互作用"],["ref","出處"]];
-const TAB_S={cur:"用藥調整"};
-const TAB_MS={px:"手術預防",ix:"交互作用"};   // 「更多」按鈕顯示目前分頁時用短名   // 窄螢幕（≤420px）短名稱
-const TAB_MAIN=["emp","cur","oral"];   // 手機主列；其餘收進「更多」（寬螢幕全部顯示）
+// v1.4：9 個分頁收成 4 組；組內 >1 個分頁時顯示第二層。出處（ref）改由頁尾進入
+const TAB_GRP=[["tx","治療",["emp","cur","oral"]],["look","查藥",["drug","spec","ix"]],["tdm","TDM",["tdm"]],["px","手術預防",["px"]]];
+const grpOf=t=>TAB_GRP.find(g=>g[2].includes(t));
+const tabName=k=>(TABS.find(t=>t[0]===k)||[])[1]||"";
+/* v1.4 返回：跨頁跳轉前記下畫面。只放記憶體（history 只存編號），重新整理即清空 */
+const NAV=[]; let NAV_ID=0; const NAV_MAX=20;
+const SPEC_VIEW_N={bac:"抗細菌",cmp:"比較",abg:"院內",fun:"抗黴菌",pk:"PK/PD",mdr:"MDR 速查",corr:"校正紀錄"};
+function navSnap(){ return {tab:S.tab,sys:S.sys,sub:S.sub,sev:S.sev,mdr:S.mdr.slice(),path:S.path,ph:S.ph,drug:S.drug,tdm:S.tdm,proc:S.proc,spec:JSON.parse(JSON.stringify(S.spec)),ui:{edit:UI.edit,dpick:UI.dpick,pxpick:UI.pxpick,cmpPick:UI.cmpPick}}; }
+const navKey=sn=>JSON.stringify([sn.tab,sn.sys,sn.sub,sn.sev,sn.mdr,sn.path,sn.ph,sn.drug,sn.tdm,sn.proc,sn.spec]);
+function navLabel(){
+  const t=S.tab; let x="";
+  if(t==="emp") x=SUBDEF[S.sub]?SUBDEF[S.sub].n.replace(/（.*?）/g,""):"";
+  else if(t==="drug") x=S.drug&&D[S.drug]?D[S.drug].n:"";
+  else if(t==="spec") x=SPEC_VIEW_N[S.spec.view]||"";
+  else if(t==="tdm") x=({vanco:"Vancomycin",teico:"Teicoplanin",gent:"Gentamicin",amk:"Amikacin"})[S.tdm]||"";
+  return tabName(t)+(x?"・"+x:"");
+}
+function navPush(sn,label,y){ sn.label=label; sn.y=y||0; sn.id=++NAV_ID; NAV.push(sn); if(NAV.length>NAV_MAX) NAV.shift(); try{ history.pushState({nav:sn.id},""); }catch(e){} }
+function navRestore(sn){
+  const cmp=S.spec.cmp, cmpf=S.spec.cmpf;   // 比較清單是使用者累積的選擇，返回時不還原
+  ["tab","sys","sub","sev","path","ph","drug","tdm","proc"].forEach(k=>{ S[k]=sn[k]; });
+  S.mdr=sn.mdr.slice(); S.spec=JSON.parse(JSON.stringify(sn.spec));
+  if(JSON.stringify([sn.spec.cmp,sn.spec.cmpf])!==JSON.stringify([cmp,cmpf])) S.spec.cell=null;
+  S.spec.cmp=cmp; S.spec.cmpf=cmpf;
+  Object.assign(UI,sn.ui);
+}
 function renderMain(){
   R=getRenal();
-  const xt=TABS.filter(([k])=>!TAB_MAIN.includes(k)), cx=xt.find(([k])=>k===S.tab);
-  $("tabs").innerHTML=TABS.map(([k,n])=>`<button class="tab${TAB_MAIN.includes(k)?"":" xtra"}" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${TAB_S[k]?`<span class="ts">${TAB_S[k]}</span>`:""}<span class="tl">${n}</span></button>`).join("")
-    +`<button class="tab morebtn" type="button" data-act="more" aria-expanded="${UI.more}" aria-controls="tabmenu" aria-selected="${!!cx}">${cx?`<span class="mcur">${TAB_MS[cx[0]]||cx[1]}</span><span class="mgen">更多</span>`:"更多"} ▾</button>`;
-  const tm=$("tabmenu"); tm.hidden=!UI.more;
-  tm.innerHTML=xt.map(([k,n])=>`<button class="chip" type="button" data-act="tab" data-v="${k}" aria-pressed="${S.tab===k}">${n}</button>`).join("");
+  const cg=grpOf(S.tab); if(cg) UI.last[cg[0]]=S.tab;
+  $("tabs").innerHTML=TAB_GRP.map(([g,n,ts])=>`<button class="tab" role="tab" type="button" data-act="tab" data-g="${g}" data-v="${ts.includes(UI.last[g])?UI.last[g]:ts[0]}" aria-selected="${!!cg&&cg[0]===g}">${n}</button>`).join("");
+  const sm=$("subtabs"), multi=!!cg&&cg[2].length>1; sm.hidden=!multi;
+  sm.innerHTML=multi?cg[2].map(k=>`<button class="stab" role="tab" type="button" data-act="tab" data-v="${k}" aria-selected="${S.tab===k}">${tabName(k)}</button>`).join(""):"";
+  const back=NAV.length?`<button class="backbar" type="button" data-act="nav-back"><span class="bk">‹ 返回</span><span class="to">${NAV[NAV.length-1].label}</span></button>`:"";
   const f={spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderOral,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef}[S.tab]||renderEmp;
   const onBac=S.tab==="spec"&&S.spec.view==="bac", nc=S.spec.cmp.length;
   const tray=onBac&&nc?`<button class="btn${nc>=2?" solid":""}" type="button" data-act="cmp-open">${nc>=2?`比較已選 ${nc} 個藥 ›`:"已選 1 個藥・再選一個"}</button>`:"";
   const jmp=onBac&&S.spec.cols.length?`<button class="btn solid jump" type="button" data-act="spec-jump">看建議（${S.spec.cols.length} 個菌種）↓</button>`:"";
-  $("main").innerHTML=f()+(tray||jmp?`<div class="fixpad" aria-hidden="true"></div><div class="fixbar">${tray}${jmp}</div>`:"");
+  $("main").innerHTML=back+f()+(tray||jmp?`<div class="fixpad" aria-hidden="true"></div><div class="fixbar">${tray}${jmp}</div>`:"");
   markGloss($("main"));
 }
 const narrow=()=>typeof matchMedia!=="undefined"&&matchMedia("(max-width:920px)").matches;
@@ -3624,7 +3665,7 @@ if(typeof document!=="undefined"){
     ["aki","preg","pf5","pfA","pfS","pfT"].forEach(id=>{ $(id).checked=false; });
     $("allergy").value="none"; $("cpAsc").value="1"; $("cpEnc").value="1"; $("cpCls").value="";
     S.ag=JSON.parse(JSON.stringify(S_INIT.ag)); S.cur=JSON.parse(JSON.stringify(S_INIT.cur)); S.oral=JSON.parse(JSON.stringify(S_INIT.oral));
-    UI.mMore=false; readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); renderCp();
+    UI.mMore=false; navDrop(NAV.length); readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); renderCp();
     toast("已清除病人資料");
   }
   $("side").addEventListener("input",onPt);
@@ -3669,11 +3710,23 @@ if(typeof document!=="undefined"){
     else if(a==="vld"){ S.vld=Math.min(35,Math.max(15,num(e.target.value)||25)); renderMain(); }
     else if(a==="ag-f") return;   // 由 input 事件處理
   });
+  const NAV_JUMP=new Set(["go","go-drug","go-tdm","go-sub","spec-go","cmp-go","cmp-set","abg-go"]);
+  const histSync=()=>{ try{ const t=NAV[NAV.length-1]; return !!(t&&history.state&&history.state.nav===t.id); }catch(e){ return false; } };
+  // 退回到編號 ≤ t 的畫面；還原最後退掉的那一層
+  function navBack(t){ let sn=null; while(NAV.length&&NAV[NAV.length-1].id>t) sn=NAV.pop(); if(!sn) return; navRestore(sn); renderMain(); renderPt(); scrollTo(0,sn.y); }
+  // 丟掉最上面 k 層（不還原畫面），瀏覽器紀錄同步退回
+  function navDrop(k){ if(k<=0) return; const sync=histSync(); NAV.splice(NAV.length-k,k); if(sync){ try{ history.go(-k); }catch(e){} } }
+  addEventListener("popstate",e=>{ navBack((e.state&&e.state.nav)||0); });
   document.addEventListener("click",e=>{
     const b=e.target.closest("button[data-act]"); if(!b) return;
     const a=b.dataset.act, v=b.dataset.v; let jump=false;
-    if(a==="tab"){ S.tab=v; UI.more=false; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } scrollTo(0,0); }
-    else if(a==="more") UI.more=!UI.more;
+    // v1.4 返回：跨頁跳轉（含頁尾「出處」）前記下目前畫面
+    const pre=NAV_JUMP.has(a)||(a==="tab"&&v==="ref"&&S.tab!=="ref")?[navSnap(),navLabel(),scrollY]:null;
+    if(a==="nav-back"){ const top=NAV[NAV.length-1]; if(!top) return; if(histSync()) history.back(); else navBack(0); return; }
+    if(a==="tab"){
+      // 手動切回「返回」堆疊裡的分頁＝自己走回去了：把那一層以後的紀錄丟掉
+      if(v!=="ref"){ let i=-1; NAV.forEach((n,j)=>{ if(n.tab===v) i=j; }); if(i>=0) navDrop(NAV.length-i); }
+      S.tab=v; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } scrollTo(0,0); }
     else if(a==="pt-open"){ UI.pt=true; renderPt(); if(narrow()){ const el=$("ptBody"); el.scrollIntoView({block:"start"}); const f=$("age"); if(!S.pt.age) f.focus({preventScroll:true}); } return; }
     else if(a==="clear-all"){ clearAll(); return; }
     else if(a==="pt-close"){ UI.pt=false; renderPt(); $("ptBar").focus(); return; }
@@ -3682,7 +3735,7 @@ if(typeof document!=="undefined"){
     else if(a==="ov-close"){ $("ov").hidden=true; return; }
     else if(a==="demo"){ $("age").value=72; $("wt").value=60; $("ht").value=165; $("scr").value=1.6; $("sexM").checked=true; document.querySelector('input[name="method"][value="cg"]').checked=true; readPt(); renderRsum(); renderPt(); toast("已填入範例數值，請改為病人資料"); }
     else if(a==="edit"){ UI.edit=UI.edit===v?null:v; }
-    else if(a==="go"){ const x=QH[+b.dataset.i]; if(!x) return; jump=goHit(x); UI.more=false; $("q").value=""; $("qres").hidden=true; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } if(!jump) scrollTo(0,0); }
+    else if(a==="go"){ const x=QH[+b.dataset.i]; if(!x) return; jump=goHit(x); $("q").value=""; $("qres").hidden=true; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } if(!jump) scrollTo(0,0); }
     else if(a==="drug"){ S.drug=v; UI.dpick=false; }
     else if(a==="dpick") UI.dpick=!UI.dpick;
     else if(a==="go-drug"){ S.tab="drug"; S.drug=v; UI.dpick=false; scrollTo(0,0); }
@@ -3691,7 +3744,7 @@ if(typeof document!=="undefined"){
     else if(a==="tdm") S.tdm=v;
     else if(a==="ag-mode") S.ag.mode=v;
     else if(a==="pf-apply"){ $("allergy").value="pen_low"; readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); toast("已設為 Penicillin 過敏（非嚴重）"); return; }
-    else if(a==="onote"){ const n=b.parentElement.nextElementSibling; if(n&&n.classList.contains("onote")){ n.hidden=!n.hidden; b.setAttribute("aria-expanded",String(!n.hidden)); } return; }
+    else if(a==="onote"||a==="srcs-tog"){ const n=b.closest(".opt").querySelector(a==="onote"?".onote.fold":".srcs.fold"); if(n){ n.hidden=!n.hidden; b.setAttribute("aria-expanded",String(!n.hidden)); } return; }
     else if(a==="sys"){ const ch=S.sys!==v; S.sys=v; if(ch){ S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; } UI.edit=SYS[v].subs.length>1?"sub":null; }
     else if(a==="sub"){ if(S.sub!==v){ S.sub=v; S.path=null; S.ph=null; } UI.edit=null; }
     else if(a==="sev") S.sev=v;
@@ -3726,8 +3779,8 @@ if(typeof document!=="undefined"){
     else if(a==="cmp-pick") UI.cmpPick=!UI.cmpPick;
     else if(a==="cmp-cell"){ const [r,k]=v.split("|"); const c=S.spec.cell; S.spec.cell=c&&String(c[0])===r&&c[1]===k?null:[r,k]; jump=!!S.spec.cell; }
     else if(a==="abg-org"){ S.spec.abg=v; }
-    else if(a==="abg-go"){ S.tab="spec"; S.spec.view="abg"; S.spec.abg=v; UI.more=false; scrollTo(0,0); }
-    else if(a==="cmp-set"){ const [t,ks]=v.split("|"); cmpSet(t,ks.split(",")); UI.more=false; scrollTo(0,0); }
+    else if(a==="abg-go"){ S.tab="spec"; S.spec.view="abg"; S.spec.abg=v; scrollTo(0,0); }
+    else if(a==="cmp-set"){ const [t,ks]=v.split("|"); cmpSet(t,ks.split(",")); scrollTo(0,0); }
     else if(a==="cmp-open"){ S.spec.view="cmp"; S.spec.cmpt="bac"; S.spec.cell=null; UI.cmpPick=S.spec.cmp.length<2; scrollTo(0,0); }
     else if(a==="cmp-tog"){ const L=S.spec.cmp, i=L.indexOf(v);
       if(i>=0){ L.splice(i,1); toast("已從比較移除"); }
@@ -3744,6 +3797,7 @@ if(typeof document!=="undefined"){
     else if(a==="tind"){ S.tind=v; S.tln=v==="std"?3:(v==="ie"?5:4); }
     else if(a==="tln") S.tln=+v;
     else return;
+    if(pre&&navKey(navSnap())!==navKey(pre[0])) navPush(pre[0],pre[1],pre[2]);
     renderMain();
     if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
   });
