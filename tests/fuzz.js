@@ -315,7 +315,7 @@ if(on("res")){
   for(const [k,re] of Object.entries(STD)){ n++; if(!re.test(A.REG[k].b[0][1])) fails.push(["res-reg",{k},"標準劑量錯誤 "+A.REG[k].b[0][1]]); }
   // MDR 速查：短標籤與 bad 同長度；每張非表格卡都有一段；不列入速查的只有非藥物項
   for(const r of A.RES){ if(r.tbl) continue; n++; const L=A.MDRQ_LBL[r.id]; if(L&&L.length!==r.bad.length) fails.push(["mdrq",{k:r.id},"短標籤數與 bad 不符"]); }
-  run("mdrq",{tab:"spec",spec:{view:"mdr"}},()=>A.render("spec"),(t,h)=>{ const k=(h.match(/data-act="res-go" data-v="/g)||[]).length; if(k!==A.RES.length) return "速查連結數 "+k; if(/Sulbactam-durlobactam；|Sulbactam-durlobactam <\/div>/.test(t)) return "速查無條件列出 sulbactam-durlobactam"; return ""; });
+  run("mdrq",{tab:"res",res:{k:"",site:"",ph:""}},()=>A.render("res"),(t,h)=>{ const k=(h.match(/data-act="res-k"/g)||[]).length; if(k!==A.RES.length) return "速查標題數 "+k; if(/id="resCard"/.test(h)) return "未展開卻顯示完整卡"; if(/Sulbactam-durlobactam；|Sulbactam-durlobactam <\/div>/.test(t)) return "速查無條件列出 sulbactam-durlobactam"; return ""; });
   // 搜尋：輸入抗藥名稱可找到卡片
   for(const q of ["esbl","cre","ampc","mrsa","vre","crab","maltophilia","天生抗藥"]){ n++; if(!A.searchHits(q).some(x=>x.t==="抗藥")) fails.push(["res-search",{q},"搜尋找不到抗藥卡"]); }
 }

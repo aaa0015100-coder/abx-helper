@@ -276,6 +276,11 @@ main>.subtabs[hidden]+#main{margin-top:6px}
 .rx-meta.abg{grid-column:1/-1;font-size:.7rem}
 .rx-meta.abg .linkbtn{font-size:.7rem}
 .foot .linkbtn{font-size:.8rem}
+.reshd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.reshd .muted{font-size:.82rem}
+.reshd .chev{margin-left:auto;font-size:.8rem;color:var(--accent)}
+.resitem{scroll-margin-top:64px;min-width:0}
+.resitem.open{border-color:var(--accent)}
 #resCard details.more{margin-top:6px}
 #resCard details.more>summary{font-size:.9rem;font-weight:600}
 .foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);display:grid;gap:4px}
@@ -822,7 +827,7 @@ const S = {
   sys:"gu", sub:"pyelo", sev:"none", mdr:[], path:null, ph:null,
   cur:{drugs:[],day:3,resp:"improve",afeb:false,stable:false,po:false,src:false,org:"",ph:"",sus:{}},
   drug:null, tdm:"vanco", ag:{mode:"ei",ti:0.5,c1:null,t1:null,c2:null,t2:null}, pf:{f5:false,ana:false,scar:false,tx:false}, cp:{mode:"calc",bili:null,alb:null,inr:null,asc:"1",enc:"1",cls:""},
-  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, res:{k:"esbl",site:"",ph:""}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null,cmpt:"bac",cmp:[],cmpf:[],cell:null,diff:false,abg:"Escherichia coli"}
+  proc:"turp", vauc:500, vld:25, tind:"std", tln:3, res:{k:"",site:"",ph:""}, spec:{view:"bac",cols:[],drug:null,frow:null,fdrug:null,cmpt:"bac",cmp:[],cmpf:[],cell:null,diff:false,abg:"Escherichia coli"}
 };
 let R = null;
 /* 介面狀態（只影響顯示，不影響建議內容） */
@@ -2337,8 +2342,8 @@ function abgCmpBlock(keys){
     </tbody></table></div><div class="hint">– 為未測、不適用或數值異常。只列 ≥30 株的菌種。<button class="linkbtn" type="button" data-act="spec-view" data-v="abg">院內 antibiogram ›</button></div></details>`;
 }
 function renderSpec(){
-  const sp=S.spec; if(!["bac","cmp","abg","fun","pk","mdr"].includes(sp.view)) sp.view="bac";   // v1.5：校正紀錄移到出處頁
-  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["cmp","比較"],["abg","院內"],["fun","抗黴菌"],["pk","PK/PD"],["mdr","MDR 速查"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
+  const sp=S.spec; if(!["bac","cmp","abg","fun","pk"].includes(sp.view)) sp.view="bac";   // v1.5：MDR 速查併入「抗藥」、校正紀錄移到出處頁
+  let h=`<div class="chips" style="margin-bottom:14px">${[["bac","抗細菌"],["cmp","比較"],["abg","院內"],["fun","抗黴菌"],["pk","PK/PD"]].map(([k,n])=>`<button class="chip" type="button" data-act="spec-view" data-v="${k}" aria-pressed="${sp.view===k}">${n}</button>`).join("")}</div>`;
   const legend=`<div class="legend">${[3,2,1,0].map(v=>`${dot(v)} ${["無效","不穩定／依藥敏","可用","強效"][v]}`).join("")}</div>`;
   if(sp.view==="bac"){
     h+=`${renalBar()}${legend}<div class="hint">點欄位標題選菌種（可複選找合併方案）；點藥名看說明與劑量。要並列 2–4 個藥：<button class="linkbtn" type="button" data-act="spec-view" data-v="cmp">比較 ›</button>${sp.cols.length||sp.drug?` <button class="linkbtn" type="button" data-act="spec-clear">清除選取</button>`:""}</div>${specGrid()}<div id="specAdv" class="res mt">${specAdvice()}</div>`;
@@ -2351,8 +2356,6 @@ function renderSpec(){
   } else if(sp.view==="pk"){
     h+=`<div class="tbl-wrap"><table><thead><tr><th>藥物類別</th><th>PK/PD 指標</th><th>殺菌／抑菌</th><th>臨床應用</th></tr></thead><tbody>${PKPD.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table></div>${srcTags(["MANDELL","VANCO20"])}`;
 
-  } else if(sp.view==="mdr"){
-    h+=mdrQuick();
   }
   return h;
 }
@@ -3073,7 +3076,7 @@ function renderRef(){
     <div class="note">劑量以仿單與文中所列文獻為主；Sanford Guide 為訂閱制，未逐筆比對，請以院內藥劑部或 Sanford 核對。CRRT 劑量依常見 effluent 25–35 mL/kg/h 假設，實際請會診藥師。</div>
     <div class="note">台灣抗藥資料為全國或文獻層級，與單一醫院可能不同；有院內 antibiogram 時以院內為準。</div>
     <div class="note">點藥名可顯示台灣常見商品名，僅供辨識；同成分可能有多家廠牌，院內品項以處方系統為準。</div>
-    <div class="note">2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」改為各抗藥菌一段摘要（無效或不可靠的藥＋建議，內容取自抗藥卡），「校正紀錄」移到出處頁。</div>
+    <div class="note">2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」併入「抗藥」（打開即速查清單，點標題展開完整內容），「校正紀錄」移到出處頁。</div>
     <div class="note">2026-11-12 v1.4：介面整理，臨床內容與建議排序未變。分頁由 9 個收成 4 組（治療／查藥／TDM／手術預防），出處改由頁尾進入；跨頁跳轉後頁頂顯示「返回」，支援手機返回手勢與瀏覽器上一頁（最多 20 步）；方案卡底列收合說明與出處（2 筆以上顯示「出處 N」），院內 %S 縮成一行。</div>
     <div class="note">2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。</div>
     <div class="note">2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。</div>
@@ -3764,6 +3767,7 @@ const RES = [
 ];
 const RES_OF = {ent:{ESBL:"esbl",CRE:"cre"},ampc:{S:"ampc",R:"ampc"},psa:{DTR:"dtr"},entc:{VRE:"vre"},sa:{MRSA:"mrsa"},spn:{PR:"prsp"},ab:{CR:"crab"},smalt:{any:"steno"},anaer:{any:"anaer"},c_gla:{any:"fungal"},c_kru:{any:"fungal"},c_aur:{any:"fungal"},c_tro:{any:"fungal"}};
 const resById = id=>RES.find(r=>r.id===id)||RES[0];
+const resName = id=>{ const r=RES.find(x=>x.id===id); return r?r.n:""; };
 function resLink(g,ph){ const k=(RES_OF[g]||{})[ph||"any"]; if(!k) return ""; const r=resById(k); return `<button class="linkbtn" type="button" data-act="res-go" data-v="${k}">${r.n}：判讀與不可靠的藥 ›</button>`; }
 /* 卡片的「改用」：回傳 [{key,label}] 部位與目前部位的方案清單 */
 function resTx(r){
@@ -3791,24 +3795,31 @@ const MDRQ_LBL = {
   fungal:[null,"Fluconazole 經驗性用於 C. glabrata、C. auris","Echinocandin（泌尿道）"]
 };
 const mdrqItems = r=>r.bad.map((b,i)=>{ const l=(MDRQ_LBL[r.id]||[])[i]; return l===false?null:(l||b[0]); }).filter(Boolean);
-function mdrQuick(){
-  return `<div class="hint" style="margin-top:0">各抗藥菌哪些藥無效、改用什麼。點「完整說明」看判讀線索、台灣盛行率與依部位的劑量。</div><div class="notes mt">${RES.filter(r=>!r.tbl).map(r=>`<div class="note"><div><b>${r.n}</b> <span class="muted" style="font-size:.82rem">${/（/.test(r.full)?r.full.replace(/^[^（]*（|）$/g,""):r.full}</span></div>
-    <div class="mt" style="font-size:.86rem"><span class="flag danger">無效或不可靠</span> ${mdrqItems(r).join("；")}</div>
-    <div class="mt" style="font-size:.86rem"><span class="flag ok">建議</span> ${r.key}</div>
-    <div class="mt"><button class="linkbtn" type="button" data-act="res-go" data-v="${r.id}">完整說明 ›</button></div></div>`).join("")}
-    <div class="note">細菌對某些藥天生無效（例如 Klebsiella 對 ampicillin、P. aeruginosa 對 ertapenem）：<button class="linkbtn" type="button" data-act="res-go" data-v="intr">天生抗藥表 ›</button></div></div>`;
-}
+const resSub = r=>/（/.test(r.full)?r.full.replace(/^[^（]*（|）$/g,""):(r.full!==r.n?r.full:"");
+/* 抗藥分頁：速查清單（每種抗藥菌：無效的藥＋建議），點標題原地展開完整內容 */
 function renderRes(){
-  const r=resById(S.res.k);
-  let h=`<div class="hint" style="margin-top:0">各種抗藥菌：哪些菌常帶、報告怎麼看、哪些藥不可靠、改用什麼。用藥建議與「經驗性治療」的標靶治療相同。</div>`;
-  ["革蘭陰性","革蘭陽性","其他"].forEach(grp=>{ h+=`<div class="dgrp"><div class="dg-h">${grp}</div><div class="chips">${RES.filter(x=>x.grp===grp).map(x=>`<button class="chip" type="button" data-act="res-k" data-v="${x.id}" aria-pressed="${x.id===r.id}">${x.n}</button>`).join("")}</div></div>`; });
-  h+=`<div id="resCard" class="tgt mt"><h3 style="font-style:normal">${r.full}</h3><div class="pnote" style="color:var(--ink)"><b>${r.key}</b></div>`;
-  if(r.tbl){
-    h+=`<div class="tbl-wrap"><table><thead><tr><th>菌種</th><th>預期抗藥（視為無效）</th><th>備註</th></tr></thead><tbody>${r.tbl.map(x=>`<tr><td><i>${x[0]}</i></td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join("")}</tbody></table></div>${srcTags(r.src)}<div class="hint">各菌種完整清單見 EUCAST 與 CLSI M100 Appendix B；「目前用藥調整」選菌種後會自動標出天生無效的藥。</div>`;
-    return h+`</div>`;
-  }
+  let h=`<div class="hint" style="margin-top:0">各抗藥菌哪些藥無效、改用什麼。點標題展開判讀線索、台灣盛行率與依部位的方案和劑量；用藥建議與「經驗性治療」的標靶治療相同。</div>`;
+  let grp="";
+  RES.forEach(r=>{
+    if(r.grp!==grp){ h+=`${grp?"</div>":""}<div class="dg-h mt">${r.grp}</div><div class="notes">`; grp=r.grp; }
+    const open=S.res.k===r.id, sub=resSub(r);
+    h+=`<div class="note resitem${open?" open":""}" id="res-${r.id}"><button class="reshd" type="button" data-act="res-k" data-v="${r.id}" aria-expanded="${open}"><b>${r.n}</b>${sub?`<span class="muted">${sub}</span>`:""}<span class="chev">${open?"收合 ▴":"展開 ▾"}</span></button>`;
+    if(r.tbl) h+=open?`<div id="resCard"><div class="mt" style="font-size:.86rem">${r.key}</div>${resTbl(r)}</div>`:`<div class="mt" style="font-size:.86rem">${r.key}</div>`;
+    else {
+      if(!open) h+=`<div class="mt" style="font-size:.86rem"><span class="flag danger">無效或不可靠</span> ${mdrqItems(r).join("；")}</div>`;
+      h+=`<div class="mt" style="font-size:.86rem"><span class="flag ok">建議</span> ${r.key}</div>`;
+      if(open) h+=`<div id="resCard">${resBody(r)}</div>`;
+    }
+    h+=`</div>`;
+  });
+  return h+`</div>`;
+}
+function resTbl(r){
+  return `<div class="tbl-wrap mt"><table><thead><tr><th>菌種</th><th>預期抗藥（視為無效）</th><th>備註</th></tr></thead><tbody>${r.tbl.map(x=>`<tr><td><i>${x[0]}</i></td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join("")}</tbody></table></div>${srcTags(r.src)}<div class="hint">各菌種完整清單見 EUCAST 與 CLSI M100 Appendix B；「用藥調整」選菌種後會自動標出天生無效的藥。</div>`;
+}
+function resBody(r){
   const lines=r.tw().filter(Boolean);
-  h+=`<details class="more"><summary>好發菌與危險因子</summary><div class="notes mt"><div class="note">${r.orgs}<div class="hint" style="margin-top:4px">${r.risk}</div></div></div></details>`;
+  let h=`<details class="more mt"><summary>好發菌與危險因子</summary><div class="notes mt"><div class="note">${r.orgs}<div class="hint" style="margin-top:4px">${r.risk}</div></div></div></details>`;
   h+=`<details class="more"><summary>台灣盛行率</summary><div class="notes mt"><div class="note"><ul class="ixl" style="margin:0">${lines.map(x=>`<li>${x}</li>`).join("")}</ul></div></div></details>`;
   h+=`<details class="more"><summary>藥敏報告怎麼看</summary><div class="notes mt"><div class="note"><ul class="ixl" style="margin:0">${r.clue.map(([t,s])=>`<li>${t} ${srcBtns(s)}</li>`).join("")}</ul></div></div></details>`;
   h+=`<div class="sec-title mt">無效或不可靠的藥</div><div class="notes"><div class="note warn"><ul class="ixl" style="margin:0">${r.bad.map(([d,t,s])=>`<li><b>${d}</b>：${t} ${srcBtns(s)}</li>`).join("")}</ul></div></div>`;
@@ -3820,7 +3831,7 @@ function renderRes(){
   else if(T.site) h+=`<div class="lbl" style="margin-bottom:6px">${(r.site&&r.site[T.site])||RSITE[T.site]}</div>`;
   h+=T.list.length?`<div class="res">${T.list.map(optCard).join("")}</div>`:`<div class="note">此部位無對應建議。</div>`;
   if(r.diff) h+=`<div class="notes mt">${r.diff.map(t=>`<div class="note">${t}</div>`).join("")}</div>`;
-  return h+`</div>`;
+  return h;
 }
 
 const TABS=[["emp","經驗性治療"],["spec","抗菌譜"],["cur","用藥調整・口服降階"],["res","抗藥"],["drug","藥物"],["tdm","TDM"],["px","泌尿手術預防"],["ix","交互作用"],["ref","出處"]];
@@ -3838,7 +3849,7 @@ function navLabel(){
   if(t==="emp") x=SUBDEF[S.sub]?SUBDEF[S.sub].n.replace(/（.*?）/g,""):"";
   else if(t==="drug") x=S.drug&&D[S.drug]?D[S.drug].n:"";
   else if(t==="spec") x=SPEC_VIEW_N[S.spec.view]||"";
-  else if(t==="res") x=resById(S.res.k).n;
+  else if(t==="res") x=resName(S.res.k);
   else if(t==="tdm") x=({vanco:"Vancomycin",teico:"Teicoplanin",gent:"Gentamicin",amk:"Amikacin"})[S.tdm]||"";
   return tabName(t)+(x?"・"+x:"");
 }
@@ -4032,7 +4043,7 @@ if(typeof document!=="undefined"){
     else if(a==="cur-site") UI.curSite=!UI.curSite;
     else if(a==="cur-sys"){ if(S.sys!==v){ S.sys=v; S.sub=SYS[v].def||SYS[v].subs[0].id; S.path=null; S.ph=null; } }
     else if(a==="cur-sub"){ if(S.sub!==v){ S.sub=v; S.path=null; S.ph=null; } UI.curSite=false; }
-    else if(a==="res-k"){ S.res={k:v,site:"",ph:""}; }
+    else if(a==="res-k"){ S.res={k:S.res.k===v?"":v,site:"",ph:""}; }
     else if(a==="res-site") S.res.site=v;
     else if(a==="res-ph"){ S.res.ph=v; S.res.site=""; }
     else if(a==="res-go"){ S.tab="res"; S.res={k:v,site:"",ph:""}; if(narrow()&&UI.pt){ UI.pt=false; renderPt(); } scrollTo(0,0); }
@@ -4069,6 +4080,7 @@ if(typeof document!=="undefined"){
     else return;
     if(pre&&navKey(navSnap())!==navKey(pre[0])) navPush(pre[0],pre[1],pre[2]);
     renderMain();
+    if((a==="res-k"||a==="res-go")&&S.res.k){ const el=$("res-"+S.res.k); if(el) el.scrollIntoView({block:"start"}); }
     if(jump){ const el=$("specAdv"); if(el) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); }
   });
   readPt(); renderRsum(); renderMain(); renderPt(); renderPf(); renderCp();

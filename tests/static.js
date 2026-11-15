@@ -31,7 +31,7 @@ for(const k of Object.keys(A.D)) for(const pt of PTS){ set(Object.assign({tab:"d
 for(const p of A.PROC) for(const al of ["none","pen_ana"]){ set({tab:"px",proc:p.id,allergy:al}); scan(A.render("px")); }
 for(const td of ["vanco","teico","gent","amk"]) for(const mode of ["ei","conv","syn"]) for(const pt of PTS) for(const lv of [{},{c1:4,t1:8},{c1:12,t1:1.5,c2:2,t2:12}]){ set(Object.assign({tab:"tdm",tdm:td,ag:Object.assign({mode,ti:0.5,c1:null,t1:null,c2:null,t2:null},lv)},JSON.parse(JSON.stringify(pt)))); scan(A.render("tdm")); }
 for(let m=0;m<16;m++){ set({pf:{f5:!!(m&1),ana:!!(m&2),scar:!!(m&4),tx:!!(m&8)}}); scan(A.pfHTML()); }
-set({tab:"spec",spec:{view:"mdr"}}); scan(A.render("spec"));
+set({tab:"res",res:{k:"",site:"",ph:""}}); scan(A.render("res"));
 // v1.5 抗藥卡：每張卡 × 表現型 × 部位
 for(const r of A.RES){ const phs=r.sp?r.sp.map(x=>x[0]):(r.tgt&&!r.tgt[1]?Object.keys(A.PHL[r.tgt[0]]):[""]);
   for(const ph of phs){ set({tab:"res",res:{k:r.id,site:"",ph}}); const T=r.tbl?{sites:[""]}:A.resTx(r); for(const site of T.sites){ set({tab:"res",res:{k:r.id,site,ph}}); scan(A.render("res")); } } }

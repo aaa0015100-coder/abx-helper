@@ -313,14 +313,16 @@ with sync_playwright() as p:
             else:
                 hit.first.click(); pg.wait_for_timeout(40)
                 if pg.evaluate("S.tab+S.res.k")!="resesbl": issues.append(f"{W}: 搜尋未開 ESBL 卡")
-            # 抗菌譜 MDR 速查 → 抗藥卡
-            go_tab(pg, "spec"); pg.locator("button.chip[data-act=spec-view][data-v=mdr]").click(); pg.wait_for_timeout(30)
-            if pg.locator("#main [data-act=res-go]").count()!=pg.evaluate("RES.length"): issues.append(f"{W}: MDR 速查段數錯")
-            check(pg, W, "MDR 速查")
-            pg.locator("#main [data-act=res-go][data-v=crab]").click(); pg.wait_for_timeout(40)
-            if pg.evaluate("S.tab+S.res.k")!="rescrab" or pg.locator(".backbar").count()!=1: issues.append(f"{W}: 速查 → CRAB 卡失敗")
-            pg.locator(".backbar").click(); pg.wait_for_timeout(120)
-            if pg.evaluate("S.tab+S.spec.view")!="specmdr": issues.append(f"{W}: CRAB 卡返回未回到 MDR 速查")
+            # 抗藥速查清單：預設全收合、點標題展開／再點收合、抗菌譜不再有 MDR 速查
+            go_tab(pg, "res"); pg.evaluate("S.res={k:'',site:'',ph:''};renderMain()"); pg.wait_for_timeout(30)
+            if pg.locator("#main [data-act=res-k]").count()!=pg.evaluate("RES.length") or pg.locator("#resCard").count(): issues.append(f"{W}: 抗藥速查清單錯誤")
+            check(pg, W, "抗藥速查")
+            pg.locator("[data-act=res-k][data-v=crab]").click(); pg.wait_for_timeout(30)
+            if pg.locator("#resCard").count()!=1: issues.append(f"{W}: 點 CRAB 未展開")
+            pg.locator("[data-act=res-k][data-v=crab]").click(); pg.wait_for_timeout(30)
+            if pg.locator("#resCard").count(): issues.append(f"{W}: 再點 CRAB 未收合")
+            go_tab(pg, "spec")
+            if pg.locator("[data-act=spec-view][data-v=mdr]").count(): issues.append(f"{W}: 抗菌譜仍有 MDR 速查")
             # 用藥調整・口服降階（合併頁）
             go_tab(pg, "cur"); pg.wait_for_timeout(30)
             if pg.locator("[data-act^=o-]").count(): issues.append(f"{W}: 合併頁仍有舊口服降階按鈕")
