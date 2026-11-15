@@ -150469,6 +150469,7 @@ Gentamicin
 Imipenem-cilastatin
 Levofloxacin
 Linezolid
+MDR 速查
 MRSA
 MSSA
 Meropenem
@@ -150955,6 +150956,7 @@ Gentamicin
 Imipenem-cilastatin
 Levofloxacin
 Linezolid
+MDR 速查
 MRSA
 MSSA
 Meropenem
@@ -151441,6 +151443,7 @@ Gentamicin
 Imipenem-cilastatin
 Levofloxacin
 Linezolid
+MDR 速查
 MRSA
 MSSA
 Meropenem
@@ -153626,7 +153629,7 @@ Warfarin、sulfonylurea、phenytoin
 2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。
 2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。
 2026-11-12 v1.4：介面整理，臨床內容與建議排序未變。分頁由 9 個收成 4 組（治療／查藥／TDM／手術預防），出處改由頁尾進入；跨頁跳轉後頁頂顯示「返回」，支援手機返回手勢與瀏覽器上一頁（最多 20 步）；方案卡底列收合說明與出處（2 筆以上顯示「出處 N」），院內 %S 縮成一行。
-2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」併入「抗藥」，「校正紀錄」移到出處頁。
+2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」改為各抗藥菌一段摘要（無效或不可靠的藥＋建議，內容取自抗藥卡），「校正紀錄」移到出處頁。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 A. baumannii
 A. baumannii
@@ -154223,7 +154226,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。
 2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。
 2026-11-12 v1.4：介面整理，臨床內容與建議排序未變。分頁由 9 個收成 4 組（治療／查藥／TDM／手術預防），出處改由頁尾進入；跨頁跳轉後頁頂顯示「返回」，支援手機返回手勢與瀏覽器上一頁（最多 20 步）；方案卡底列收合說明與出處（2 筆以上顯示「出處 N」），院內 %S 縮成一行。
-2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」併入「抗藥」，「校正紀錄」移到出處頁。
+2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」改為各抗藥菌一段摘要（無效或不可靠的藥＋建議，內容取自抗藥卡），「校正紀錄」移到出處頁。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 A. baumannii
 A. baumannii
@@ -154820,7 +154823,7 @@ van de Beek D, et al. ESCMID guideline: diagnosis and treatment of acute bacteri
 2026-10-27 v1.2：比較功能加入口——抗菌譜藥卡可「加入比較」，底部顯示已選藥物；經驗性治療等方案卡列出 2 個以上可擇一的藥時，可點「比較這 N 個藥」；抗菌譜的「比較」移到第二個。
 2026-11-05 v1.3：加入院內 antibiogram（雙和 115 年第一季，全院）：抗菌譜「院內」檢視；經驗性與標靶方案卡顯示常見菌種的院內 %S；比較表下方可展開院內感受率；院內數字低於指引門檻時（膀胱炎 TMP-SMX、腎盂腎炎 FQ、cUTI 敗血症／休克、cIAI 的 FQ）在方案卡加黃色提示；HAP／VAP 列出院內 MRSA 與 P. aeruginosa 抗藥率。建議排序未因院內資料改變。資料超過 12 個月顯示可能過期。
 2026-11-12 v1.4：介面整理，臨床內容與建議排序未變。分頁由 9 個收成 4 組（治療／查藥／TDM／手術預防），出處改由頁尾進入；跨頁跳轉後頁頂顯示「返回」，支援手機返回手勢與瀏覽器上一頁（最多 20 步）；方案卡底列收合說明與出處（2 筆以上顯示「出處 N」），院內 %S 縮成一行。
-2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」併入「抗藥」，「校正紀錄」移到出處頁。
+2026-11-15 v1.5：查藥組新增「抗藥」分頁（ESBL、AmpC、CRE、DTR P. aeruginosa、CRAB、S. maltophilia、MRSA、VRE、PRSP、厭氧菌、念珠菌、天生抗藥）：好發菌、台灣與院內盛行率、藥敏報告判讀、無效或不可靠的藥、改用方案（與標靶治療共用資料）。新增 cefiderocol、imipenem-relebactam、meropenem-vaborbactam、aztreonam-avibactam、sulbactam-durlobactam 劑量（依仿單）與台灣供應狀態；CRE、DTR P. aeruginosa、CRAB、S. maltophilia 標靶治療依 IDSA AMR 2026 改寫並並列 ESCMID 2022。「目前用藥調整」與「口服降階」合併為一頁（輸入只填一次）；抗菌譜的「MDR 速查」改為各抗藥菌一段摘要（無效或不可靠的藥＋建議，內容取自抗藥卡），「校正紀錄」移到出處頁。
 80 kg 2 g、>120 kg 3 g IV。邊界值（80、120 kg）app 分別歸為 2 g。
 A. baumannii
 A. baumannii
@@ -162718,6 +162721,93 @@ TURP／雷射攝護腺手術（HoLEP、PVP）
 陰莖人工植入物／人工尿道括約肌／薦神經調節器
 陰莖手術（包皮環切、陰莖切片）
 體外震波碎石（ESWL）
+## spec mdr
+AmpC
+B. fragilis group
+CRAB
+CRE
+Carbapenem 天生無效。IDSA 2026 侵襲性感染首選 cefiderocol 單用；TMP-SMX、minocycline、levofloxacin、aztreonam-avibactam 為替代（多合併）。
+Carbapenem、aminoglycoside；Ceftazidime、piperacillin-tazobactam（即使報 S）
+Ceftriaxone、cefazolin、cefuroxime、ampicillin；Cefepime（即使報 S）；Piperacillin-tazobactam（泌尿道外）；Cephamycin（cefmetazole、flomoxef；IDSA、ESCMID 不建議）；Tigecycline（UTI、菌血症）
+Ceftriaxone、cefotaxime、ceftazidime（侵襲性感染，即使報 S）；Piperacillin-tazobactam（侵襲性感染）；Ampicillin、amoxicillin-clavulanate、cefazolin、cephamycin
+Clindamycin、moxifloxacin、cephamycin（不作經驗性厭氧涵蓋）；Cefazolin、ceftriaxone、cefepime、aztreonam、aminoglycoside、TMP-SMX、ciprofloxacin、levofloxacin
+DTR-PsA
+ESBL
+Ertapenem、ceftriaxone、TMP-SMX、tigecycline；Aminoglycoside 單用（泌尿道外）；Aztreonam-avibactam（MBL 型）
+Ertapenem、ceftriaxone、aztreonam、amoxicillin-clavulanate、fosfomycin；高劑量延長輸注 meropenem／imipenem；Polymyxin ＋ meropenem 或 ＋ rifampin；Sulbactam-durlobactam（NDM 型 CRAB）
+Fluconazole（C. krusei）；Fluconazole 經驗性用於 C. glabrata、C. auris；Echinocandin（泌尿道）
+MDR 速查
+MRSA
+Macrolide 單用；Penicillin（腦膜炎，MIC ≥0.12）；Aminoglycoside、aztreonam、metronidazole
+Metronidazole、piperacillin-tazobactam、carbapenem 仍可靠；clindamycin、moxifloxacin、cephamycin 抗藥高，不作經驗性厭氧涵蓋。
+PK/PD
+PRSP
+Penicillin 抗藥 S. pneumoniae
+S. maltophilia
+Stenotrophomonas maltophilia
+VRE
+Vancomycin、teicoplanin；Cephalosporin、clindamycin、TMP-SMX；Tigecycline（菌血症）
+carbapenem-resistant Acinetobacter baumannii
+carbapenem-resistant Enterobacterales
+difficult-to-treat resistance
+extended-spectrum β-lactamase
+vancomycin-resistant Enterococcus
+β-lactam（ceftobiprole 除外）；Daptomycin（肺炎）；Tigecycline（菌血症）；Clindamycin（D-test 陽性）
+侵襲性感染用 cefepime（MIC ≤8，未檢出 ESBL）或 carbapenem；ceftriaxone、piperacillin-tazobactam 治療中可能失敗，即使初次報告 S。
+傳統 β-lactam（含 carbapenem、piperacillin-tazobactam、cefepime）；Ceftazidime-avibactam 單用（NDM 等 MBL）；Meropenem-vaborbactam、imipenem-relebactam（OXA-48、MBL）；Tigecycline（UTI、菌血症）；Colistin（膀胱炎以外）
+先確認是侵襲性感染而不是移生。IDSA 2026 首選 sulbactam-durlobactam ＋ carbapenem（台灣查無許可證）；台灣可行的做法是高劑量 ampicillin-sulbactam ＋ 第二個有效藥。
+先驗 carbapenemase 型別：KPC 用 meropenem-vaborbactam、ceftazidime-avibactam 或 imipenem-relebactam；OXA-48 用 ceftazidime-avibactam；NDM 用 aztreonam-avibactam 或 ceftazidime-avibactam ＋ aztreonam。會診感染科。
+厭氧菌
+各抗藥菌哪些藥無效、改用什麼。點「完整說明」看判讀線索、台灣盛行率與依部位的劑量。
+含 VISA、inducible clindamycin 抗藥
+多為 E. faecium，常同時 ampicillin R。全身性首選 linezolid（菌血症觀察性資料偏好 daptomycin ≥9 mg/kg）；膀胱炎 nitrofurantoin、fosfomycin。
+天生抗藥表 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+完整說明 ›
+建議
+建議
+建議
+建議
+建議
+建議
+建議
+建議
+建議
+建議
+建議
+念珠菌抗藥
+念珠菌血症先用 echinocandin，依菌種與藥敏降階。C. krusei 天生抗 fluconazole；C. glabrata 多為 SDD；C. auris 多重抗藥、會院內傳播。
+抗細菌
+抗黴菌
+染色體可誘導型
+比較
+泌尿道外首選 carbapenem；pyelo／cUTI 感受時 TMP-SMX 或 FQ；膀胱炎用 nitrofurantoin、TMP-SMX 或單劑 aminoglycoside。即使報告 S，cefepime 與（泌尿道外）piperacillin-tazobactam 不可靠。
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+無效或不可靠
+用 ceftolozane-tazobactam、ceftazidime-avibactam 或 imipenem-relebactam（肺炎優先 ceftolozane-tazobactam）；MBL 型用 cefiderocol。四個新藥都要測藥敏。
+細菌對某些藥天生無效（例如 Klebsiella 對 ampicillin、P. aeruginosa 對 ertapenem）：
+菌血症用 vancomycin 或 daptomycin；肺炎用 vancomycin 或 linezolid（daptomycin 不用於肺炎）。Clindamycin 用前看 D-test。
+院內
+非腦膜炎的肺炎用 ceftriaxone（MIC ≤1）仍有效；腦膜炎用 ceftriaxone ＋ vancomycin。Macrolide 不可單用（台灣抗藥 >80%）。
+黴菌
 ## res esbl  cys
 1 DS 錠（160/800 mg）PO q12h
 100 mg PO q12h（來源不一致：仿單 CrCl <60 禁用；AGS Beers 2023 只在 CrCl <30 避免）

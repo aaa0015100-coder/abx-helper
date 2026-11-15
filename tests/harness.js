@@ -6,7 +6,7 @@ function load(file){
   const ctx={console,setTimeout,clearTimeout}; vm.createContext(ctx);
   vm.runInContext(js+`
 ;this.__api={S,UI,REF,DGRP,GLOSS,AGX,HEP,cpScore,hepHTML,SYS,SUBDEF,REG,D,PL,PATH,PROC,TABS,pfScore,pfHTML,searchHits,agCalc,drugUse,
-  getRenal,hasSev,ABG,ABG_ROWS,ABG_BAD,ABG_PATH,abgVal,abgStale,setNow(f){ABG_NOW=f;},SPEC_ROWS,CELLN,FCOLS,FROWS,FV,SPV,XROWS,CMP_ROWS,cmpV,cmpKeyOf,cmpLinkOf,goHit,optCard,RES,TGT,PHL,PATH_:PATH,intrinsic,resTx,resById,RSITE,TABS_:TABS,DGRP_:DGRP,
+  getRenal,hasSev,ABG,ABG_ROWS,ABG_BAD,ABG_PATH,abgVal,abgStale,setNow(f){ABG_NOW=f;},SPEC_ROWS,CELLN,FCOLS,FROWS,FV,SPV,XROWS,CMP_ROWS,cmpV,cmpKeyOf,cmpLinkOf,goHit,optCard,RES,TGT,MDRQ_LBL,mdrqItems,PHL,PATH_:PATH,intrinsic,resTx,resById,RSITE,TABS_:TABS,DGRP_:DGRP,
   setR(){R=getRenal();},
   render(tab){R=getRenal(); return ({spec:renderSpec,emp:renderEmp,cur:renderCur,oral:renderCur,res:renderRes,drug:renderDrug,tdm:renderTdm,px:renderPx,vanco:renderVanco,teico:renderTeico,ix:renderIx,ref:renderRef})[tab]();}
 };`,ctx);
