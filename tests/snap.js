@@ -26,10 +26,14 @@ for(const [sk,sy] of Object.entries(A.SYS)) for(const sub of sy.subs){
   for(const p of (A.PL[sub.id]||[])) snap(`emp ${sub.id} path ${p}`,Object.assign({tab:"emp",sys:sk,sub:sub.id,path:p},JSON.parse(JSON.stringify(PT.c35))),"emp");
 }
 snap("emp arc preg mdr",Object.assign({tab:"emp",preg:true,mdr:["prevESBL","prevPSA"]},PT.arc),"emp");
-for(const tab of ["spec","cur","oral","vanco","teico","ix","ref"]) for(const pk of ["none","c35","hd"]) snap(`${tab} ${pk}`,Object.assign({tab},JSON.parse(JSON.stringify(PT[pk]))),tab);
+for(const tab of ["spec","cur","res","vanco","teico","ix","ref"]) for(const pk of ["none","c35","hd"]) snap(`${tab} ${pk}`,Object.assign({tab},JSON.parse(JSON.stringify(PT[pk]))),tab);
 for(const k of Object.keys(A.D)) snap(`drug ${k}`,Object.assign({tab:"drug",drug:k},JSON.parse(JSON.stringify(PT.c35))),"drug");
 for(const td of ["vanco","teico","gent","amk"]) for(const mode of ["ei","conv","syn"]) for(const pk of ["none","c35","hd"]) snap(`tdm ${td} ${mode} ${pk}`,Object.assign({tab:"tdm",tdm:td,ag:{mode,ti:0.5,c1:12,t1:1.5,c2:2,t2:12}},JSON.parse(JSON.stringify(PT[pk]))),"tdm");
 for(const pr of A.PROC) snap(`px ${pr.id||pr[0]}`,Object.assign({tab:"px",proc:pr.id||pr[0]},PT.c35),"px");
+// v1.5 抗藥卡（每張卡 × 表現型 × 部位，CrCl 35）與 CRE／DTR／CRAB 標靶治療
+for(const r of A.RES){ const phs=r.sp?r.sp.map(x=>x[0]):(r.tgt&&!r.tgt[1]?Object.keys(A.PHL[r.tgt[0]]):[""]);
+  for(const ph of phs){ set({tab:"res",res:{k:r.id,site:"",ph}}); const T=r.tbl?{sites:[""]}:A.resTx(r); for(const site of T.sites) snap(`res ${r.id} ${ph} ${site}`,Object.assign({tab:"res",res:{k:r.id,site,ph}},JSON.parse(JSON.stringify(PT.c35))),"res"); } }
+for(const [p,ph] of [["kpn","CRE"],["psa","DTR"],["abau","CR"]]) for(const sub of ["pyelo","hap"]) snap(`emp ${sub} path ${p} ${ph}`,Object.assign({tab:"emp",sys:sub==="hap"?"hap":"gu",sub,path:p,ph},JSON.parse(JSON.stringify(PT.c35))),"emp");
 const s=out.join("\n")+"\n";
 const f=path.join(__dirname,'snap.txt');
 if(process.argv.includes('--update')||!fs.existsSync(f)){ fs.writeFileSync(f,s); console.log("snap written",out.length,"scenarios"); process.exit(0); }

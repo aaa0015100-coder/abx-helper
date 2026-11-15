@@ -24,13 +24,17 @@ for(const [k,r] of Object.entries(A.REF)) if(!r.s||!r.f) bad.push("REF 缺欄位
 const used=new Set(), missing=new Set();
 const scan=h=>{ for(const m of h.matchAll(/data-ref="([^"]*)"/g)){ used.add(m[1]); if(!A.REF[m[1]]) missing.add(m[1]); } };
 for(const [sk,sy] of Object.entries(A.SYS)) for(const sub of sy.subs){ set({tab:"emp",sys:sk,sub:sub.id,sev:"shock",allergy:"pen_ana"}); scan(A.render("emp")); for(const p of (A.PL[sub.id]||[])){ set({tab:"emp",sys:sk,sub:sub.id,path:p}); scan(A.render("emp")); } }
-for(const t of ["spec","cur","oral","px","vanco","teico","ix","ref"]){ set({tab:t}); scan(A.render(t)); }
+for(const t of ["spec","cur","res","px","vanco","teico","ix","ref"]){ set({tab:t}); scan(A.render(t)); }
 // 新模組：每個藥物頁、每個手術、TDM 各藥各用途（含濃度）、PEN-FAST 各分數
 const PTS=[{},{pt:{age:72,sex:"M",wt:60,ht:165,scr:1.6,method:"cg"}},{pt:{age:60,sex:"F",wt:55,method:"hd"}}];
 for(const k of Object.keys(A.D)) for(const pt of PTS){ set(Object.assign({tab:"drug",drug:k},JSON.parse(JSON.stringify(pt)))); scan(A.render("drug")); }
 for(const p of A.PROC) for(const al of ["none","pen_ana"]){ set({tab:"px",proc:p.id,allergy:al}); scan(A.render("px")); }
 for(const td of ["vanco","teico","gent","amk"]) for(const mode of ["ei","conv","syn"]) for(const pt of PTS) for(const lv of [{},{c1:4,t1:8},{c1:12,t1:1.5,c2:2,t2:12}]){ set(Object.assign({tab:"tdm",tdm:td,ag:Object.assign({mode,ti:0.5,c1:null,t1:null,c2:null,t2:null},lv)},JSON.parse(JSON.stringify(pt)))); scan(A.render("tdm")); }
 for(let m=0;m<16;m++){ set({pf:{f5:!!(m&1),ana:!!(m&2),scar:!!(m&4),tx:!!(m&8)}}); scan(A.pfHTML()); }
+// v1.5 抗藥卡：每張卡 × 表現型 × 部位
+for(const r of A.RES){ const phs=r.sp?r.sp.map(x=>x[0]):(r.tgt&&!r.tgt[1]?Object.keys(A.PHL[r.tgt[0]]):[""]);
+  for(const ph of phs){ set({tab:"res",res:{k:r.id,site:"",ph}}); const T=r.tbl?{sites:[""]}:A.resTx(r); for(const site of T.sites){ set({tab:"res",res:{k:r.id,site,ph}}); scan(A.render("res")); } } }
+for(const [p,ph] of [["kpn","CRE"],["psa","DTR"],["abau","CR"],["smalt","any"]]) for(const sub of ["pyelo","hap"]){ set({tab:"emp",sys:sub==="hap"?"hap":"gu",sub,path:p,ph}); scan(A.render("emp")); }
 // 每筆 REF 都有被引用（來源頁本身不算）
 set({tab:"ref"}); const refHtml=A.render("ref");
 Object.keys(A.REF).forEach(k=>{ if(!refHtml.includes(A.REF[k].s)) bad.push("REF 未列在來源頁 "+k); });

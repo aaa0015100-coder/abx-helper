@@ -1,4 +1,4 @@
-// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp cmp cmpentry abg（預設全部）
+// 組合模擬：node tests/fuzz.js [模組…]   模組：drug tdm px pf search emp cmp cmpentry abg res（預設全部）
 const {load,mk}=require('./harness');
 const {A}=load(process.argv.find(a=>a.endsWith('.html')));
 const set=mk(A);
@@ -262,6 +262,59 @@ if(on("abg")){
   run("abg-stale",{tab:"spec",spec:{view:"abg"}},()=>A.render("spec"),t=>/可能過期/.test(t)?"":"超過 12 個月未提示");
   run("abg-stale",{tab:"emp",sys:"gu",sub:"cys"},()=>A.render("emp"),(t,h)=>/cond abgw/.test(h)?"過期仍出現門檻提示":"");
   A.setNow(()=>new Date());
+}
+
+if(on("res")){
+  // v1.5 抗藥機轉：每張卡 × 表現型／菌種 × 部位 × 腎功能都能產生；卡片列為無效的藥不出現在同卡的方案中；天生抗藥表與 intrinsic() 一致
+  const tiersOf=list=>list.flatMap(o=>[...o.regs,...(o.add||[]).flatMap(a=>a.regs)]).map(r=>A.REG[r].d);
+  for(const r of A.RES){
+    if(r.tbl){
+      run("res-intr",{tab:"res",res:{k:r.id,site:"",ph:""}},()=>A.render("res"),t=>/預期抗藥/.test(t)?"":"天生抗藥表未顯示");
+      for(const row of r.tbl){ const [org,,,pk,keys]=row; if(!pk) continue; n++;
+        if(!A.PATH_[pk]){ fails.push(["res-intr",{org},"路徑不存在 "+pk]); continue; }
+        for(const d of keys){ const i=A.intrinsic(d,pk,null); if(!i||(i.lvl!=="bad"&&!(pk==="c_gla"))) fails.push(["res-intr",{org,d},"表列預期抗藥但 intrinsic() 未判無效"]); } }
+      continue;
+    }
+    const phs=r.sp?r.sp.map(x=>x[0]):(r.tgt[1]?[""]:Object.keys(A.PHL[r.tgt[0]]));
+    const badKeys=r.bad.flatMap(b=>b[3]||[]);
+    for(const ph of phs){
+      set({tab:"res",res:{k:r.id,site:"",ph}}); const T=A.resTx(r);
+      if(!T.sites.length) fails.push(["res-site",{k:r.id,ph},"沒有任何部位方案"]);
+      for(const site of T.sites) for(const pk of ["none","c35","c15","hd","crrt"]){
+        const o=Object.assign({tab:"res",res:{k:r.id,site,ph}},P(pk));
+        run("res-card",o,()=>A.render("res"),(t,h)=>{
+          set(JSON.parse(JSON.stringify(o))); const T2=A.resTx(r);
+          if(!T2.list.length) return "部位無方案 "+site;
+          const hit=tiersOf(T2.list).filter(d=>badKeys.includes(d)); if(hit.length) return "卡片列為無效卻出現在方案："+hit.join(",");
+          const opts=(h.match(/<div class="opt[ "]/g)||[]).length; if(opts!==T2.list.length) return "方案卡數不符 "+opts+"/"+T2.list.length;
+          for(const sec of ["好發菌與危險因子","台灣盛行率","藥敏報告怎麼看","無效或不可靠的藥","改用"]) if(!t.includes(sec)) return "缺段落 "+sec;
+          return "";
+        });
+      }
+    }
+    for(const b of r.bad) for(const k of b[2]) if(!A.REF[k]) fails.push(["res-ref",{k:r.id},"出處鍵不存在 "+k]);
+    for(const c of r.clue) for(const k of c[1]) if(!A.REF[k]) fails.push(["res-ref",{k:r.id},"出處鍵不存在 "+k]);
+  }
+  // 標靶治療與抗藥卡共用同一份 TGT：targetPanel 顯示的方案 = 卡片方案
+  for(const [pid,ph,k] of [["kpn","CRE","cre"],["ecoli","ESBL","esbl"],["psa","DTR","dtr"],["abau","CR","crab"],["smalt","any","steno"],["saur","MRSA","mrsa"],["efae","VRE","vre"]]){
+    for(const sub of ["pyelo","hap","bsi_unk"]){
+      if(!A.SUBDEF[sub]) continue;
+      run("res-tgt",{tab:"emp",sys:Object.keys(A.SYS).find(s=>A.SYS[s].subs.some(x=>x.id===sub)),sub,path:pid,ph},()=>A.render("emp"),(t,h)=>/data-act="res-go"/.test(h)&&h.includes(`data-v="${k}"`)?"":"標靶治療缺抗藥卡連結 "+k);
+    }
+  }
+  // CRE 依型別：KPC、OXA-48、NDM 都有首選；NDM 合併方案為 CZA ＋ aztreonam；新藥都有完整腎功能分段
+  const cre=A.TGT.ent.CRE.sys.map(o=>o.tier).join("|"); n++;
+  for(const x of ["首選（KPC）","首選（OXA-48-like）","首選（NDM 等 MBL）","NDM：台灣可行（合併）"]) if(!cre.includes(x)) fails.push(["res-cre",{},"缺 "+x]);
+  const ndm=A.TGT.ent.CRE.sys.find(o=>o.tier==="NDM：台灣可行（合併）"); if(!ndm||ndm.regs[0]!=="cza"||ndm.add[0].regs[0]!=="azt") fails.push(["res-cre",{},"NDM 合併方案錯誤"]);
+  for(const k of ["fdc","ire","mev","aza","sud","ctzHAP"]){ const g=A.REG[k]; n++;
+    if(!g||!g.b.length||!g.hd||!g.pd||!g.crrt) fails.push(["res-reg",{k},"劑量資料不完整"]);
+    for(let i=1;i<g.b.length;i++) if(!(g.b[i-1][0]>g.b[i][0])) fails.push(["res-reg",{k},"腎功能分段未遞減"]);
+    if(!A.DGRP_.some(x=>x[1].includes(g.d))) fails.push(["res-reg",{k},"未列入藥物分組"]); }
+  // 新藥正常腎功能劑量 = 仿單標準劑量（未填腎功能時顯示）
+  const STD={fdc:/^2 g IV q8h/,ire:/^1\.25 g IV q6h/,mev:/^4 g/,aza:/^首劑 2 g\/0\.67 g，之後 1\.5 g\/0\.5 g IV q6h/,sud:/^sulbactam 1 g ＋ durlobactam 1 g IV q6h/,ctzHAP:/^3 g IV q8h/};
+  for(const [k,re] of Object.entries(STD)){ n++; if(!re.test(A.REG[k].b[0][1])) fails.push(["res-reg",{k},"標準劑量錯誤 "+A.REG[k].b[0][1]]); }
+  // 搜尋：輸入抗藥名稱可找到卡片
+  for(const q of ["esbl","cre","ampc","mrsa","vre","crab","maltophilia","天生抗藥"]){ n++; if(!A.searchHits(q).some(x=>x.t==="抗藥")) fails.push(["res-search",{q},"搜尋找不到抗藥卡"]); }
 }
 
 const by={}; for(const f of fails){const k=f[0].split("#")[0]+" | "+f[2].slice(0,90);(by[k]=by[k]||[]).push(f[1]);}

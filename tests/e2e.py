@@ -27,7 +27,7 @@ def click_all(pg, sel, W, where):
         if loc.is_visible():
             loc.click(); check(pg, W, f"{where} #{i}")
 
-GRP = {"emp":"tx","cur":"tx","oral":"tx","drug":"look","spec":"look","ix":"look","tdm":"tdm","px":"px"}
+GRP = {"emp":"tx","cur":"tx","drug":"look","spec":"look","res":"look","ix":"look","tdm":"tdm","px":"px"}
 def go_tab(pg, k):
     # v1.4：先點第一層分組，再點第二層；出處由頁尾進入
     if k == "ref": pg.evaluate("document.querySelector('#foot [data-act=tab][data-v=ref]').click()"); return
@@ -44,10 +44,10 @@ with sync_playwright() as p:
             pg.on("request", lambda r: net.append(r.url) if not r.url.startswith("file:") and not r.url.startswith("data:") else None)
             pg.goto(HTML); pg.wait_for_timeout(200)
             check(pg, W, "load")
-            tabs = ["emp","cur","oral","drug","spec","ix","tdm","px","ref"]
+            tabs = ["emp","cur","drug","spec","res","ix","tdm","px","ref"]
             # v1.4：第一層 4 組；組內多個分頁才顯示第二層；沒有「更多」
             if pg.locator("#tabs .tab").count()!=4: issues.append(f"{W}: 第一層分頁不是 4 個")
-            if pg.locator("#subtabs .stab:visible").count()!=3: issues.append(f"{W}: 治療組第二層不是 3 個")
+            if pg.locator("#subtabs .stab:visible").count()!=2: issues.append(f"{W}: 治療組第二層不是 2 個")
             if pg.locator("[data-act=more]").count(): issues.append(f"{W}: 仍有更多按鈕")
             tb = pg.locator("#tabs").bounding_box()
             if pg.evaluate("document.getElementById('tabs').scrollWidth") > tb["width"]+1: issues.append(f"{W}: 第一層分頁需橫捲")
@@ -287,6 +287,46 @@ with sync_playwright() as p:
             if pg.evaluate("NAV.length")!=20: issues.append(f"{W}: 返回堆疊未限制 20 步（"+str(pg.evaluate("NAV.length"))+"）")
             pg.evaluate("S.tab='emp';renderMain()"); pg.locator("[data-act=clear-all]").click() if pg.locator("[data-act=clear-all]").is_visible() else pg.evaluate("document.querySelector('[data-act=clear-all]').click()"); pg.wait_for_timeout(150)
             go_tab(pg, "emp")
+            # v1.5 抗藥分頁：12 張卡、部位切換、標靶治療連結、搜尋、返回
+            go_tab(pg, "res"); pg.wait_for_timeout(30)
+            if pg.locator("#subtabs .stab").count()!=4: issues.append(f"{W}: 查藥組第二層不是 4 個")
+            ids = pg.evaluate("RES.map(r=>r.id)")
+            for k in ids:
+                pg.locator(f"[data-act=res-k][data-v={k}]").click(); pg.wait_for_timeout(20)
+                if pg.locator("#resCard").count()!=1: issues.append(f"{W}: 抗藥卡 {k} 未顯示")
+                for st in pg.evaluate("[...document.querySelectorAll('[data-act=res-site]')].map(e=>e.dataset.v)"):
+                    pg.locator(f"[data-act=res-site][data-v={st}]").click(); pg.wait_for_timeout(15)
+                    if pg.locator("#resCard .opt").count()==0: issues.append(f"{W}: 抗藥卡 {k} 部位 {st} 沒有方案")
+                check(pg, W, f"res {k}")
+            pg.locator("[data-act=res-k][data-v=ampc]").click(); pg.locator("[data-act=res-ph][data-v=R]").click(); pg.wait_for_timeout(20)
+            if pg.evaluate("S.res.ph")!="R": issues.append(f"{W}: AmpC 表現型切換失敗")
+            pg.evaluate("S.tab='emp';S.sys='gu';S.sub='pyelo';S.sev='none';S.path='kpn';S.ph='CRE';UI.edit=null;NAV.length=0;renderMain()"); pg.wait_for_timeout(30)
+            pg.locator("#main [data-act=res-go][data-v=cre]").click(); pg.wait_for_timeout(40)
+            if pg.evaluate("S.tab+S.res.k")!="rescre" or pg.locator(".backbar").count()!=1: issues.append(f"{W}: 標靶治療 → CRE 卡或返回列失敗")
+            if "首選（KPC）" not in pg.inner_text("#resCard"): issues.append(f"{W}: CRE 卡缺 KPC 方案")
+            pg.locator(".backbar").click(); pg.wait_for_timeout(120)
+            if pg.evaluate("S.tab+S.path+S.ph")!="empkpnCRE": issues.append(f"{W}: CRE 卡返回未還原標靶治療")
+            pg.evaluate("S.path=null;S.ph=null;renderMain()")
+            pg.fill("#q", "esbl"); pg.wait_for_timeout(50)
+            hit = pg.locator("#qres .qitem", has_text="ESBL")
+            if hit.count()==0: issues.append(f"{W}: 搜尋 ESBL 沒有抗藥卡")
+            else:
+                hit.first.click(); pg.wait_for_timeout(40)
+                if pg.evaluate("S.tab+S.res.k")!="resesbl": issues.append(f"{W}: 搜尋未開 ESBL 卡")
+            # 用藥調整・口服降階（合併頁）
+            go_tab(pg, "cur"); pg.wait_for_timeout(30)
+            if pg.locator("[data-act^=o-]").count(): issues.append(f"{W}: 合併頁仍有舊口服降階按鈕")
+            pg.evaluate("S.sys='gu';S.sub='pyelo';renderMain()")
+            pg.locator("[data-act=cur-drug][data-v=ceftriaxone]").click()
+            for f in ["afeb","stable","po","src"]: pg.locator(f"input[data-act=cur-flag][data-v={f}]").check(force=True)
+            pg.locator("[data-act=cur-org][data-v=ecoli]").click(); pg.wait_for_timeout(30)
+            pg.locator("[data-act=cur-sus][data-d=tmpsmx][data-v=S]").click(); pg.wait_for_timeout(30)
+            mt = pg.inner_text("#main"); o6 = mt[mt.find("口服降階"):]
+            if "尚未符合轉口服條件" in o6 or "TMP-SMX" not in o6 or "生體可用率" not in o6: issues.append(f"{W}: 合併頁口服降階未依輸入更新")
+            pg.locator("[data-act=cur-site]").click(); pg.locator("[data-act=cur-sub][data-v=cys]").click(); pg.wait_for_timeout(30)
+            if pg.evaluate("S.sub")!="cys": issues.append(f"{W}: 合併頁更改部位失敗")
+            check(pg, W, "用藥調整・口服降階")
+            pg.evaluate("S.sub='pyelo';S.cur=JSON.parse(JSON.stringify({drugs:[],day:3,resp:'improve',afeb:false,stable:false,po:false,src:false,org:'',ph:'',sus:{}}));renderMain()")
             # 免責聲明收合
             pg.locator("[data-act=disc-ok]").click()
             if pg.locator("#footDisc").is_hidden(): issues.append(f"{W}: 免責聲明未移到頁尾")
